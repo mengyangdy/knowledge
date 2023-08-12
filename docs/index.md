@@ -1,25 +1,8 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
-
-hero:
-  name: "My Awesome Project"
-  text: "A VitePress Site"
-  tagline: My great project tagline
-  actions:
-    - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+blog:
+ name: 粥里有勺糖
+ motto: 你的指尖,拥有改变世界的力量
+ inspiring: 千万不要因为走得太久，而忘记了我们为什么出发
+ pageSize: 8
 ---
-
