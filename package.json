@@ -12,13 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@element-plus/icons-vue": "^2.1.0",
     "@vue/shared": "^3.3.4",
-    "element-plus": "^2.3.9",
     "gray-matter": "^4.0.3",
     "vue": "^3.3.4"
   },
   "devDependencies": {
+    "element-plus": "^2.3.9",
+    "@element-plus/icons-vue": "^2.1.0",
     "@dylanjs/cli": "^0.0.3",
     "@types/node": "^20.4.10",
     "fast-glob": "^3.3.1",
