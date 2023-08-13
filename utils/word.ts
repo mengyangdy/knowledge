@@ -17,3 +17,10 @@ export function countWord (data:string) {
   }
   return count
 }
+
+export function chineseSearchOptimize(input: string) {
+  return input
+    .replace(/[\u4e00-\u9fa5]/g, ' $& ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
