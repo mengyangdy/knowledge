@@ -39,22 +39,42 @@
 import {withBase} from "vitepress";
 import {useWindowSize} from "@vueuse/core";
 import {computed} from "vue";
-import {formatShowDate} from "../../../utils/index.js";
+import {formatShowDate} from "../../../utils";
 
 const {width} = useWindowSize()
 const inMobile = computed(() => width.value <= 500)
-const props = defineProps < {
-  route: string
-  title: string
-  date: string | Date
-  sticky? : number
-  description? : string
-  descriptionHTML? : string
-  tag? : string[]
-  author? : string
-  cover? : string | boolean
-  pin? : number
-} > ()
+const props=defineProps({
+  route:{
+    type:String
+  },
+  title:{
+    type:String
+  },
+  date:{
+    type:String || Date
+  },
+  sticky:{
+    type:Number
+  },
+  description:{
+    type:String
+  },
+  descriptionHTML:{
+    type:String
+  },
+  tag:{
+    type:Array
+  },
+  author:{
+    type:String
+  },
+  cover:{
+    type:String ||Boolean
+  },
+  pin:{
+    type:Number
+  },
+})
 const showtime = computed(() => {
   return formatShowDate(props.date)
 })

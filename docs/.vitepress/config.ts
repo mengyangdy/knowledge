@@ -149,8 +149,13 @@ export default defineConfig({
     logo: '/logo.png',
     nav: [
       {
-        text: '关于我',
-        link: '/aboutme'
+        text: '大前端',
+        items:[
+          {
+            text:'vitepress',
+            link:'/frontEnd/vitepress/'
+          }
+        ]
       },
     ],
     socialLinks: [

@@ -13,7 +13,7 @@
     </template>
     <!--自定义搜索，替代Algolia-->
     <template #nav-bar-content-before>
-      <MySearch/>
+      <!--<MySearch/>-->
     </template>
     <!--自定义首页-->
     <template #home-hero-before v-if="isBlogTheme">
