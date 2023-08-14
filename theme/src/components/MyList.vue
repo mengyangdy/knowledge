@@ -23,6 +23,8 @@ import {computed, watch} from "vue";
 import {useActiveTag, useArticles, useBlogConfig, useCurrentPageNum} from "../composables/config/blog";
 import {useBrowserLocation} from "@vueuse/core";
 
+import {ElPagination} from "element-plus";
+
 const {theme, frontmatter} = useData<Theme.Config>()
 const globalAuthor = computed(() => theme.value.blog?.author || '')
 const docs = useArticles()

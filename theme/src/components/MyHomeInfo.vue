@@ -1,6 +1,6 @@
 <template>
   <div class="blog-info">
-  <!-- 统计数据，日后支持，点击筛选出左侧的数据 -->
+  <!-- 统计数据 -->
     <MyStat/>
   <!-- 置顶文章 -->
     <MyHotArticle />

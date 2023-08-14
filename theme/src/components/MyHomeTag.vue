@@ -2,7 +2,7 @@
   <div class="card tags" v-if="tags.length" data-pagefind-ignore="all">
     <!--头部-->
     <div class="card-header">
-      <span class="titke">🏷 标签</span>
+      <span class="title">🏷 标签</span>
       <el-tag v-if="activeTag.label" :type="(activeTag.type as any)" :effect="colorMode" closeable
               @close="handleCloseTag">
         {{ activeTag.label }}
@@ -26,6 +26,7 @@ import {useActiveTag, useArticles, useCurrentPageNum} from "../composables/confi
 import {computed, watch} from "vue";
 import {useBrowserLocation, useDark} from "@vueuse/core";
 import {useRouter} from "vitepress";
+import {ElTag} from "element-plus";
 
 const docs = useArticles()
 const tags = computed(() => {

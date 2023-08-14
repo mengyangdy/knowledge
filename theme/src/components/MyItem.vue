@@ -75,7 +75,7 @@ const props=defineProps({
     type:Number
   },
 })
-const showtime = computed(() => {
+const showTime = computed(() => {
   return formatShowDate(props.date)
 })
 

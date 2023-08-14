@@ -9,7 +9,7 @@
     </div>
     <!-- 文章列表 -->
     <ol class="recommend-container" v-if="currentWikiData.length">
-      <li v-for="(v,idx) in currentWikeData" :key="v.route">
+      <li v-for="(v,idx) in currentWikiData" :key="v.route">
         <!-- 序号 -->
         <i class="num">{{ idx + 1 }}</i>
         <!-- 简介 -->
@@ -28,7 +28,7 @@
         </div>
       </li>
     </ol>
-    <div class="empty" v-else>{{ empty }}</div>
+    <div class="empty-text" v-else>{{ empty }}</div>
   </div>
 </template>
 
@@ -38,6 +38,7 @@ import {withBase} from "vitepress";
 import {formatShowDate} from "../../../utils/index.js";
 import {useArticles, useBlogConfig} from "../composables/config/blog.js";
 import {computed, ref} from "vue";
+import {ElButton, ElLink} from "element-plus";
 
 const {hotArticle} = useBlogConfig()
 const title = computed(() => hotArticle?.title || '🔥 精选文章')
@@ -46,22 +47,29 @@ const pageSize = computed(() => hotArticle?.pageSize || 10)
 const empty = computed(() => hotArticle?.empty ?? '暂无精选内容')
 
 const docs = useArticles()
+//先设置最新文章
 const recommendList = computed(() => {
-  const data = docs.value.filter(v => v.meta.sticky)
-  data.sort((a, b) => b.meta.sticky! - a.meta.sticky!)
+  // const data = docs.value.filter(v => v.meta.sticky)
+  const data = docs.value.concat([])
+
+  // data.sort((a, b) => b.meta.sticky! - a.meta.sticky!)
   return [...data]
 })
 
 const currentPage = ref(1)
 const changePage = () => {
-  const newIdx = currentPage.value % Math.ceil(recommentList.value.length / pageSize.value)
+  const newIdx = currentPage.value % Math.ceil(recommendList.value.length / pageSize.value)
   currentPage.value = newIdx + 1
 }
 const currentWikiData = computed(() => {
   const startIdx = (currentPage.value - 1) * pageSize.value
+  console.log("=>(MyHotArticle.vue:68) startIdx", startIdx);
   const endIsx = startIdx + pageSize.value
+  console.log("=>(MyHotArticle.vue:70) endIsx", endIsx);
+  console.log("=>(MyHotArticle.vue:72) recommendList", recommendList);
   return recommendList.value.slice(startIdx, endIsx)
 })
+console.log("=>(MyHotArticle.vue:64) currentWikiData", currentWikiData);
 
 const showChangeBtn = computed(() => {
   return recommendList.value.length > pageSize.value
