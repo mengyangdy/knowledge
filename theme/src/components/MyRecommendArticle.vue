@@ -49,9 +49,10 @@
 <script setup lang="ts">
 
 import {formatShowDate} from "../../../utils";
-import {useBlogConfig} from "../composables/config/blog";
+import {useArticles, useBlogConfig} from "../composables/config/blog";
 import {computed, ref} from "vue";
-import {withBase} from "vitepress";
+import {useRoute, withBase} from "vitepress";
+import {ElButton,ElLink} from "element-plus";
 
 const {recommend: _recommend} = useBlogConfig()
 const sidebarStyle = computed(() => {
@@ -60,6 +61,9 @@ const sidebarStyle = computed(() => {
 
 const recommendPadding = computed(() => {
   return sidebarStyle.value === 'card' ? '10px' : '0'
+})
+const recommend = computed(() => {
+  return _recommend === false ? undefined : _recommend
 })
 const title = computed(() => recommend.value?.title ?? '🔍 相关文章')
 const pageSize = computed(() => recommend.value?.pageSize || 9)

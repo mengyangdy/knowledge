@@ -63,13 +63,9 @@ const changePage = () => {
 }
 const currentWikiData = computed(() => {
   const startIdx = (currentPage.value - 1) * pageSize.value
-  console.log("=>(MyHotArticle.vue:68) startIdx", startIdx);
   const endIsx = startIdx + pageSize.value
-  console.log("=>(MyHotArticle.vue:70) endIsx", endIsx);
-  console.log("=>(MyHotArticle.vue:72) recommendList", recommendList);
   return recommendList.value.slice(startIdx, endIsx)
 })
-console.log("=>(MyHotArticle.vue:64) currentWikiData", currentWikiData);
 
 const showChangeBtn = computed(() => {
   return recommendList.value.length > pageSize.value

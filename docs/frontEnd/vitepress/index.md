@@ -5,6 +5,7 @@ description: 本篇文章将代理大家从0到1搭建vitepress博客，并且�
 cover: https://s2.loli.net/2023/08/14/LBN8qORPXKHrc5j.jpg
 ---
 
+# 使用vitepress创建博客并自动部署
 
 ## 项目搭建
 首先先创建一个目录并进入：

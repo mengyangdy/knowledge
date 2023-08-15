@@ -44,7 +44,7 @@ const wikiList = computed(() => {
 
 const filterData = computed(() => {
   if (!activeTagLabel.value) return wikiList.value
-  return wikiList.value.filter(v => v.meta?.tag?.include(activeTagLabel.value))
+  return wikiList.value.filter(v => v.meta?.tag?.includes(activeTagLabel.value))
 })
 
 const {home} = useBlogConfig()

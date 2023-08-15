@@ -35,8 +35,8 @@ const blogTheme = getThemeConfig({
   },
   authorList: [
     {
-      nickname: '粥里有勺糖',
-      url: 'https://sugarat.top/aboutme.html',
+      nickname: 'Dylan',
+      url: 'http://mengyang.online/',
       des: '你的指尖,拥有改变世界的力量'
     }
   ]
@@ -132,6 +132,7 @@ export default defineConfig({
     lastUpdatedText: '上次更新于',
     footer: {},
     logo: '/logo.png',
+    outlineTitle:'目录',
     nav: [
       {
         text: '大前端',
@@ -142,6 +143,15 @@ export default defineConfig({
           }
         ]
       },
+      {
+        text:'工程化',
+        items:[
+          {
+            text:'git',
+            link:'/engineering/git/'
+          }
+        ]
+      }
     ],
     socialLinks: [
       {

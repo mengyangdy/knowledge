@@ -1,5 +1,5 @@
 <template>
-<ElImageVierer :infinite="false" hide-on-click-modal teleported @close="show=false" :url-list='previewImageInfo.list' :initial-index="previewImageInfo.idx" v-if="show" />
+<ElImageViewer :infinite="false" hide-on-click-modal teleported @close="show=false" :url-list='previewImageInfo.list' :initial-index="previewImageInfo.idx" v-if="show" />
 </template>
 
 <script setup lang="ts">
