@@ -1,6 +1,7 @@
 ---
 title: 使用vitepress创建博客并自动部署
 tag: 博客
+date: 2023-08-12
 description: 本篇文章将代理大家从0到1搭建vitepress博客，并且使用Github Actions部署到阿里云oss上
 cover: https://s2.loli.net/2023/08/14/LBN8qORPXKHrc5j.jpg
 ---

@@ -1,6 +1,7 @@
 ---
 title: 工作中常用的一些git命令
 tag: git
+date: 2023-08-15
 cover: https://s2.loli.net/2023/08/15/XrUdNqOIHRkFb4D.jpg
 ---
 

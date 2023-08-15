@@ -11,8 +11,6 @@ import { formatDate } from '../../utils'
 import type { Theme } from './composables/config/index'
 
 import {MermaidMarkdown, MermaidPlugin} from 'vitepress-plugin-mermaid'
-import * as https from "https";
-import src from "./index";
 import {log} from "util";
 
 const checkKeys = ['themeConfig']
@@ -39,34 +37,45 @@ export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
 
   const data = files
     .map((v) => {
-      // 处理文件后缀名
-      let route = v.replace('.md', '')
+
+      let route = v
+        // 处理文件后缀名
+        .replace('.md', '')
+
       // 去除 srcDir 处理目录名
       if (route.startsWith('./')) {
         route = route.replace(
-          new RegExp(`^\\.\\/${path.join(srcDir, '/').replace(new RegExp(`\\${path.sep}`, 'g'), '/')}`), ''
+          new RegExp(
+            `^\\.\\/${path
+              .join(srcDir, '/')
+              .replace(new RegExp(`\\${path.sep}`, 'g'), '/')}`
+          ),
+          ''
         )
       } else {
         route = route.replace(
-          new RegExp(`^${path.join(srcDir, '/').replace(new RegExp(`\\${path.sep}`, 'g'), '/')}`), ''
+          new RegExp(
+            `^${path
+              .join(srcDir, '/')
+              .replace(new RegExp(`\\${path.sep}`, 'g'), '/')}`
+          ),
+          ''
         )
       }
 
-      //获取到文章的内容
       const fileContent = fs.readFileSync(v, 'utf-8')
 
-      /**
-       * data 获取的是文章的头部 --- --- 之间的内容
-       */
       const meta: Partial<Theme.PageMeta> = {
         ...matter(fileContent).data
       }
-      //如果md文件中--- ---没有写title的话 重新设置下 没写为''
+
       if (!meta.title) {
         meta.title = getDefaultTitle(fileContent)
       }
-      //如果没有写时间的话 获取下提交到git上的时间
       if (!meta.date) {
+        // getGitTimestamp(v).then((v) => {
+        //   meta.date = formatDate(v)
+        // })
         meta.date = getFileBirthTime(v)
       } else {
         const timeZone = cfg?.timeZone ?? 8
@@ -75,21 +84,23 @@ export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
         )
       }
 
-      // 处理tags
+      // 处理tags和categories,兼容历史文章
+      meta.categories =
+        typeof meta.categories === 'string'
+          ? [meta.categories]
+          : meta.categories
       meta.tags = typeof meta.tags === 'string' ? [meta.tags] : meta.tags
-
-      // @ts-ignore
       meta.tag = [meta.tag || []]
         .flat()
         .concat([
-          ...new Set([...(meta.tags || [])])
+          ...new Set([...(meta.categories || []), ...(meta.tags || [])])
         ])
 
       // 获取摘要信息
-      //摘要信息获取的有点问题
       const wordCount = 100
       meta.description =
         meta.description || getTextSummary(fileContent, wordCount)
+
       // 获取封面图
       meta.cover =
         meta.cover ??
@@ -100,6 +111,7 @@ export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
         meta.hidden = true
         meta.recommend = false
       }
+
       return {
         route: `/${route}`,
         meta
@@ -188,7 +200,6 @@ export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
     cfg.mermaid = cfg?.mermaid ?? true
   }
   if (cfg?.mermaid !== false) {
-
     markdownPlugin.push(MermaidMarkdown)
   }
 
@@ -262,7 +273,6 @@ export function clearMatterContent(content: string) {
 
 export function getFileBirthTime(url: string) {
   let date = new Date()
-
   try {
     // 参考 vitepress 中的 getGitTimestamp 实现
     const infoStr = spawnSync('git', ['log', '-1', '--pretty="%ci"', url])
@@ -275,7 +285,6 @@ export function getFileBirthTime(url: string) {
   } catch (error) {
     return formatDate(date)
   }
-
   return formatDate(date)
 }
 
