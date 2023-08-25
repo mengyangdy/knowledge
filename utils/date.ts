@@ -38,7 +38,7 @@ export function formatShowDate (date:Date |string) {
   const oneDay=oneHour*24
   const oneWeek=oneDay*7
   if (diff < oneMinute) {
-    return `${Math.floor(diff/oneSeconds)}秒钱`
+    return `${Math.floor(diff/oneSeconds)}秒前`
   }
   if (diff < oneHour) {
     return `${Math.floor(diff/oneMinute)}分钟前`

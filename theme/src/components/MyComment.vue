@@ -1,6 +1,6 @@
 <template>
   <div class="comment" v-if="show" id="giscus-comment" data-pagefind-ignore="all" ref="commentEl">
-    <el-affix :class="{hidden:commentIsVisible}" class="comment-btn" target="main" position="botton" :offset="40">
+    <el-affix :class="{hidden:commentIsVisible}" class="comment-btn" target="main" position="bottom" :offset="40">
       <el-button @click="handleScrollToComment" plain :icon="Comment" type="primary">
         评论
       </el-button>
@@ -31,6 +31,8 @@ import {computed, ref, watch} from "vue";
 import {useDark, useElementVisibility} from "@vueuse/core";
 import {useGiscusConfig} from "../composables/config/blog";
 import {Theme} from "../composables/config";
+import {ElAffix, ElButton} from "element-plus";
+import {Comment} from '@element-plus/icons-vue'
 
 const {frontmatter} = useData()
 const commentEl = ref(null)
@@ -53,7 +55,7 @@ const commentConfig = computed<Partial<Theme.GiscusConfig>>(() => {
 })
 
 const show = computed(() => {
-  if (frontmatter.value.comment = false) {
+  if (frontmatter.value.comment === false) {
     return frontmatter.value.comment
   }
   if (!giscusConfig) {

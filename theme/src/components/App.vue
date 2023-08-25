@@ -25,7 +25,7 @@
           <div class="blog-list-wrapper">
             <MyList />
           </div>
-          <div class="blog-info wrapper">
+          <div class="blog-info-wrapper">
             <MyHomeInfo />
           </div>
         </div>
@@ -53,6 +53,7 @@ import MyHomeBanner from "./MyHomeBanner.vue";
 import MyList from "./MyList.vue";
 import MyHomeInfo from "./MyHomeInfo.vue";
 import MyComment from "./MyComment.vue";
+import MySidebar from "./MySidebar.vue";
 import {useBlogThemeMode} from "../composables/config/blog";
 
 const {Layout} = Theme
@@ -84,6 +85,13 @@ const isBlogTheme=useBlogThemeMode()
 .blog-list-wrapper{
   width: 100%;
 }
+
+.blog-info-wrapper{
+  margin-left: 16px;
+  position: sticky;
+  top: 100px;
+}
+
 @media screen and (max-width: 959px) {
   .blog-info-wrapper{
     margin-left: 16px;
