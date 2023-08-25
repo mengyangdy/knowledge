@@ -1,11 +1,13 @@
 # workflow的名称，会显示在工作流运行页面
 name: upload to Ali OSS
 # 触发事件：push到master分支的时候出发这个工作流
+# on: [push]不区分分支
 on:
   push:
     branches:
       - master
 jobs:
+  # 第一个job名称
   deploy:
     name: 部署到阿里云对象存储
     # 部署的一个虚拟环境

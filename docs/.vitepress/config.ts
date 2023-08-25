@@ -83,6 +83,9 @@ export default defineConfig({
   title: "Dylan Blog",
   description: "Dylan的个人博客，记录随笔与学习笔记，大前端相关的知识，高频面试题，个人面经等",
   ignoreDeadLinks: true,
+  markdown:{
+    lineNumbers:true
+  },
   lang: 'zh-cn',
   vite: {
     server: {
