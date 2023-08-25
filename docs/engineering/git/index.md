@@ -7,11 +7,24 @@ cover: https://s2.loli.net/2023/08/15/XrUdNqOIHRkFb4D.jpg
 
 # 工作中常用的一些git命令
 
-<a name="s6vIa"></a>
+
 ## 初始化仓库
 ```bash
 git init
-``[index.md](..%2F..%2FfrontEnd%2Fvitepress%2Findex.md)`
+```
+
+## 添加代理
+```bash
+# 设置
+git config --global http.proxy http://127.0.0.1:7890
+ 
+git config --global https.proxy http://127.0.0.1:7890
+
+# 取消全局代理
+git config --global --unset http.proxy
+ 
+git config --global --unset https.proxy
+```
 
 <a name="n2MyU"></a>
 ## 本地连接远程仓库
