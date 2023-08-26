@@ -151,6 +151,10 @@ export default defineConfig({
             link: "/frontEnd/JavaScript/",
           },
           {
+            text:"NodeJS",
+            link:"/frontEnd/node/"
+          },
+          {
             text: "NestJS",
             link: "/frontEnd/nest/",
           },
