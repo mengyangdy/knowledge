@@ -175,6 +175,10 @@ export default defineConfig({
             text: "ESLint",
             link: "/engineering/eslint/",
           },
+          {
+            text:'软件',
+            link:"/engineering/software/"
+          }
         ],
       },
       {

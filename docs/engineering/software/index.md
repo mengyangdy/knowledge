@@ -6,7 +6,7 @@ tag:
  - 终端
  - Terminal
 date: 2023-08-25
-cover: https://s2.loli.net/2023/08/15/XrUdNqOIHRkFb4D.jpg
+cover: https://s2.loli.net/2023/08/26/DRX6Bw5iSKotAuJ.jpg
 ---
 
 # windows下使用Oh My Posh美化终端
@@ -82,3 +82,9 @@ oh-my-posh init pwsh | Invoke-Expression
 
 ## 7. 自定义主题
 如果不喜欢默认的主题的话，可以查找更多的主题来使用，首先我们前往官网主题页面查看所有的主题：[theme](https://ohmyposh.dev/docs/themes)和显示的效果，看看使用哪一个主题，复制其主题名字。其次我们第一步安装的使用已经把主题都安装到本地了，地址为：`C:\Users\dylan\AppData\Local\Programs\oh-my-posh\themes`
+
+我们再次打开PowerShell的配置文件，将下面的写入到文件中保存，刷新即可看到我们自定义的主题了。
+
+```bash
+oh-my-posh init pwsh --config 'C:/Users/dylan/AppData/Local/Programs/oh-my-posh/themes/emodipt-extend.omp.json' | Invoke-Expression
+```
