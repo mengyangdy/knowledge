@@ -8,7 +8,10 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 # Dependency directories
-node_modules/
+**/node_modules
+**/.idea
+**/dest
+**/.obsidian
 
 # TypeScript cache
 *.tsbuildinfo
@@ -44,4 +47,3 @@ docs/.vitepress/cache
 .yarn/install-state.gz
 .pnp.*
 
-.idea

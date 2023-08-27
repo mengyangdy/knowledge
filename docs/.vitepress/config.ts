@@ -133,6 +133,10 @@ export default defineConfig({
     lastUpdatedText: "上次更新于",
     footer: {},
     logo: "/logo.png",
+    outline:{
+      level:'deep',
+      label:"目录"
+    },
     outlineTitle: "目录",
     nav: [
       {
