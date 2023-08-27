@@ -163,10 +163,6 @@ export default defineConfig({
             link: "/frontEnd/nest/",
           },
           {
-            text: "vite",
-            link: "/frontEnd/vite",
-          },
-          {
             text: "vitepress",
             link: "/frontEnd/vitepress/",
           },
@@ -175,6 +171,10 @@ export default defineConfig({
       {
         text: "工程化",
         items: [
+          {
+            text: "vite",
+            link: "/engineering/vite",
+          },
           {
             text: "Git",
             link: "/engineering/git/",
