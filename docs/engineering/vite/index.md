@@ -3,7 +3,7 @@ title: vite 学习
 tag:
   - vite
 date: 2023-08-27
-cover: https://s2.loli.net/2023/08/26/E7hD4MzjXyGLxdP.jpg
+cover: https://s2.loli.net/2023/08/28/RJIPrjOkfFGNDAl.jpg
 ---
 
 # vite 学习
