@@ -144,27 +144,27 @@ export default defineConfig({
         items: [
           {
             text: "HTML",
-            link: "/frontEnd/html/",
+            link: "/大前端/html/",
           },
           {
             text: "CSS",
-            link: "/frontEnd/css/",
+            link: "/大前端/css/",
           },
           {
             text: "JavaScript",
-            link: "/frontEnd/JavaScript/",
+            link: "/大前端/JavaScript/",
           },
           {
             text:"NodeJS",
-            link:"/frontEnd/node/"
+            link:"/大前端/node/"
           },
           {
             text: "NestJS",
-            link: "/frontEnd/nest/",
+            link: "/大前端/nest/",
           },
           {
             text: "vitepress",
-            link: "/frontEnd/vitepress/",
+            link: "/大前端/vitepress/",
           },
         ],
       },
@@ -173,31 +173,22 @@ export default defineConfig({
         items: [
           {
             text: "vite",
-            link: "/engineering/vite",
+            link: "/工程化/vite/",
           },
           {
             text: "Git",
-            link: "/engineering/git/",
+            link: "/工程化/git/",
           },
           {
             text: "ESLint",
-            link: "/engineering/eslint/",
+            link: "/工程化/eslint/",
           },
           {
             text:'软件',
-            link:"/engineering/software/"
+            link:"/工程化/software/"
           }
         ],
-      },
-      {
-        text: "http",
-        items: [
-          {
-            text: "fetch",
-            link: "/http/fetch/",
-          },
-        ],
-      },
+      }
     ],
     socialLinks: [
       {
