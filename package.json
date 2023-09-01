@@ -19,7 +19,6 @@
     "vue-command-palette": "^0.1.4"
   },
   "devDependencies": {
-    "@dylanjs/cli": "^0.0.3",
     "@element-plus/icons-vue": "^2.1.0",
     "@types/node": "^20.4.10",
     "element-plus": "^2.3.9",
