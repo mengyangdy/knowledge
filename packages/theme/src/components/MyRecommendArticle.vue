@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 
-import {formatShowDate} from "../../../utils";
+import {formatShowDate} from "../../../blog/utils";
 import {useArticles, useBlogConfig} from "../composables/config/blog";
 import {computed, ref} from "vue";
 import {useRoute, withBase} from "vitepress";

@@ -1,6 +1,6 @@
 import {h} from 'vue'
 import {EnhanceAppContext} from "vitepress";
-import BlogTheme,{Theme} from "../../../theme/src";
+import BlogTheme,{Theme} from "../../../../theme/src";
 
 const AIWords = [
   '千万不要因为走得太久，而忘记了我们为什么出发',

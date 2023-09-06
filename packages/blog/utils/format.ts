@@ -1,6 +1,6 @@
 
 
-import type {ThemeableImage} from "../theme/src/composables/config";
+import type {ThemeableImage} from "../../theme/src/composables/config";
 
 
 export function getImageUrl(

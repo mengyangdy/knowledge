@@ -139,8 +139,8 @@
 import {computed, onBeforeMount, onMounted, ref, watch} from 'vue'
 import {Command} from "vue-command-palette";
 import {useMagicKeys, useWindowSize} from '@vueuse/core'
-import {formatDate} from "../../../utils/index.js";
-import {useArticles, useBlogConfig} from "../composables/config/blog.js";
+import {formatDate} from "../../../blog/utils";
+import {useArticles, useBlogConfig} from "../composables/config/blog.ts";
 import {useRoute, useRouter, withBase} from "vitepress";
 import {string} from "fast-glob/out/utils/index.js";
 
@@ -376,8 +376,8 @@ const handleSelect = (target: any) => {
 }
 </style>
 <style lang="scss">
-@import '../styles/scss/global.scss';
-@import '../styles/scss/algolia.scss';
+@import 'global';
+@import 'algolia';
 
 div[command-group] {
   display: block !important;

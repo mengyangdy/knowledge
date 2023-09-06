@@ -39,7 +39,7 @@
 import {withBase} from "vitepress";
 import {useWindowSize} from "@vueuse/core";
 import {computed} from "vue";
-import {formatShowDate} from "../../../utils";
+import {formatShowDate} from "../../../blog/utils";
 
 const {width} = useWindowSize()
 const inMobile = computed(() => width.value <= 500)

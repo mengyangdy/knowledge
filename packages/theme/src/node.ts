@@ -7,8 +7,8 @@ import { execSync, spawn, spawnSync } from 'child_process'
 import path from 'path'
 import type { SiteConfig, UserConfig } from 'vitepress'
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
-import { formatDate } from '../../utils'
-import type { Theme } from './composables/config/index'
+import { formatDate } from '../../blog/utils'
+import type { Theme } from './composables/config'
 
 import {MermaidMarkdown, MermaidPlugin} from 'vitepress-plugin-mermaid'
 import {log} from "util";

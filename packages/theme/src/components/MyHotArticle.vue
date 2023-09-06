@@ -35,7 +35,7 @@
 <script setup lang="ts">
 
 import {withBase} from "vitepress";
-import {formatShowDate} from "../../../utils/index.js";
+import {formatShowDate} from "../../../blog/utils";
 import {useArticles, useBlogConfig} from "../composables/config/blog.js";
 import {computed, ref} from "vue";
 import {ElButton, ElLink} from "element-plus";

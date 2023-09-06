@@ -31,7 +31,7 @@
 
 import {useArticles} from "../composables/config/blog";
 import {computed} from "vue";
-import {isCurrentWeek} from "../../../utils";
+import {isCurrentWeek} from "../../../blog/utils";
 
 const docs=useArticles()
 const notHiddenArticles=computed(()=>{

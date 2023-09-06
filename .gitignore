@@ -30,8 +30,8 @@ lerna-debug.log*
 # public
 
 # vuepress build output
-docs/.vitepress/dist
-docs/.vitepress/cache
+**/dist
+**/cache
 
 
 # TernJS port file

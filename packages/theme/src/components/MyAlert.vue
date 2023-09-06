@@ -10,7 +10,7 @@
 import {ElAlert} from "element-plus";
 import {ref,onMounted} from "vue";
 
-import {useBlogConfig} from '../composables/config/blog'
+import {useBlogConfig} from '../composables/config/blog.ts'
 
 const {alert:alertProps}=useBlogConfig()
 const show=ref(false)
