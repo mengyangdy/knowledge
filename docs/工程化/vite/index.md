@@ -45,7 +45,7 @@ Vite（法语意为 "快速的"，发音  `/vit/`，发音同 "veet"）是一�
   - 只需要安装 postcss，并且配置 postcss.config.js 的配置文件即可
   - `npm install postcss postcss-preset-env -D`
 
-```javascript
+```JavaScript
 module.exports = {
   plugins: [require("postcss-preset-env")],
 }
@@ -70,7 +70,7 @@ module.exports = {
   - `npm install vite-plugin-vue2 -D`
 - 在 vite.config.js 中配置插件:
 
-```javascript
+```JavaScript
 import { createVuePlugin } from "vite-plugin-vue2"
 
 export default {

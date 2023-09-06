@@ -22,7 +22,7 @@ SKU 的全称是**Stock Keeping Units**，我们可以理解为是商家用于�
 
 假如我们现在有一个商品，这个商品有红色、蓝色两种颜色，1、2 两种尺寸，儿童票、成人票两种规格，那么我们根据现有的规格，可以得到所有的 SKU 为：
 
-```javascript
+```JavaScript
 const arr = [
   ["红色", "1", "儿童票"],
   ["红色", "1", "成人票"],
@@ -39,7 +39,7 @@ const arr = [
 
 首先我们需要构建我们商品的数据，数据结构为下：
 
-```javascript
+```JavaScript
 const skuTopData=[
 	{
 	key:0
@@ -58,7 +58,7 @@ const skuTopData=[
 
 基于上面的属性结构，我们可以获得的 SKU 结构为：
 
-```javascript
+```JavaScript
 const skuBottomData = [
   {
     key0: 'red',
@@ -99,7 +99,7 @@ const skuBottomData = [
 
 我们可以使用笛卡尔积来构建我们的 SKU 数据，SKU 的生成是实时的，也就是销售属性的增加或者删除都会引起 SKU 的变化，所以我们需要通过 watch 监听销售属性的变化:
 
-```javascript
+```JavaScript
 // 构建销售属性data
 const skuTopData = ref([])
 
@@ -199,7 +199,7 @@ function addAttr(data: any) {
 
 但是当我们修改某一个值的时候，就会引起 SKU 属性的重新计算，而以前填写的数据也全部会被重置掉，所以我们需要在每次重新计算 SKU 数据的时候，获取到上一次的 SKU 数据和新的对比，如果 key 一样则用旧的数据，如果 ky 不一样，则重新赋值。
 
-```javascript
+```JavaScript
 // 添加其他属性 库存 价格 会员价
 function addAttr(data: any) {
 

@@ -13,7 +13,7 @@ cover: https://s2.loli.net/2023/09/01/714nHtUfrzYWSqJ.jpg
 
 ## 脚手架第三方依赖
 
-```text
+```txt
 - bumpp 版本控制工具，用于更新npm包的时候生成友好和可定制的版本变更信息，也可以在运行中执行git tag、git push或自定义命令
 - enquirer 与prompts/inquirer同为实现命令行交互界面的工具。比如：输入、密码、上下选择等
 - execa 用于替代Node.js中原生的child_precess模块，用于执行外部命令
@@ -46,7 +46,7 @@ packages:
 
 入口文件的第一行要写上`#!/usr/bin/env node`标识，这行命令是为了告诉操作系统用node环境执行文件。
 
-```javascript
+```JavaScript
 #!/usr/bin/env node
 
 console.log('cli 第一行的打印')
@@ -78,7 +78,7 @@ console.log('cli 第一行的打印')
 
 ### 项目目录
 
-```text
+```txt
 ├─build.config.ts   //打包配置
 ├─CHANGELOG.md      //自动生成的更新日志
 ├─package.json      //配置文件

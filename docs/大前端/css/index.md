@@ -1,6 +1,6 @@
 ---
 title: 什么是原子化CSS
-tag:
+tags:
   - css
   - 原子化
 date: 2023-09-05
