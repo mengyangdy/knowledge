@@ -1,4 +1,5 @@
-import { getThemeConfig, defineConfig } from "../../../theme/src/node"
+import { getThemeConfig, defineConfig } from "@dylanjs/vitepress-theme/node"
+
 
 // https://vitepress.dev/reference/site-config
 

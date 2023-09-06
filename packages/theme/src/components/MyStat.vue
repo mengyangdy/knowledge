@@ -31,7 +31,7 @@
 
 import {useArticles} from "../composables/config/blog";
 import {computed} from "vue";
-import {isCurrentWeek} from "../../../blog/utils";
+import {blogIsCurrentWeek} from "@dylanjs/utils";
 
 const docs=useArticles()
 const notHiddenArticles=computed(()=>{
@@ -49,7 +49,7 @@ const currentMonth=computed(()=>{
 const currentWeek=computed(()=>{
   return notHiddenArticles.value.filter(v=>{
     const pubDate=new Date(v.meta?.date)
-    return isCurrentWeek(pubDate)
+    return blogIsCurrentWeek(pubDate)
   })
 })
 

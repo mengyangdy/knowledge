@@ -1,0 +1,42 @@
+{
+  "name": "@dylanjs/vitepress-theme",
+  "version": "0.0.1",
+  "description": "vitepress博客主题",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json",
+    "./node": {
+      "types": "./node.d.ts",
+      "default": "/node.js"
+    }
+  },
+  "files": [
+    "src",
+    "types",
+    "node.js",
+    "node.d.ts"
+  ],
+  "scripts": {
+    "build": "npx tsup src/node.ts --dts --out-dir=./ --external vitepress",
+    "publish-pkg": "pnpm publish --access public --no-git-checks"
+  },
+  "dependencies": {
+    "@vue/shared": "^3.3.4",
+    "@vueuse/core": "^10.3.0",
+    "fast-glob": "^3.3.1",
+    "gray-matter": "^4.0.3",
+    "sass": "^1.65.1",
+    "vitepress-plugin-mermaid": "^2.0.14"
+  },
+  "devDependencies": {
+    "@dylanjs/utils": "^0.0.1",
+    "@element-plus/icons-vue": "^2.1.0",
+    "element-plus": "^2.3.9",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vitepress": "1.0.0-rc.4",
+    "vitepress-plugin-tabs": "^0.3.0",
+    "vue": "^3.3.4"
+  }
+}

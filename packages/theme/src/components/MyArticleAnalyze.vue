@@ -56,7 +56,7 @@ import {
   CollectionTag
 } from '@element-plus/icons-vue'
 import { useBlogConfig, useCurrentArticle } from '../composables/config/blog'
-import  { formatShowDate,countWord } from '../../../blog/utils'
+import  { formatBlogShowDate,countWord } from '@dylanjs/utils'
 import { Theme } from '../composables/config'
 import MyDocCover from './MyDocCover.vue'
 
@@ -139,7 +139,7 @@ const pv = ref(6666)
 
 const currentArticle = useCurrentArticle()
 const publishDate = computed(() => {
-  return formatShowDate(currentArticle.value?.meta?.date || '')
+  return formatBlogShowDate(currentArticle.value?.meta?.date || '')
 })
 
 const timeTitle = computed(() =>

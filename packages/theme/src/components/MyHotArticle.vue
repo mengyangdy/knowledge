@@ -22,7 +22,7 @@
           <div class="suffix">
             <!-- 日期 -->
             <span class="tag">
-              {{ formatShowDate(v.meta.date) }}
+              {{ formatBlogShowDate(v.meta.date) }}
             </span>
           </div>
         </div>
@@ -35,7 +35,7 @@
 <script setup lang="ts">
 
 import {withBase} from "vitepress";
-import {formatShowDate} from "../../../blog/utils";
+import {formatBlogShowDate} from "@dylanjs/utils"
 import {useArticles, useBlogConfig} from "../composables/config/blog.js";
 import {computed, ref} from "vue";
 import {ElButton, ElLink} from "element-plus";

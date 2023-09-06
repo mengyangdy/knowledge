@@ -37,7 +37,7 @@
           <!-- 描述信息 -->
           <div class="suffix">
             <!-- 日期 -->
-            <span class="tag">{{ formatShowDate(v.meta.date) }}</span>
+            <span class="tag">{{ formatBlogShowDate(v.meta.date) }}</span>
           </div>
         </div>
       </li>
@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 
-import {formatShowDate} from "../../../blog/utils";
+import {formatBlogShowDate} from "@dylanjs/utils";
 import {useArticles, useBlogConfig} from "../composables/config/blog";
 import {computed, ref} from "vue";
 import {useRoute, withBase} from "vitepress";

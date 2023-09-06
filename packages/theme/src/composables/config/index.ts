@@ -49,7 +49,6 @@ export namespace Theme {
     cover?: string
     hiddenCover?: boolean
     readingTime?: boolean
-    readingTime?: boolean
     sticky?: number
     author?: string
     hidden?: boolean

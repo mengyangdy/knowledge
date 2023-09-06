@@ -39,7 +39,7 @@
 import {withBase} from "vitepress";
 import {useWindowSize} from "@vueuse/core";
 import {computed} from "vue";
-import {formatShowDate} from "../../../blog/utils";
+import {formatBlogShowDate} from "@dylanjs/utils";
 
 const {width} = useWindowSize()
 const inMobile = computed(() => width.value <= 500)
@@ -75,8 +75,10 @@ const props=defineProps({
     type:Number
   },
 })
+
+console.log(props.tag)
 const showTime = computed(() => {
-  return formatShowDate(props.date)
+  return formatBlogShowDate(props.date)
 })
 
 // function isWrappedWithPreventDefault(element: HTMLElement) {

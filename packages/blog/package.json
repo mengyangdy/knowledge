@@ -2,13 +2,13 @@
   "name": "blog",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs"
   },
   "dependencies": {
+    "@dylanjs/vitepress-theme": "workspace:^",
     "@vue/shared": "^3.3.4",
     "@vueuse/core": "^10.3.0",
     "gray-matter": "^4.0.3",
@@ -16,14 +16,11 @@
     "vue-command-palette": "^0.1.4"
   },
   "devDependencies": {
-    "@element-plus/icons-vue": "^2.1.0",
     "@types/node": "^20.4.10",
     "element-plus": "^2.3.9",
     "fast-glob": "^3.3.1",
     "sass": "^1.65.1",
-    "vitepress": "1.0.0-rc.4",
-    "vitepress-plugin-mermaid": "^2.0.14",
-    "vitepress-plugin-tabs": "^0.3.0"
+    "vitepress": "1.0.0-rc.4"
   },
   "pnpm": {
     "peerDependencyRules": {
