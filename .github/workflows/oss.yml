@@ -48,4 +48,4 @@ jobs:
 
       - name: 发布到OSS
         # 固定的写法 ossutil cp -rf 要上传的文件夹 oss://存储桶名字
-        run: ossutil cp -rf docs/.vitepress/dist/ oss://vitepress-blog
+        run: ossutil cp -rf packages/blog/docs/.vitepress/dist/ oss://vitepress-blog
