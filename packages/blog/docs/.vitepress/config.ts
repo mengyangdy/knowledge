@@ -128,14 +128,12 @@ export default defineConfig({
     ...extraHead,
   ],
   themeConfig: {
-    // search:{
-    //
-    // },
     lastUpdatedText: "上次更新于",
     footer: {},
     logo: "/logo.png",
     editLink:{
-      pattern:
+      pattern:'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/:path',
+      text:"去 GitHub 上编辑内容"
     },
     outline:{
       level:'deep',
