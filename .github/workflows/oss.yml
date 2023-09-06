@@ -30,9 +30,10 @@ jobs:
       - name: 构建HTML
         # 这里就是安装依赖 执行build打包，这里的要和package.json定义的scripts名称一致，如果是docs:build的话 请修改下面命令
         run: |
+          npm install -g pnpm
           cd ./packages/blog
-          npm i
-          npm run build
+          pnpm i
+          pnpm run build
 
       - name: 连接OSS
         # 使用别人写好的连接oss的action
