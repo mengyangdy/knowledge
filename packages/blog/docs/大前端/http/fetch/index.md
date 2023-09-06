@@ -1,6 +1,7 @@
 ---
 title: fetch的使用
-tag: fetch
+tag: 
+  - fetch
 date: 2023-08-16
 cover: https://s2.loli.net/2023/08/16/DUF7zejJROh5Ift.jpg
 ---

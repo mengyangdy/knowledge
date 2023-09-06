@@ -134,6 +134,9 @@ export default defineConfig({
     lastUpdatedText: "上次更新于",
     footer: {},
     logo: "/logo.png",
+    editLink:{
+      pattern:
+    },
     outline:{
       level:'deep',
       label:"目录"
