@@ -76,7 +76,6 @@ const props=defineProps({
   },
 })
 
-console.log(props.tag)
 const showTime = computed(() => {
   return formatBlogShowDate(props.date)
 })

@@ -18,7 +18,7 @@
     "node.d.ts"
   ],
   "scripts": {
-    "build": "npx tsup src/node.ts --dts --out-dir=./ --external vitepress",
+    "build": "npx tsup  src/node.ts --dts --out-dir=./ --external vitepress --watch",
     "publish-pkg": "pnpm publish --access public --no-git-checks"
   },
   "dependencies": {

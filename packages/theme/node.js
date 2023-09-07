@@ -304,6 +304,11 @@ function formatBlogDate(d, format = "yyyy-MM-dd hh:mm:ss") {
 
 // src/utils/node/index.ts
 var import_child_process = require("child_process");
+
+// src/constants/index.ts
+var removeBlank = /^\s+|\s+$/g;
+
+// src/utils/node/index.ts
 function aliasObjectToArray(obj) {
   return Object.entries(obj).map(([find, replacement]) => ({
     find,
@@ -313,7 +318,7 @@ function aliasObjectToArray(obj) {
 function getDefaultTitle(content) {
   const title = clearMatterContent(content).split("\n")?.find((str) => {
     return str.startsWith("# ");
-  })?.slice(2).replace(/^\s+|\s+$/g, "") || "";
+  })?.slice(2).replace(removeBlank, "") || "";
   return title;
 }
 function clearMatterContent(content) {
@@ -429,25 +434,19 @@ var import_gray_matter = __toESM(require("gray-matter"));
 function getArticles(cfg) {
   const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || ".";
   const files = import_fast_glob.glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] });
-  const data = files.map((v) => {
+  let test = files.filter((ee) => ee === "docs/\u5927\u524D\u7AEF/JavaScript/oauth.md");
+  const data = test.map((v) => {
     let route = v.replace(".md", "");
-    if (route.startsWith("./")) {
-      route.route.replace(
-        new RegExp(
-          `^\\.\\/${import_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_path.default.sep}`, "g"), "/")}`
-        ),
-        ""
-      );
-    } else {
-      route = route.replace(
-        new RegExp(
-          `^${import_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_path.default.sep}`, "g"), "/")}`
-        ),
-        ""
-      );
-    }
+    route = route.replace(
+      new RegExp(
+        `^${import_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_path.default.sep}`, "g"), "/")}`
+      ),
+      ""
+    );
     const fileContent = import_fs.default.readFileSync(v, "utf-8");
-    const { data: frontmatter, excerpt } = (0, import_gray_matter.default)(fileContent, { excerpt: true });
+    const { data: frontmatter } = (0, import_gray_matter.default)(fileContent, {
+      excerpt: true
+    });
     const meta = {
       ...frontmatter
     };
@@ -455,6 +454,8 @@ function getArticles(cfg) {
       meta.title = getDefaultTitle(fileContent);
     }
     if (!meta.date) {
+      console.log(v);
+      console.log(getFileBirthTime(v));
       meta.date = getFileBirthTime(v);
     } else {
       const timeZone = cfg?.timeZone ?? 8;

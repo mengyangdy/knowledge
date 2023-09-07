@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . --fix",
+    "format": "dy prettier-write",
+    "cm": "dy git-commit",
+    "clear": "dy cleanup",
+    "ncu": "dy ncu"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "pnpm": {
     "peerDependencyRules": {
       "ignoreMissing": [
@@ -16,5 +17,8 @@
         "search-insights"
       ]
     }
+  },
+  "devDependencies": {
+    "@dylanjs/cli": "^0.0.4"
   }
 }

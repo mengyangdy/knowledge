@@ -1,69 +1,87 @@
-import {formatBlogDate} from '@dylanjs/utils'
-import {spawn,spawnSync} from 'child_process'
+import { formatBlogDate } from "@dylanjs/utils";
+import { spawn, spawnSync } from "child_process";
+import { removeBlank } from "src/constants";
 
 export function aliasObjectToArray(obj: Record<string, string>) {
   return Object.entries(obj).map(([find, replacement]) => ({
     find,
-    replacement
-  }))
+    replacement,
+  }));
 }
 
+/**
+ * 获取文章中带#号的标题 将其作为title处理
+ * @param content 文章字符串
+ * @returns 处理过后的title字符串
+ */
 export function getDefaultTitle(content: string) {
-  const title = clearMatterContent(content).split('\n')
-    ?.find((str) => {
-      return str.startsWith('# ')
-    })
-    ?.slice(2)
-    .replace(/^\s+|\s+$/g, '') || ''
+  const title =
+    clearMatterContent(content)
+      .split("\n")
+      // 获取到第一个带#符号的标题
+      ?.find((str) => {
+        return str.startsWith("# ");
+      })
+      // 去掉#号 获取标题
+      ?.slice(2)
+      // 匹配以一个或多个空白字符开头或结尾的字符串
+      .replace(removeBlank, "") || "";
 
-  return title
+  return title;
 }
 
+/**
+ * 对文章进行转换去除--- --- 之间的内容 但是包含下面的---
+ * @param content 文章字符串
+ * @returns 文章字符串
+ */
 export function clearMatterContent(content: string) {
-  let first___: unknown
-  let second___: unknown
-
-  const lines = content.split('\n').reduce<string[]>((pre, line) => {
+  let first___: unknown;
+  let second___: unknown;
+  // split方法将文章切割为一行一行组成的数组
+  const lines = content.split("\n").reduce<string[]>((pre, line) => {
     // 移除开头的空白行
     if (!line.trim() && pre.length === 0) {
-      return pre
+      return pre;
     }
-    if (line.trim() === '---') {
+    if (line.trim() === "---") {
       if (first___ === undefined) {
-        first___ = pre.length
+        first___ = pre.length;
       } else if (second___ === undefined) {
-        second___ = pre.length
+        second___ = pre.length;
       }
     }
-    pre.push(line)
-    return pre
-  }, [])
-
+    pre.push(line);
+    return pre;
+  }, []);
+  // 去除--- --- 之间的内容但是包含下面的---
   return (
     lines
       // 剔除---之间的内容
       .slice((second___ as number) || 0)
-      .join('\n')
-  )
+      .join("\n")
+  );
 }
 
 export function getFileBirthTime(url: string) {
-  let date = new Date()
+  let date = new Date();
+  console.log("-> date", date);
+  console.log("-> url", url);
 
   try {
     // 参考 vitepress 中的 getGitTimestamp 实现
-    const infoStr = spawnSync('git', ['log', '-1', '--pretty="%ci"', url])
+    const infoStr = spawnSync("git", ["log", "-1", '--pretty="%ci"', url])
       .stdout?.toString()
-      .replace(/["']/g, '')
-      .trim()
+      .replace(/["']/g, "")
+      .trim();
     if (infoStr) {
-      date = new Date(infoStr)
+      date = new Date(infoStr);
     }
   } catch (error) {
-    return formatBlogDate(date)
+    return formatBlogDate(date);
   }
 
-  return formatBlogDate(date)
+  return formatBlogDate(date);
 }
 
 export function getTextSummary(text: string, count = 100) {
@@ -71,18 +89,18 @@ export function getTextSummary(text: string, count = 100) {
     clearMatterContent(text)
       .match(/^# ([\s\S]+)/m)?.[1]
       // 除去标题
-      ?.replace(/#/g, '')
+      ?.replace(/#/g, "")
       // 除去图片
-      ?.replace(/!\[.*?\]\(.*?\)/g, '')
+      ?.replace(/!\[.*?\]\(.*?\)/g, "")
       // 除去链接
-      ?.replace(/\[(.*?)\]\(.*?\)/g, '$1')
+      ?.replace(/\[(.*?)\]\(.*?\)/g, "$1")
       // 除去加粗
-      ?.replace(/\*\*(.*?)\*\*/g, '$1')
-      ?.split('\n')
+      ?.replace(/\*\*(.*?)\*\*/g, "$1")
+      ?.split("\n")
       ?.filter((v) => !!v)
       ?.slice(1)
-      ?.join('\n')
-      ?.replace(/>(.*)/, '')
+      ?.join("\n")
+      ?.replace(/>(.*)/, "")
       ?.slice(0, count)
-  )
+  );
 }
