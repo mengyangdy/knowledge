@@ -8,7 +8,7 @@
     "preview": "vitepress preview docs"
   },
   "dependencies": {
-    "@dylanjs/vitepress-theme": "workspace:^",
+    "@dylanjs/vitepress-theme": "workspace:*",
     "@vue/shared": "^3.3.4",
     "@vueuse/core": "^10.3.0",
     "gray-matter": "^4.0.3",
