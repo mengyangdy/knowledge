@@ -1,24 +1,24 @@
-import { Theme } from "../../composables/config";
-import { glob } from "fast-glob";
-import path from "path";
-import fs from "fs";
-import matter from "gray-matter";
-import { getDefaultTitle, getFileBirthTime, getTextSummary } from "./index";
+import { Theme } from "../../composables/config"
+import { glob } from "fast-glob"
+import path from "path"
+import fs from "fs"
+import matter from "gray-matter"
+import { getDefaultTitle, getFileBirthTime, getTextSummary } from "./index"
 
-import { formatBlogDate } from "@dylanjs/utils";
+import { formatBlogDate } from "@dylanjs/utils"
 
 export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
   // srcDir 文件目录 process.argv 执行命令穿的参数 执行的命令为vitepress dev docs  可以获取到docs目录
-  const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || ".";
+  const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || "."
   // fast-glob 这个库提供了遍历文件系统的方法 返回一组指定模式匹配的路径名
-  const files = glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] });
-  let test = files.filter((ee) => ee === "docs/大前端/JavaScript/oauth.md");
+  const files = glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] })
+  let test = files.filter((ee) => ee === "docs/大前端/JavaScript/oauth.md")
   // 循环所有的文章 添加一些属性
   // const data = files.map(v => {
   const data = test
     .map((v) => {
       // 去掉末尾的.md
-      let route = v.replace(".md", "");
+      let route = v.replace(".md", "")
 
       route = route.replace(
         new RegExp(
@@ -27,69 +27,57 @@ export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
             .replace(new RegExp(`\\${path.sep}`, "g"), "/")}`
         ),
         ""
-      );
+      )
       // 获取到文章内容
-      const fileContent = fs.readFileSync(v, "utf-8");
+      const fileContent = fs.readFileSync(v, "utf-8")
       // 将--- ---中间的内容转化为一个对象
       const { data: frontmatter } = matter(fileContent, {
         excerpt: true,
-      });
+      })
 
       const meta: Partial<Theme.PageMeta> = {
         ...frontmatter,
-      };
+      }
 
       if (!meta.title) {
-        meta.title = getDefaultTitle(fileContent);
+        meta.title = getDefaultTitle(fileContent)
       }
       if (!meta.date) {
-        console.log(v);
-        
-        console.log(getFileBirthTime(v));
-
-        meta.date = getFileBirthTime(v);
+        // 获取文件在github上的最后提交时间
+        meta.date = getFileBirthTime(v)
       } else {
-        const timeZone = cfg?.timeZone ?? 8;
+        const timeZone = cfg?.timeZone ?? 8
         meta.date = formatBlogDate(
           new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
-        );
+        )
       }
 
-      // 处理tags和categories,兼容历史文章
-      meta.categories =
-        typeof meta.categories === "string"
-          ? [meta.categories]
-          : meta.categories;
-      meta.tags = typeof meta.tags === "string" ? [meta.tags] : meta.tags;
-      meta.tag = [meta.tag || []]
-        .flat()
-        .concat([
-          ...new Set([...(meta.categories || []), ...(meta.tags || [])]),
-        ]);
+      // 处理tag的不同写法 直接跟在tag: 后面 或用 - 写在下面
+      meta.tag = [meta.tag || []].flat()
 
       // 获得摘要信息
-      const wordCount = 100;
+      const wordCount = 100
       meta.description =
-        meta.description || getTextSummary(fileContent, wordCount);
+        meta.description || getTextSummary(fileContent, wordCount)
 
       // 获取封面图
       meta.cover =
         meta.cover ??
-        (fileContent.match(/[!]\[.*?\]\((https:\/\/.+)\)/)?.[1] || "");
+        (fileContent.match(/[!]\[.*?\]\((https:\/\/.+)\)/)?.[1] || "")
 
       // 是否发布 默认发布
       if (meta.publish === false) {
-        meta.hidden = true;
-        meta.recommend = false;
+        meta.hidden = true
+        meta.recommend = false
       }
 
       return {
         route: `/${route}`,
         meta,
-      };
+      }
     })
-    .filter((v) => v.meta.layout !== "home");
-  return data as Theme.PageData[];
+    .filter((v) => v.meta.layout !== "home")
+  return data as Theme.PageData[]
 }
 
 export function patchVPThemeConfig(
@@ -97,7 +85,7 @@ export function patchVPThemeConfig(
   vpThemeConfig: any = {}
 ) {
   // 添加 RSS icon
-  const RSS = cfg?.RSS;
+  const RSS = cfg?.RSS
   if (RSS && RSS.icon !== false) {
     vpThemeConfig.socialLinks = [
       {
@@ -106,13 +94,13 @@ export function patchVPThemeConfig(
         },
         link: RSS?.url,
       },
-    ];
+    ]
   }
 
   // 用于自定义sidebar卡片slot
-  vpThemeConfig.sidebar = patchDefaultThemeSideBar(cfg)?.sidebar;
+  vpThemeConfig.sidebar = patchDefaultThemeSideBar(cfg)?.sidebar
 
-  return vpThemeConfig;
+  return vpThemeConfig
 }
 
 export function patchDefaultThemeSideBar(cfg?: Partial<Theme.BlogConfig>) {
@@ -125,5 +113,5 @@ export function patchDefaultThemeSideBar(cfg?: Partial<Theme.BlogConfig>) {
           },
         ],
       }
-    : undefined;
+    : undefined
 }

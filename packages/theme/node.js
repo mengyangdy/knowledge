@@ -454,8 +454,6 @@ function getArticles(cfg) {
       meta.title = getDefaultTitle(fileContent);
     }
     if (!meta.date) {
-      console.log(v);
-      console.log(getFileBirthTime(v));
       meta.date = getFileBirthTime(v);
     } else {
       const timeZone = cfg?.timeZone ?? 8;
@@ -463,11 +461,7 @@ function getArticles(cfg) {
         /* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
       );
     }
-    meta.categories = typeof meta.categories === "string" ? [meta.categories] : meta.categories;
-    meta.tags = typeof meta.tags === "string" ? [meta.tags] : meta.tags;
-    meta.tag = [meta.tag || []].flat().concat([
-      .../* @__PURE__ */ new Set([...meta.categories || [], ...meta.tags || []])
-    ]);
+    meta.tag = [meta.tag || []].flat();
     const wordCount = 100;
     meta.description = meta.description || getTextSummary(fileContent, wordCount);
     meta.cover = meta.cover ?? (fileContent.match(/[!]\[.*?\]\((https:\/\/.+)\)/)?.[1] || "");
