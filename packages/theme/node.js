@@ -434,8 +434,7 @@ var import_gray_matter = __toESM(require("gray-matter"));
 function getArticles(cfg) {
   const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || ".";
   const files = import_fast_glob.glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] });
-  let test = files.filter((ee) => ee === "docs/\u5927\u524D\u7AEF/JavaScript/oauth.md");
-  const data = test.map((v) => {
+  const data = files.map((v) => {
     let route = v.replace(".md", "");
     route = route.replace(
       new RegExp(
@@ -456,7 +455,12 @@ function getArticles(cfg) {
     if (!meta.date) {
       meta.date = getFileBirthTime(v);
     } else {
+      console.log(meta.date);
       const timeZone = cfg?.timeZone ?? 8;
+      console.log("-> timeZone", timeZone);
+      console.log(formatBlogDate(
+        /* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
+      ));
       meta.date = formatBlogDate(
         /* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
       );
@@ -581,11 +585,23 @@ function registerVitePlugins(vpCfg, plugins) {
 // src/node.ts
 function getThemeConfig(cfg) {
   const pagesData = getArticles(cfg);
+  console.log("-> pagesData", pagesData);
   const extraVPConfig = {};
   const vitePlugins = getVitePlugins(cfg);
   registerVitePlugins(extraVPConfig, vitePlugins);
   const markdownPlugin = getMarkdownPlugins(cfg);
   registerMdPlugins(extraVPConfig, markdownPlugin);
+  console.log({
+    themeConfig: {
+      blog: {
+        pagesData,
+        ...cfg
+      },
+      // 补充一些额外的配置用于继承
+      ...patchVPThemeConfig(cfg)
+    },
+    ...extraVPConfig
+  });
   return {
     themeConfig: {
       blog: {

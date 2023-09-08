@@ -3,6 +3,10 @@ import {tabsMarkdownPlugin} from 'vitepress-plugin-tabs'
 import {UserConfig} from "vitepress";
 import {aliasObjectToArray} from "./index";
 
+/**
+ * 需要添加那些插件
+ * @param cfg
+ */
 export function getMarkdownPlugins(cfg?: Partial<Theme.BlogConfig>) {
   const markdownPlugin: any[] = []
   // tabs支持

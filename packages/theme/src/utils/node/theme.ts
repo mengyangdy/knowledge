@@ -1,21 +1,19 @@
-import { Theme } from "../../composables/config"
-import { glob } from "fast-glob"
+import {Theme} from "../../composables/config"
+import {glob} from "fast-glob"
 import path from "path"
 import fs from "fs"
 import matter from "gray-matter"
-import { getDefaultTitle, getFileBirthTime, getTextSummary } from "./index"
+import {getDefaultTitle, getFileBirthTime, getTextSummary} from "./index"
 
-import { formatBlogDate } from "@dylanjs/utils"
+import {formatBlogDate} from "@dylanjs/utils"
 
 export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
   // srcDir 文件目录 process.argv 执行命令穿的参数 执行的命令为vitepress dev docs  可以获取到docs目录
   const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || "."
   // fast-glob 这个库提供了遍历文件系统的方法 返回一组指定模式匹配的路径名
-  const files = glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] })
-  let test = files.filter((ee) => ee === "docs/大前端/JavaScript/oauth.md")
+  const files = glob.sync(`${srcDir}/**/*.md`, {ignore: ["node_modules"]})
   // 循环所有的文章 添加一些属性
-  // const data = files.map(v => {
-  const data = test
+  const data = files
     .map((v) => {
       // 去掉末尾的.md
       let route = v.replace(".md", "")
@@ -31,14 +29,14 @@ export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
       // 获取到文章内容
       const fileContent = fs.readFileSync(v, "utf-8")
       // 将--- ---中间的内容转化为一个对象
-      const { data: frontmatter } = matter(fileContent, {
+      const {data: frontmatter} = matter(fileContent, {
         excerpt: true,
       })
 
       const meta: Partial<Theme.PageMeta> = {
         ...frontmatter,
       }
-
+      // 没有写title的话  从文章的标题中获取
       if (!meta.title) {
         meta.title = getDefaultTitle(fileContent)
       }
@@ -46,7 +44,12 @@ export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
         // 获取文件在github上的最后提交时间
         meta.date = getFileBirthTime(v)
       } else {
+        console.log(meta.date)
         const timeZone = cfg?.timeZone ?? 8
+        console.log("-> timeZone", timeZone);
+        console.log(formatBlogDate(
+          new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
+        ))
         meta.date = formatBlogDate(
           new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
         )
@@ -106,12 +109,12 @@ export function patchVPThemeConfig(
 export function patchDefaultThemeSideBar(cfg?: Partial<Theme.BlogConfig>) {
   return cfg?.blog !== false && cfg?.recommend !== false
     ? {
-        sidebar: [
-          {
-            text: "",
-            items: [],
-          },
-        ],
-      }
+      sidebar: [
+        {
+          text: "",
+          items: [],
+        },
+      ],
+    }
     : undefined
 }

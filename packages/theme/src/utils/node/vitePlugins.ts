@@ -4,9 +4,9 @@ import path from "path";
 import {execSync} from 'child_process'
 
 /**
- * 
+ *
  * @param cfg 主题配置
- * @returns 
+ * @returns
  */
 export function getVitePlugins(cfg?: Partial<Theme.BlogConfig>) {
   const plugins: any[] = []
@@ -26,9 +26,9 @@ export function getVitePlugins(cfg?: Partial<Theme.BlogConfig>) {
 }
 
 /**
- * 
- * @param buildEndFn 
- * @returns 
+ *
+ * @param buildEndFn
+ * @returns
  */
 export function inlineBuildEndPlugin(buildEndFn: any[]) {
   let rewrite = false

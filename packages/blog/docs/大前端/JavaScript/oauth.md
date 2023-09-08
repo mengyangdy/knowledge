@@ -1,6 +1,7 @@
 ---
 title: 什么是笛卡尔积
 tag: 笛卡尔乘积
+date: 2023/05/01
 cover: https://s2.loli.net/2023/08/28/aetMuxEYX7nDkpl.jpg
 ---
 

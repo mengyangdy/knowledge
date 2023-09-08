@@ -1,4 +1,6 @@
-import { getThemeConfig, defineConfig } from "@dylanjs/vitepress-theme/node"
+import {getThemeConfig, defineConfig} from "@dylanjs/vitepress-theme/node"
+
+import themePkg from '@dylanjs/vitepress-theme/package.json'
 
 
 // https://vitepress.dev/reference/site-config
@@ -15,7 +17,7 @@ const blogTheme = getThemeConfig({
   popover: {
     title: "联系我",
     body: [
-      { type: "text", content: "👇公众号👇---👇 微信 👇" },
+      {type: "text", content: "👇公众号👇---👇 微信 👇"},
       {
         type: "image",
         src: "https://img.cdn.sugarat.top/mdImg/MTYxNTAxODc2NTIxMA==615018765210",
@@ -46,20 +48,20 @@ const blogTheme = getThemeConfig({
 const extraHead: any =
   process.env.NODE_ENV === "production"
     ? [
-        [
-          "script",
-          {
-            charset: "UTF-8",
-            id: "LA_COLLECT",
-            src: "//sdk.51.la/js-sdk-pro.min.js",
-          },
-        ],
-        [
-          "script",
-          {},
-          'LA.init({id:"3FbAqLI3SfMDBcIj",ck:"3FbAqLI3SfMDBcIj"})',
-        ],
-      ]
+      [
+        "script",
+        {
+          charset: "UTF-8",
+          id: "LA_COLLECT",
+          src: "//sdk.51.la/js-sdk-pro.min.js",
+        },
+      ],
+      [
+        "script",
+        {},
+        'LA.init({id:"3FbAqLI3SfMDBcIj",ck:"3FbAqLI3SfMDBcIj"})',
+      ],
+    ]
     : []
 
 export default defineConfig({
@@ -128,15 +130,18 @@ export default defineConfig({
   ],
   themeConfig: {
     lastUpdatedText: "上次更新于",
-    footer: {},
-    logo: "/logo.png",
-    editLink:{
-      pattern:'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/:path',
-      text:"去 GitHub 上编辑内容"
+    footer: {
+      // message: '<a target="_blank" href="https://beian.miit.gov.cn/">备案信息</a>',
+      copyright: `© 2023-present Dylan | <a href="https://github.com/mengyang94982/knowledge/tree/master/packages/theme">@dylanjs/vitepress-theme@${themePkg.version} </a>`,
     },
-    outline:{
-      level:'deep',
-      label:"目录"
+    logo: "/logo.png",
+    editLink: {
+      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/:path',
+      text: "去 GitHub 上编辑内容"
+    },
+    outline: {
+      level: 'deep',
+      label: "目录"
     },
     outlineTitle: "目录",
     nav: [
@@ -156,8 +161,8 @@ export default defineConfig({
             link: "/大前端/JavaScript/",
           },
           {
-            text:"NodeJS",
-            link:"/大前端/node/"
+            text: "NodeJS",
+            link: "/大前端/node/"
           },
           {
             text: "NestJS",
@@ -185,8 +190,8 @@ export default defineConfig({
             link: "/工程化/eslint/",
           },
           {
-            text:'软件',
-            link:"/工程化/software/"
+            text: '软件',
+            link: "/工程化/software/"
           }
         ],
       }
