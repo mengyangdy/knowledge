@@ -44,12 +44,7 @@ export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
         // 获取文件在github上的最后提交时间
         meta.date = getFileBirthTime(v)
       } else {
-        console.log(meta.date)
         const timeZone = cfg?.timeZone ?? 8
-        console.log("-> timeZone", timeZone);
-        console.log(formatBlogDate(
-          new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
-        ))
         meta.date = formatBlogDate(
           new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
         )
