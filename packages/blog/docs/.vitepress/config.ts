@@ -1,7 +1,6 @@
-import {getThemeConfig, defineConfig} from "@dylanjs/vitepress-theme/node"
+import {defineConfig, getThemeConfig} from "@dylanjs/vitepress-theme/node"
 
-import themePkg from '@dylanjs/vitepress-theme/package.json'
-
+// import themePkg from '@dylanjs/vitepress-theme/package.json'
 
 // https://vitepress.dev/reference/site-config
 
@@ -130,6 +129,15 @@ export default defineConfig({
   ],
   themeConfig: {
     lastUpdatedText: "上次更新于",
+    search: {
+      provider: 'algolia',
+      options: {
+        appId: 'YLGDUCW405',
+        apiKey: '939259c2a82108f8e741b108b673ef4f',
+        indexName: 'dylanjs_blog_top_search',
+        placeholder: '请输入要搜索的内容...'
+      }
+    },
     footer: {
       // message: '<a target="_blank" href="https://beian.miit.gov.cn/">备案信息</a>',
       copyright: `© 2023-present Dylan | <a href="https://github.com/mengyang94982/knowledge/tree/master/packages/theme">@dylanjs/vitepress-theme@${themePkg.version} </a>`,
