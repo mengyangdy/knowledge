@@ -1,6 +1,6 @@
 import {defineConfig, getThemeConfig} from "@dylanjs/vitepress-theme/node"
 
-// import themePkg from '@dylanjs/vitepress-theme/package.json'
+import themePkg from '@dylanjs/vitepress-theme/package.json'
 
 // https://vitepress.dev/reference/site-config
 
