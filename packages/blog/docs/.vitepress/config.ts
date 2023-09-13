@@ -130,13 +130,13 @@ export default defineConfig({
   themeConfig: {
     lastUpdatedText: "上次更新于",
     search: {
-      provider: 'algolia',
+      provider: "algolia",
       options: {
-        appId: 'YLGDUCW405',
-        apiKey: '939259c2a82108f8e741b108b673ef4f',
-        indexName: 'dylanjs_blog_top_search',
-        placeholder: '请输入要搜索的内容...'
-      }
+        appId: "XK3ASI0PM0",
+        apiKey: "71b718af7f109179d825ed0af2133deb",
+        indexName: "dylanjs_blog_top_search",
+        placeholder: "请输入要搜索的内容...",
+      },
     },
     footer: {
       // message: '<a target="_blank" href="https://beian.miit.gov.cn/">备案信息</a>',
@@ -144,12 +144,13 @@ export default defineConfig({
     },
     logo: "/logo.png",
     editLink: {
-      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/:path',
-      text: "去 GitHub 上编辑内容"
+      pattern:
+        "https://github.com/mengyang94982/knowledge/tree/master/packages/blog/:path",
+      text: "去 GitHub 上编辑内容",
     },
     outline: {
-      level: 'deep',
-      label: "目录"
+      level: "deep",
+      label: "目录",
     },
     outlineTitle: "目录",
     nav: [
@@ -170,7 +171,7 @@ export default defineConfig({
           },
           {
             text: "NodeJS",
-            link: "/大前端/node/"
+            link: "/大前端/node/",
           },
           {
             text: "NestJS",
@@ -198,11 +199,11 @@ export default defineConfig({
             link: "/工程化/eslint/",
           },
           {
-            text: '软件',
-            link: "/工程化/software/"
-          }
+            text: "软件",
+            link: "/工程化/software/",
+          },
         ],
-      }
+      },
     ],
     socialLinks: [
       {
