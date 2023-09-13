@@ -58,7 +58,6 @@ import {
 import { useBlogConfig, useCurrentArticle } from '../composables/config/blog'
 import  { formatBlogShowDate,countWord } from '@dylanjs/utils'
 import { Theme } from '../composables/config'
-import MyDocCover from './MyDocCover.vue'
 
 const { article, authorList } = useBlogConfig()
 const { frontmatter } = useData()

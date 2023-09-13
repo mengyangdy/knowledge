@@ -1,6 +1,6 @@
 ---
 title: vitepress博客添加搜索效果
-tags:
+tag:
   - vitepress
   - 搜索
 date: 2023-09-13

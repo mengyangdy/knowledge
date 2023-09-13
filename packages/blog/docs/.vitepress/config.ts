@@ -1,6 +1,6 @@
-import {defineConfig, getThemeConfig} from "@dylanjs/vitepress-theme/node"
+import { defineConfig, getThemeConfig } from "@dylanjs/vitepress-theme/node"
 
-import themePkg from '@dylanjs/vitepress-theme/package.json'
+import themePkg from "@dylanjs/vitepress-theme/package.json"
 
 // https://vitepress.dev/reference/site-config
 
@@ -16,7 +16,7 @@ const blogTheme = getThemeConfig({
   popover: {
     title: "联系我",
     body: [
-      {type: "text", content: "👇公众号👇---👇 微信 👇"},
+      { type: "text", content: "👇公众号👇---👇 微信 👇" },
       {
         type: "image",
         src: "https://img.cdn.sugarat.top/mdImg/MTYxNTAxODc2NTIxMA==615018765210",
@@ -47,20 +47,20 @@ const blogTheme = getThemeConfig({
 const extraHead: any =
   process.env.NODE_ENV === "production"
     ? [
-      [
-        "script",
-        {
-          charset: "UTF-8",
-          id: "LA_COLLECT",
-          src: "//sdk.51.la/js-sdk-pro.min.js",
-        },
-      ],
-      [
-        "script",
-        {},
-        'LA.init({id:"3FbAqLI3SfMDBcIj",ck:"3FbAqLI3SfMDBcIj"})',
-      ],
-    ]
+        [
+          "script",
+          {
+            charset: "UTF-8",
+            id: "LA_COLLECT",
+            src: "//sdk.51.la/js-sdk-pro.min.js",
+          },
+        ],
+        [
+          "script",
+          {},
+          'LA.init({id:"3FbAqLI3SfMDBcIj",ck:"3FbAqLI3SfMDBcIj"})',
+        ],
+      ]
     : []
 
 export default defineConfig({
@@ -145,7 +145,7 @@ export default defineConfig({
     logo: "/logo.png",
     editLink: {
       pattern:
-        "https://github.com/mengyang94982/knowledge/tree/master/packages/blog/:path",
+        "https://github.com/mengyang94982/knowledge/tree/master/packages/blog/docs/:path",
       text: "去 GitHub 上编辑内容",
     },
     outline: {

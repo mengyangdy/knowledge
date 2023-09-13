@@ -71,8 +71,8 @@ importers:
         version: 2.0.14(mermaid@10.3.1)(vitepress@1.0.0-rc.4)
     devDependencies:
       '@dylanjs/utils':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@element-plus/icons-vue':
         specifier: ^2.1.0
         version: 2.1.0(vue@3.3.4)
@@ -320,14 +320,8 @@ packages:
       - supports-color
     dev: true
 
-  /@dylanjs/utils@0.0.1:
-    resolution: {integrity: sha512-c8FkVi/IqkvzKkEnz98yGhnCUnT/lU1HomEL31V68E2FsygGLIn4byH0jWWVYXlaf1ODVTM/ndUSeF95k9RRBQ==}
-    dependencies:
-      '@dylanjs/cli': 0.0.4
-    transitivePeerDependencies:
-      - bluebird
-      - enquirer
-      - supports-color
+  /@dylanjs/utils@0.0.3:
+    resolution: {integrity: sha512-7BcRoJLlQjA5bqgRfLrW/SXICHeuyvHsJA/KjMkyOrIx066yOm1CO9khPEUhQ5GqjidrQVpjPHm/PwUr+7BRBg==}
     dev: true
 
   /@element-plus/icons-vue@2.1.0(vue@3.3.4):
