@@ -1,6 +1,6 @@
 {
   "name": "@dylanjs/vitepress-theme",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "vitepress博客主题",
   "main": "src/index.ts",
   "exports": {
@@ -28,10 +28,10 @@
     "fast-glob": "^3.3.1",
     "gray-matter": "^4.0.3",
     "sass": "^1.65.1",
-    "vitepress-plugin-mermaid": "^2.0.14"
+    "vitepress-plugin-mermaid": "^2.0.14",
+    "@dylanjs/utils": "^0.0.3"
   },
   "devDependencies": {
-    "@dylanjs/utils": "^0.0.3",
     "@element-plus/icons-vue": "^2.1.0",
     "element-plus": "^2.3.9",
     "tsup": "^7.2.0",

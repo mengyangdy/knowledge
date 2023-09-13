@@ -19,6 +19,6 @@
     }
   },
   "devDependencies": {
-    "@dylanjs/cli": "^0.0.4"
+    "@dylanjs/cli": "^0.0.13"
   }
 }

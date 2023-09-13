@@ -265,44 +265,8 @@ var tabsPlugin = (md) => {
   md.renderer.rules["tab_close"] = renderTab;
 };
 
-// ../../node_modules/.pnpm/@dylanjs+utils@0.0.1/node_modules/@dylanjs/utils/dist/index.mjs
-function formatBlogDate(d, format = "yyyy-MM-dd hh:mm:ss") {
-  if (!(d instanceof Date)) {
-    d = new Date(d);
-  }
-  const o = {
-    "M+": d.getMonth() + 1,
-    // 月份
-    "d+": d.getDate(),
-    // 日
-    "h+": d.getHours(),
-    // 小时
-    "m+": d.getMinutes(),
-    // 分
-    "s+": d.getSeconds(),
-    // 秒
-    "q+": Math.floor((d.getMonth() + 3) / 3),
-    // 季度
-    S: d.getMilliseconds()
-    // 毫秒
-  };
-  if (/(y+)/.test(format)) {
-    format = format.replace(
-      RegExp.$1,
-      `${d.getFullYear()}`.substr(4 - RegExp.$1.length)
-    );
-  }
-  for (const k in o) {
-    if (new RegExp(`(${k})`).test(format))
-      format = format.replace(
-        RegExp.$1,
-        RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substr(`${o[k]}`.length)
-      );
-  }
-  return format;
-}
-
 // src/utils/node/index.ts
+var import_utils = require("@dylanjs/utils");
 var import_child_process = require("child_process");
 
 // src/constants/index.ts
@@ -348,9 +312,9 @@ function getFileBirthTime(url) {
       date = new Date(infoStr);
     }
   } catch (error) {
-    return formatBlogDate(date);
+    return (0, import_utils.formatBlogDate)(date);
   }
-  return formatBlogDate(date);
+  return (0, import_utils.formatBlogDate)(date);
 }
 function getTextSummary(text, count = 100) {
   return clearMatterContent(text).match(/^# ([\s\S]+)/m)?.[1]?.replace(/#/g, "")?.replace(/!\[.*?\]\(.*?\)/g, "")?.replace(/\[(.*?)\]\(.*?\)/g, "$1")?.replace(/\*\*(.*?)\*\*/g, "$1")?.split("\n")?.filter((v) => !!v)?.slice(1)?.join("\n")?.replace(/>(.*)/, "")?.slice(0, count);
@@ -431,6 +395,7 @@ var import_fast_glob = require("fast-glob");
 var import_path = __toESM(require("path"));
 var import_fs = __toESM(require("fs"));
 var import_gray_matter = __toESM(require("gray-matter"));
+var import_utils2 = require("@dylanjs/utils");
 function getArticles(cfg) {
   const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || ".";
   const files = import_fast_glob.glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] });
@@ -456,11 +421,12 @@ function getArticles(cfg) {
       meta.date = getFileBirthTime(v);
     } else {
       const timeZone = cfg?.timeZone ?? 8;
-      meta.date = formatBlogDate(
+      meta.date = (0, import_utils2.formatBlogDate)(
         /* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
       );
     }
-    meta.tag = [meta.tag || []].flat();
+    meta.tags = typeof meta.tags === "string" ? [meta.tags] : meta.tags;
+    meta.tag = [meta.tag || []].flat().concat([.../* @__PURE__ */ new Set([...meta.tags || []])]);
     const wordCount = 100;
     meta.description = meta.description || getTextSummary(fileContent, wordCount);
     meta.cover = meta.cover ?? (fileContent.match(/[!]\[.*?\]\((https:\/\/.+)\)/)?.[1] || "");
