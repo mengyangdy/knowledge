@@ -7,8 +7,6 @@ jobs:
   algolia:
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep for 120s
-              run: sleep 120
       - uses: actions/checkout@v3
       - name: Get the content of algolia.json as config
         id: algolia_config
