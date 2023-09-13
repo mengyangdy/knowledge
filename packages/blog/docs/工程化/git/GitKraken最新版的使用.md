@@ -1,6 +1,6 @@
 ---
 title: GitKraken最新版的使用
-tags:
+tag:
   - git
   - 软件
 date: 2023-09-12
@@ -130,6 +130,6 @@ rm -r ~/.gitkraken
 
 将下载好的 `strings.json` 替换到 GitKraken 语言目录下的 `strings.json`
 - Windows: `%程序安装目录%\gitkraken\app-x.x.x\resources\app\src\strings.json` (x.x.x 是你的 GitKraken 版本)
-- Mac: `/Applications/GitKraken.app/Contents/Resources/app/src/strings.json`
+- Mac: `/Applications/GitKraken.app/Contents/Resources/app.asar.unpacked/src/strings.json`
 - Linux: `/usr/share/gitkraken/resources/app.asar.unpacked/src` (感谢@lyydhy 10.31补充 Gitkraken是deepin 通过deb 安装的)
 - Linux: `/opt/gitkraken/resources/app.asar.unpacked/src/strings.json` (Arch Linux AUR 安装的路径在这)
