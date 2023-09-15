@@ -1,23 +1,23 @@
 <template>
-  <div class="card recommend" v-if="recommendList.length || empty" data-pagefind-ignore="all">
+  <div v-if="recommendList.length || empty" class="card recommend" data-pagefind-ignore="all">
     <!-- 头部 -->
     <div class="card-header">
       <span class="title">{{ title }}</span>
-      <el-button v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
+      <ElButton v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
         {{ nextText }}
-      </el-button>
+      </ElButton>
     </div>
     <!-- 文章列表 -->
-    <ol class="recommend-container" v-if="currentWikiData.length">
+    <ol v-if="currentWikiData.length" class="recommend-container">
       <li v-for="(v,idx) in currentWikiData" :key="v.route">
         <!-- 序号 -->
         <i class="num">{{ idx + 1 }}</i>
         <!-- 简介 -->
         <div class="des">
           <!-- title -->
-          <el-link type="info" class="title" :href="withBase(v.route)">
+          <ElLink type="info" class="title" :href="withBase(v.route)">
             {{ v.meta.title }}
-          </el-link>
+          </ElLink>
           <!-- 描述信息 -->
           <div class="suffix">
             <!-- 日期 -->
@@ -28,7 +28,7 @@
         </div>
       </li>
     </ol>
-    <div class="empty-text" v-else>{{ empty }}</div>
+    <div v-else class="empty-text">{{ empty }}</div>
   </div>
 </template>
 
@@ -36,9 +36,9 @@
 
 import {withBase} from "vitepress";
 import {formatBlogShowDate} from "@dylanjs/utils"
-import {useArticles, useBlogConfig} from "../composables/config/blog.js";
 import {computed, ref} from "vue";
 import {ElButton, ElLink} from "element-plus";
+import {useArticles, useBlogConfig} from "../composables/config/blog.js";
 
 const {hotArticle} = useBlogConfig()
 const title = computed(() => hotArticle?.title || '🔥 精选文章')
@@ -47,7 +47,7 @@ const pageSize = computed(() => hotArticle?.pageSize || 10)
 const empty = computed(() => hotArticle?.empty ?? '暂无精选内容')
 
 const docs = useArticles()
-//先设置最新文章
+// 先设置最新文章
 const recommendList = computed(() => {
   // const data = docs.value.filter(v => v.meta.sticky)
   const data = docs.value.concat([])
@@ -57,7 +57,7 @@ const recommendList = computed(() => {
 })
 
 const currentPage = ref(1)
-const changePage = () => {
+function changePage () {
   const newIdx = currentPage.value % Math.ceil(recommendList.value.length / pageSize.value)
   currentPage.value = newIdx + 1
 }

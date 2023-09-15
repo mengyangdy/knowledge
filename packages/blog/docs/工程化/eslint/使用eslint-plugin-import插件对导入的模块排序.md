@@ -5,6 +5,7 @@ tags:
 date: 2023-09-13
 cover: https://s2.loli.net/2023/09/13/E3pa6wJsACflSuP.jpg
 ---
+
 # 使用 eslint-plugin-import 插件对导入的模块排序
 
 > 当一个页面很大的时候，我们会发现各种 import、内部组件、外部组件、各种引入等等都在一起，可能会有个几十行，看着实在是比较杂乱。
@@ -48,6 +49,7 @@ cover: https://s2.loli.net/2023/09/13/E3pa6wJsACflSuP.jpg
 ### group
 
 对导入模块进行分组
+
 - `builtin`：内置模块
 - `external`：外部模块
 - `internl`：内部引用
@@ -71,21 +73,21 @@ cover: https://s2.loli.net/2023/09/13/E3pa6wJsACflSuP.jpg
 
 ```js
 pathGroups: [
-    {
-        pattern: 'vue',
-        group: 'external',
-        position: 'before'
-    },
-    {
-        pattern: 'vue-router',
-        group: 'external',
-        position: 'before'
-    },
-    {
-        pattern: 'pinia',
-        group: 'external',
-        position: 'before'
-    },
+  {
+    pattern: 'vue',
+    group: 'external',
+    position: 'before'
+  },
+  {
+    pattern: 'vue-router',
+    group: 'external',
+    position: 'before'
+  },
+  {
+    pattern: 'pinia',
+    group: 'external',
+    position: 'before'
+  }
 ]
 ```
 

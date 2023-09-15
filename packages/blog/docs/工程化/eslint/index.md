@@ -258,7 +258,7 @@ module.exports = {
 - `vue-eslint-parser`：专门解析 vue 单文件组件的解析器，用于解析 vue 模板、js 和样式，并提供对 vue 特定语法的支持
 
 ```js
-parser: "vue-eslint-parser";
+parser: 'vue-eslint-parser'
 ```
 
 ### 解析器选项（parserOptions）
@@ -332,9 +332,7 @@ parserOptions: {
 `plugin` 也是一个 npm 的包，主要是定义好了一些规则让我们和项目中的 `ESLint` 集成在一起。
 
 ```js
-extend:[
-"plugin:@typescript-eslint/recommended"
-]
+extend: ['plugin:@typescript-eslint/recommended']
 ```
 
 #### 引入 file 文件
@@ -366,9 +364,14 @@ extend:[
 `ESLint` 中附带有大量的规则，用于定义代码的规范和风格。这些规则大家需要那个或者是有那个不知道的话可以来这个网站来查询：[更多规则](https://zh-hans.eslint.org/docs/latest/rules/)
 
 规则的等级：
+
 - `off/0` - 关闭规则
 - `warn/1` - 启用并视作警告（不影响退出）
 - `error/2` - 启用并视作错误（触发时退出代码为 1）
+
+### reportUnusedDisableDirectives 参数
+
+这个参数表示是否应该跟踪和报告未用的禁用指令的布尔值，设置为 true 表示为跟踪
 
 ## 命令行的一些参数
 
@@ -390,7 +393,7 @@ npx eslint index.js index1.js
 // 校验多个目录
 npx eslint src build dist
 
-// 检查多种文件类型 
+// 检查多种文件类型
 npx eslint --ext .js,.vue
 
 // 只报告错误，而不报告警告
@@ -402,14 +405,14 @@ npx eslint --fix src
 // 缓存 对只有改变的文件进行操作
 npx eslint --cache src
 
-// 启用/禁用彩色输出 
+// 启用/禁用彩色输出
 npx eslint --no-color/--color index.js
 
-// 这个选项指定了控制台的输出格式 需要安装插件 npm install -D eslint-formatter-codeframe 
-// https://eslint.bootcss.com/docs/user-guide/formatters/ 
+// 这个选项指定了控制台的输出格式 需要安装插件 npm install -D eslint-formatter-codeframe
+// https://eslint.bootcss.com/docs/user-guide/formatters/
 npx eslint -f html index.js
 
-// 该选项将调试信息输出到控制台。在 ESLint 的命令行中加入这个标志，以便在命令运行时获得额外的调试信息。 
+// 该选项将调试信息输出到控制台。在 ESLint 的命令行中加入这个标志，以便在命令运行时获得额外的调试信息。
 npx eslint --debug test.js
 
 ```

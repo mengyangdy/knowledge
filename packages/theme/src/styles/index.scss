@@ -27,22 +27,18 @@ html[class='dark'] {
     position: fixed;
     top: 0;
     z-index: -1;
-    background-image: url(bg.png);
+    background-image: url(bg.svg);
     background-repeat: repeat;
     min-height: 100%;
   }
   min-height: calc(100vh - var(--vp-nav-height));
-  background: radial-gradient(
-      ellipse,
-      rgba(var(--bg-gradient-home), 1) 0%,
-      rgba(var(--bg-gradient-home), 0) 700%
-  );
+  background: radial-gradient(ellipse, rgba(var(--bg-gradient-home), 1) 0%, rgba(var(--bg-gradient-home), 0) 700%);
 }
 
 @media screen and (min-width: 960px) {
-  #VPContent.is-home.VPContent{
+  #VPContent.is-home.VPContent {
     padding-top: 0;
-    .VPHome{
+    .VPHome {
       min-height: 100vh;
     }
   }
@@ -84,10 +80,7 @@ html[class='dark'] {
 // sidebar
 @media (min-width: 1440px) {
   aside.VPSidebar {
-    padding-left: max(
-      32px,
-      calc((100% - (var(--vp-layout-max-width) - 16px)) / 2)
-    ) !important;
+    padding-left: max(32px, calc((100% - (var(--vp-layout-max-width) - 16px)) / 2)) !important;
     padding-right: 10px !important;
   }
 }

@@ -5,16 +5,16 @@
         {{ name }}
       </span>
       <span
-        class="motto"
         v-show="motto"
+        class="motto"
       >
         {{ motto }}
       </span>
     </h1>
     <div class="inspiring-wrapper">
       <h2
-        @click="changeSlogan"
         v-show="!!inspiring"
+        @click="changeSlogan"
       >
         {{ inspiring }}
       </h2>
@@ -54,7 +54,7 @@ watch(inspiringTimeout, () => {
   startTimer()
 })
 const timer = ref<any>()
-const startTimer = () => {
+function startTimer () {
   if (timer.value) {
     clearTimeout(timer.value)
   }
@@ -74,16 +74,17 @@ onUnmounted(() => {
   }
 })
 
-const changeSlogan = async () => {
-  //启动定时器
+async function changeSlogan () {
+  // 启动定时器
   startTimer()
-  if (inspiringList.value.length < 1) return
+  if (inspiringList.value.length < 1) 
+return
   inspiringIndex.value = (inspiringIndex.value + 1) % inspiringList.value.length
   const newValue = inspiringList.value[inspiringIndex.value]
   if (newValue === inspiring.value) {
     return
   }
-  //重新渲染数据，同时触发动画
+  // 重新渲染数据，同时触发动画
   inspiring.value = ""
   setTimeout(() => {
     inspiring.value = newValue

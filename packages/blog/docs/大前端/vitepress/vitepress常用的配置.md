@@ -5,6 +5,7 @@ tags:
 date: 2023-09-13
 cover: https://s2.loli.net/2023/09/13/SoUbFK2qHeylRrd.jpg
 ---
+
 # vitepress 常用的配置
 
 ## 基本配置
@@ -28,6 +29,7 @@ cover: https://s2.loli.net/2023/09/13/SoUbFK2qHeylRrd.jpg
 ### 默认的首页配置信息
 
 在首页的 md 文件中, 我们可以填写一些默认的配置，详情如下：
+
 - `home:true`: 标记此页是否为首页
 - `lang:zh-CN`: 本页面的语言为 zh-CN (简体中文)
 - `heroText`：首页的标题
@@ -46,10 +48,10 @@ cover: https://s2.loli.net/2023/09/13/SoUbFK2qHeylRrd.jpg
 没有下拉菜单的导航：
 
 ```javascript
-themeConfig:{
-  nav:[
-	  { text: '首页', link: '/' },
-	  { text: 'ablot', link: '/about' },
+themeConfig: {
+  nav: [
+    { text: '首页', link: '/' },
+    { text: 'ablot', link: '/about' }
   ]
 }
 ```
@@ -59,26 +61,26 @@ themeConfig:{
 只需要配置下 `items` 属性即可成为下拉菜单：
 
 ```javascript
-themeConfig:{
-  nav:[
-     {
-        text: "大前端",
-        items: [
-          {
-            text: "HTML",
-            link: "/大前端/html/",
-          },
-        ],
-      },
-      {
-        text: "工程化",
-        items: [
-          {
-            text: "vite",
-            link: "/工程化/vite/",
-          },
-        ],
-      },
+themeConfig: {
+  nav: [
+    {
+      text: '大前端',
+      items: [
+        {
+          text: 'HTML',
+          link: '/大前端/html/'
+        }
+      ]
+    },
+    {
+      text: '工程化',
+      items: [
+        {
+          text: 'vite',
+          link: '/工程化/vite/'
+        }
+      ]
+    }
   ]
 }
 ```
@@ -115,12 +117,13 @@ themeConfig:{
 禁用侧边栏：
 
 ```md
-//某一个文件
----
+## //某一个文件
+
 // 开启
 sidebar:auto
 // 禁用
 sidebar:falle
+
 ---
 ```
 
@@ -149,9 +152,9 @@ export default{
 上一篇和下一篇通过配置 md 文档中的 `yaml` 的 `prev` 和 `next` 来显示配置，文字和导航地址一样即可：
 
 ```md
---- 
-prev: /HTML/ 
-next: /JavaScript/ 
+---
+prev: /HTML/
+next: /JavaScript/
 ---
 ```
 
@@ -169,4 +172,3 @@ themeConfig: {
 ```
 
 path 就是我们当前页面对应的文件，我们只需要把前面的路径修改为自己的即可，text 为页面展示的点击文本。
-

@@ -1,5 +1,5 @@
 <template>
-  <div class="card friend-wrapper" v-if="friendList?.length">
+  <div v-if="friendList?.length" class="card friend-wrapper">
     <!-- 头部 -->
     <div class="card-header">
       <span class="title">🤝 友情链接</span>
@@ -8,7 +8,7 @@
     <ol class="friend-list">
       <li v-for="v in friendList" :key="v.nickname">
         <a :href="v.url" target="_blank">
-          <el-avatar :size="50" :src="v.avatar" :alt="v.alt"/>
+          <ElAvatar :size="50" :src="v.avatar" :alt="v.alt"/>
           <div>
             <span class="nickname">{{ v.nickname }}</span>
             <p class="des">{{ v.des }}</p>
@@ -22,9 +22,9 @@
 <script setup>
 import {ElAvatar} from "element-plus";
 import {useDark} from "@vueuse/core";
-import {useBlogConfig} from "../composables/config/blog.ts";
 import {computed} from "vue";
 import {getImageUrl} from "@dylanjs/utils";
+import {useBlogConfig} from "../composables/config/blog.ts";
 
 const isDark = useDark({
   storageKey: 'vitepress-theme-appearance'

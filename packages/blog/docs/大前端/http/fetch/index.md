@@ -1,6 +1,6 @@
 ---
 title: fetch的使用
-tag: 
+tag:
   - fetch
 date: 2023-08-16
 cover: https://s2.loli.net/2023/08/16/DUF7zejJROh5Ift.jpg
@@ -95,11 +95,11 @@ let promise实例(p) = fetch(请求地址，配置项)
 ### get 请求
 
 ```js
-fetch("http://localhost:3000/api")
-  .then((res) => {
+fetch('http://localhost:3000/api')
+  .then(res => {
     return res.text()
   })
-  .then((res) => {
+  .then(res => {
     return res
   })
 ```
@@ -107,20 +107,20 @@ fetch("http://localhost:3000/api")
 ### post 请求
 
 ```js
-fetch("http://localhost:3000/api", {
-  method: "POST",
+fetch('http://localhost:3000/api', {
+  method: 'POST',
   headers: {
-    Authentication: "secret",
-    "Content-Type": "application/json",
+    Authentication: 'secret',
+    'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    name: "dylan",
-  }),
+    name: 'dylan'
+  })
 })
-  .then((res) => {
+  .then(res => {
     return res.json()
   })
-  .then((res) => {
+  .then(res => {
     return res
   })
 ```
@@ -130,30 +130,30 @@ fetch("http://localhost:3000/api", {
 fetch 请求想要中止的话需要一个特殊的内置对象：AbortController，它不仅可以中止`fetch`，还可以中止其他异步任务
 
 ```js
-//创建一个控制器
-let ctrol = new AbortController()
-fetch("http://localhost:3000/api", {
-  //请求中断的信号
-  signal: ctrol.signal,
+// 创建一个控制器
+const ctrol = new AbortController()
+fetch('http://localhost:3000/api', {
+  // 请求中断的信号
+  signal: ctrol.signal
 })
-  .then((response) => {
-    let { status, statusText } = response
+  .then(response => {
+    const { status, statusText } = response
     if (/^(2|3)\d{2}$/.test(status)) return response.json()
     return Promise.reject({
       code: -100,
       status,
-      statusText,
+      statusText
     })
   })
-  .then((value) => {
-    //最终的结果
+  .then(value => {
+    // 最终的结果
     return value
   })
-  .catch((reason) => {
+  .catch(reason => {
     console.dir(reason)
   })
 
-//立即中断请求
+// 立即中断请求
 ctrol.abort()
 ```
 
@@ -175,83 +175,73 @@ ctrol.abort()
  http.post/put/patch([url],[body],[config])  预先指定了配置项中的url/method/body
  */
 
-//判断类型
-import _ from "../utils"
+// 判断类型
+import _ from '../utils'
 
-//核心方法
+// 核心方法
 const request = function request(config) {
-  //判断是否是对象
+  // 判断是否是对象
   if (!_.isPlainObject(config)) config = {}
   config = Object.assign(
     {
-      url: "",
-      method: "GET",
-      credentials: "include",
+      url: '',
+      method: 'GET',
+      credentials: 'include',
       headers: null,
       body: null,
       params: null,
-      responseType: "json",
-      signal: null,
+      responseType: 'json',
+      signal: null
     },
     config
   )
-  if (!config.url) throw new TypeError("url must be required")
+  if (!config.url) throw new TypeError('url must be required')
   if (!_.isPlainObject(config.headers)) config.headers = {}
-  if (config.params !== null && !_.isplainObject(config.params))
-    config.params = null
+  if (config.params !== null && !_.isplainObject(config.params)) config.params = null
 
-  let {
-    url,
-    method,
-    credentials,
-    headers,
-    body,
-    params,
-    responseType,
-    signal,
-  } = config
-  //处理问号传参
+  let { url, method, credentials, headers, body, params, responseType, signal } = config
+  // 处理问号传参
   if (params) {
-    url += `${url.includes("?") ? "&" : "?"}${qs.stringify(params)}`
+    url += `${url.includes('?') ? '&' : '?'}${qs.stringify(params)}`
   }
 
-  //处理请求主题信息：按照我们后台要求，如果传递的是一个普通对象，我们要把其设置为urlencoded格式「设置请求头」？
+  // 处理请求主题信息：按照我们后台要求，如果传递的是一个普通对象，我们要把其设置为urlencoded格式「设置请求头」？
   if (_.isPlainObject(body)) {
     body = qs.stringify(body)
-    headers["Content-Type"] = "application/x-www-form-urlencoded"
+    headers['Content-Type'] = 'application/x-www-form-urlencoded'
   }
 
-  //类似与axios中的请求请求拦截器：每一个请求，传递给服务器相同的内容可以在这里处理
-  let token = localStorage.getItem("token")
+  // 类似与axios中的请求请求拦截器：每一个请求，传递给服务器相同的内容可以在这里处理
+  const token = localStorage.getItem('token')
   if (token) {
-    headers["authorization"] = token
+    headers.authorization = token
   }
 
-  //发送请求
+  // 发送请求
   method = method.toUpperCase()
   config = {
     method,
     credentials,
     headers,
-    cache: "no-cache",
-    signal,
+    cache: 'no-cache',
+    signal
   }
 
   if (/^(POST|PUT|PATCH)$/i.test(method) && body) config.body = body
   return fetch(url, config)
-    .then((response) => {
-      let { status, statusText } = response
+    .then(response => {
+      const { status, statusText } = response
       if (/^2|3\d{2}$/.test(status)) {
-        //请求成功，根据预设的方式，获取需要的值
+        // 请求成功，根据预设的方式，获取需要的值
         let result
         switch (responseType.toLowerCase()) {
-          case "text":
+          case 'text':
             result = response.text()
             break
-          case "arraybuffer":
+          case 'arraybuffer':
             result = response.arrayBuffer()
             break
-          case "blob":
+          case 'blob':
             result = response.blob()
             break
           default:
@@ -260,36 +250,36 @@ const request = function request(config) {
         return result
       }
 
-      //请求失败：HTTP状态码失败
+      // 请求失败：HTTP状态码失败
       return Promise.reject({
         code: -100,
         status,
-        statusText,
+        statusText
       })
     })
-    .catch((reason) => {
-      //失败的统一处理
+    .catch(reason => {
+      // 失败的统一处理
       return promise.reject(reason)
     })
 }[
-  //快捷方法
-  ("GET", "HEAD", "DELETE", "OPTIONS")
+  // 快捷方法
+  ('GET', 'HEAD', 'DELETE', 'OPTIONS')
 ]
-  .forEach((item) => {
+  .forEach(item => {
     request[item.toLowerCase()] = function (url, config) {
       if (!_.isPlainObject(config)) config = {}
-      config["url"] = url
-      config["method"] = item
+      config.url = url
+      config.method = item
       return request(config)
     }
   })
 
-  [("POST", "PUT", "PATCH")].forEach((item) => {
+  [('POST', 'PUT', 'PATCH')].forEach(item => {
     request[item.toLowerCase()] = function (url, body, config) {
       if (!_.isPlainObject(config)) config = {}
-      config["url"] = url
-      config["method"] = item
-      config["body"] = body
+      config.url = url
+      config.method = item
+      config.body = body
       return request(config)
     }
   })

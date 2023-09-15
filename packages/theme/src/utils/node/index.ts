@@ -1,5 +1,5 @@
+import { spawnSync } from "node:child_process"
 import { formatBlogDate } from "@dylanjs/utils"
-import { spawn, spawnSync } from "child_process"
 import { removeBlank } from "src/constants"
 
 export function aliasObjectToArray(obj: Record<string, string>) {

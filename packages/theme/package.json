@@ -2,7 +2,6 @@
   "name": "@dylanjs/vitepress-theme",
   "version": "0.0.2",
   "description": "vitepress博客主题",
-  "main": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json",
@@ -11,6 +10,7 @@
       "default": "/node.js"
     }
   },
+  "main": "src/index.ts",
   "files": [
     "src",
     "types",
@@ -18,18 +18,18 @@
     "node.d.ts"
   ],
   "scripts": {
-    "dev": "npx tsup  src/node.ts --dts --out-dir=./ --external vitepress --watch",
-    "build": "npx tsup  src/node.ts --dts --out-dir=./ --external vitepress",
-    "publish-pkg": "pnpm publish --access public --no-git-checks"
+    "typecheck": "tsc --noEmit",
+    "stub": "npx tsup  src/node.ts --dts --out-dir=./ --external vitepress --watch",
+    "build": "npx tsup  src/node.ts --dts --out-dir=./ --external vitepress"
   },
   "dependencies": {
+    "@dylanjs/utils": "^0.0.3",
     "@vue/shared": "^3.3.4",
     "@vueuse/core": "^10.3.0",
     "fast-glob": "^3.3.1",
     "gray-matter": "^4.0.3",
     "sass": "^1.65.1",
-    "vitepress-plugin-mermaid": "^2.0.14",
-    "@dylanjs/utils": "^0.0.3"
+    "vitepress-plugin-mermaid": "^2.0.14"
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.1.0",

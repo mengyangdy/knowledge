@@ -6,6 +6,7 @@ tags:
 date: 2023-09-12
 cover: https://s2.loli.net/2023/09/12/XLQcPkv4u3tTmyz.jpg
 ---
+
 # windows 下 nvm 的使用
 
 ## Nvm 是什么？

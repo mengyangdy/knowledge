@@ -3,7 +3,7 @@ import './styles/index.scss'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
-import {Theme} from "vitepress";
+import type {Theme} from "vitepress";
 import DefaultTheme from 'vitepress/theme'
 import App from './components/App.vue'
 import {withConfigProvider} from "./composables/config/blog";
