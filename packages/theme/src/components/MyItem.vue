@@ -1,35 +1,35 @@
 <template>
   <a class="blog-item" :href="withBase(route)">
-    <i class="pin" v-if="!!pin"></i>
-    <!--标题-->
-    <p class="title" v-if="inMobile">{{ title }}</p>
+    <i v-if="!!pin" class="pin"></i>
+    <!-- 标题 -->
+    <p v-if="inMobile" class="title">{{ title }}</p>
     <div class="info-container">
       <!-- 左侧信息 -->
       <div class="info-part">
         <!-- 标题 -->
-        <p class="title" v-if="!inMobile">{{ title }}</p>
+        <p v-if="!inMobile" class="title">{{ title }}</p>
         <!-- 简短介绍 -->
-        <p class="description" v-if="!descriptionHTML && !! description">
+        <p v-if="!descriptionHTML && !! description" class="description">
           {{ description }}
         </p>
         <template v-if="descriptionHTML">
           <div class="description-html" v-html="descriptionHTML"></div>
         </template>
         <!-- 底部补充信息 -->
-        <div class="badge-list" v-if="!inMobile">
-          <span class="split" v-if="author">{{ author }}</span>
+        <div v-if="!inMobile" class="badge-list">
+          <span v-if="author" class="split">{{ author }}</span>
           <span class="split">{{ showTime }}</span>
-          <span class="split" v-if="tag?.length">{{ tag.join(' . ') }}</span>
+          <span v-if="tag?.length" class="split">{{ tag.join(' . ') }}</span>
         </div>
       </div>
       <!-- 右侧封面图 -->
       <div v-if="cover" class="cover-img" :style="`background-image:url(${cover});`"></div>
     </div>
     <!-- 底部补充描述 -->
-    <div class="badge-list" v-if="inMobile">
-      <span class="split" v-if="author">{{ author }}</span>
+    <div v-if="inMobile" class="badge-list">
+      <span v-if="author" class="split">{{ author }}</span>
       <span class="split">{{ showTime }}</span>
-      <span class="split" v-if="tag?.length">{{ tag.join(' · ') }}</span>
+      <span v-if="tag?.length" class="split">{{ tag.join(' · ') }}</span>
     </div>
   </a>
 </template>
@@ -41,8 +41,6 @@ import {useWindowSize} from "@vueuse/core";
 import {computed} from "vue";
 import {formatBlogShowDate} from "@dylanjs/utils";
 
-const {width} = useWindowSize()
-const inMobile = computed(() => width.value <= 500)
 const props=defineProps({
   route:{
     type:String
@@ -75,7 +73,8 @@ const props=defineProps({
     type:Number
   },
 })
-
+const {width} = useWindowSize()
+const inMobile = computed(() => width.value <= 500)
 const showTime = computed(() => {
   return formatBlogShowDate(props.date)
 })

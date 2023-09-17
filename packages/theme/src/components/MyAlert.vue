@@ -1,14 +1,14 @@
 <template>
-<div class="global-alert" v-if="show" data-pagefind-ignore="all">
-  <el-alert :title="alertProps?.title" :type="alertProps?.type" :show-icon="alertProps?.showIcon" :center="alertProps?.center" :closable="alertProps?.closable" :close-text="alertProps?.closeText" :description="alertProps?.description">
+<div v-if="show" class="global-alert" data-pagefind-ignore="all">
+  <ElAlert :title="alertProps?.title" :type="alertProps?.type" :show-icon="alertProps?.showIcon" :center="alertProps?.center" :closable="alertProps?.closable" :close-text="alertProps?.closeText" :description="alertProps?.description">
     <div v-if="alertProps?.html" v-html="alertProps?.html"></div>
-  </el-alert>
+  </ElAlert>
 </div>
 </template>
 
 <script setup>
 import {ElAlert} from "element-plus";
-import {ref,onMounted} from "vue";
+import {onMounted,ref} from "vue";
 
 import {useBlogConfig} from '../composables/config/blog.ts'
 

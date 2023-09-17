@@ -1,29 +1,31 @@
 <template>
   <ul data-pagefind-ignore="all">
     <li v-for="v in currentWikiData" :key="v.route">
-      <my-item :route="v.route" :title="v.meta.title" :description="v.meta.description"
+      <MyItem
+:route="v.route" :title="v.meta.title" :description="v.meta.description"
                :description-h-t-m-l="v.meta.descriptionHTML" :date="v.meta.date" :tag="v.meta.tag" :cover="v.meta.cover"
                :author="v.meta.author || globalAuthor" :pin="v.meta.top"/>
     </li>
   </ul>
   <ClientOnly>
-    <el-pagination v-if="wikiList.length >=pageSize" small background :default-current-page="1"
-                   :current-page="currentPage" @update:current-page="handleUpdatePageNum" :page-size="pageSize"
-                   :total="filterData.length" layout="prev,pager,next,jumper">
+    <ElPagination
+v-if="wikiList.length >=pageSize" small background :default-current-page="1"
+                   :current-page="currentPage" :page-size="pageSize" :total="filterData.length"
+                   layout="prev,pager,next,jumper" @update:current-page="handleUpdatePageNum">
 
-    </el-pagination>
+    </ElPagination>
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
-import MyItem from "./MyItem.vue";
 import {useData, useRouter} from "vitepress";
-import {Theme} from "../composables/config";
 import {computed, watch} from "vue";
-import {useActiveTag, useArticles, useBlogConfig, useCurrentPageNum} from "../composables/config/blog";
 import {useBrowserLocation} from "@vueuse/core";
 
 import {ElPagination} from "element-plus";
+import {useActiveTag, useArticles, useBlogConfig, useCurrentPageNum} from "../composables/config/blog";
+import type {Theme} from "../composables/config";
+import MyItem from "./MyItem.vue";
 
 const {theme, frontmatter} = useData<Theme.Config>()
 const globalAuthor = computed(() => theme.value.blog?.author || '')
@@ -43,7 +45,8 @@ const wikiList = computed(() => {
 })
 
 const filterData = computed(() => {
-  if (!activeTagLabel.value) return wikiList.value
+  if (!activeTagLabel.value) 
+return wikiList.value
   return wikiList.value.filter(v => v.meta?.tag?.includes(activeTagLabel.value))
 })
 
@@ -59,7 +62,7 @@ const currentWikiData = computed(() => {
 const router = useRouter()
 const location = useBrowserLocation()
 const queryPageNumKey = 'pageNum'
-const handleUpdatePageNum = (current: number) => {
+function handleUpdatePageNum (current: number) {
   if (currentPage.value === current) {
     return
   }

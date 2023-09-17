@@ -1,20 +1,22 @@
 <template>
-  <div class="card tags" v-if="tags.length" data-pagefind-ignore="all">
-    <!--头部-->
+  <div v-if="tags.length" class="card tags" data-pagefind-ignore="all">
+    <!-- 头部 -->
     <div class="card-header">
       <span class="title">🏷 标签</span>
-      <el-tag v-if="activeTag.label" :type="(activeTag.type as any)" :effect="colorMode" closable
+      <ElTag
+v-if="activeTag.label" :type="(activeTag.type as any)" :effect="colorMode" closable
               @close="handleCloseTag">
         {{ activeTag.label }}
-      </el-tag>
+      </ElTag>
     </div>
     <!-- 标签列表 -->
     <ul class="tag-list">
       <li v-for="(tag,idx) in tags" :key="tag">
-        <el-tag :type="tagType[idx % tagType.length]" @click="handleTagClick(tag,tagType[idx % tagType.length])"
-                :effect="colorMode">
+        <ElTag
+:type="tagType[idx % tagType.length]" :effect="colorMode"
+                @click="handleTagClick(tag,tagType[idx % tagType.length])">
           {{ tag }}
-        </el-tag>
+        </ElTag>
       </li>
     </ul>
   </div>
@@ -22,11 +24,13 @@
 
 <script setup lang="ts">
 
-import {useActiveTag, useArticles, useCurrentPageNum} from "../composables/config/blog";
 import {computed, watch} from "vue";
 import {useBrowserLocation, useDark} from "@vueuse/core";
 import {useRouter} from "vitepress";
 import {ElTag} from "element-plus";
+import {useActiveTag, useArticles, useCurrentPageNum} from "../composables/config/blog";
+
+const router = useRouter()
 
 const docs = useArticles()
 const tags = computed(() => {
@@ -43,15 +47,14 @@ const colorMode = computed(() => (isDark.value ? 'light' : 'dark'))
 
 const tagType: any = ['', 'info', 'success', 'warning', 'danger']
 const currentPage = useCurrentPageNum()
-const handleCloseTag = () => {
+function handleCloseTag () {
   activeTag.value.label = ''
   activeTag.value.type = ''
   currentPage.value = 1
   router.go(`${window.location.origin}${router.route.path}`)
 }
-const router = useRouter()
 const location = useBrowserLocation()
-const handleTagClick = (tag: string, type: string) => {
+function handleTagClick (tag: string, type: string) {
   if (tag === activeTag.value.label) {
     handleCloseTag()
     return

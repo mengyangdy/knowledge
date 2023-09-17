@@ -1,17 +1,17 @@
 <template>
-  <div class="theme-blog-popover" v-show="show" data-pagefind-ignore="all">
+  <div v-show="show" class="theme-blog-popover" data-pagefind-ignore="all">
     <div class="header">
       <div class="title-wrapper">
-        <el-icon size="20px">
+        <ElIcon size="20px">
           <Flag/>
-        </el-icon>
+        </ElIcon>
         <span class="title">{{ popoverProps?.title }}</span>
       </div>
-      <el-icon @click="show = false" class="close-icon" size="20px">
+      <ElIcon class="close-icon" size="20px" @click="show = false">
         <CircleCloseFilled/>
-      </el-icon>
+      </ElIcon>
     </div>
-    <div class="body content" v-if="bodyContent.length">
+    <div v-if="bodyContent.length" class="body content">
       <PopoverValue v-for="(ee,vv) in bodyContent" :key="vv" :item="ee">
         {{ ee.type !== 'image' ? ee.content : '' }}
       </PopoverValue>
@@ -23,20 +23,21 @@
       </PopoverValue>
     </div>
   </div>
-  <div class="theme-blog-popover-close" v-show="!show && (popoverProps?.reopen ?? true) && popoverProps?.title"
+  <div
+v-show="!show && (popoverProps?.reopen ?? true) && popoverProps?.title" class="theme-blog-popover-close"
        @click="show=true">
-    <el-icon size="20px">
+    <ElIcon size="20px">
       <Flag/>
-    </el-icon>
+    </ElIcon>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ElIcon, ElButton} from "element-plus";
-import {Flag, CircleCloseFilled} from '@element-plus/icons-vue'
-import {computed, onMounted, ref, h} from "vue";
-import type {BlogPopover} from "../composables/config";
+import {ElButton, ElIcon} from "element-plus";
+import {CircleCloseFilled, Flag} from '@element-plus/icons-vue'
+import {computed, h, onMounted, ref} from "vue";
 import {parseStringStyle} from '@vue/shared'
+import type {BlogPopover} from "../composables/config";
 import {useBlogConfig} from "../composables/config/blog";
 
 
@@ -49,7 +50,7 @@ const footerContent = computed(() => {
   return popoverProps?.footer || []
 })
 
-const PopoverValue =(props:{key:number;item:BlogPopover.Value},{slots}:any)=>{
+function PopoverValue (props:{key:number;item:BlogPopover.Value},{slots}:any) {
   const {key,item}=props
   if (item.type === 'title') {
     return h(
@@ -102,7 +103,8 @@ const PopoverValue =(props:{key:number;item:BlogPopover.Value},{slots}:any)=>{
 }
 
   onMounted(() => {
-    if (!popoverProps?.title) return
+    if (!popoverProps?.title) 
+return
     const storageKey = 'theme-blog-popover'
     const oldValue = localStorage.getItem(storageKey)
     const newValue = JSON.stringify(popoverProps)

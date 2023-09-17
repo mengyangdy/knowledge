@@ -1,5 +1,5 @@
 <template>
-  <img class="blog-doc-cover" v-if="cover && !hiddenCover" :src="cover">
+  <img v-if="cover && !hiddenCover" class="blog-doc-cover" :src="cover">
 </template>
 
 <script setup lang="ts">

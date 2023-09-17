@@ -14,7 +14,7 @@ import {getVitePlugins, registerVitePlugins} from "./utils/node/vitePlugins";
  * 获取主题配置
  * @param cfg 主题配置
  */
-export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
+export async  function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
   const pagesData = getArticles(cfg)
   const extraVPConfig: any = {}
   // 获取要加载的vite插件
@@ -23,7 +23,7 @@ export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
   registerVitePlugins(extraVPConfig, vitePlugins)
 
   // 获取要加载的markdown插件
-  const markdownPlugin = getMarkdownPlugins(cfg)
+  const markdownPlugin = await getMarkdownPlugins(cfg)
 
   // 注册markdown插件
   registerMdPlugins(extraVPConfig, markdownPlugin)

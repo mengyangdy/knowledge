@@ -6,6 +6,7 @@ tag:
 date: 2023-09-12
 cover: https://s2.loli.net/2023/09/12/OBWvluSgyGxIabk.jpg
 ---
+
 # GitKraken 最新版的使用
 
 > 最近一直在几个 git 的 gui 工具中试用，发现最后还是 gitkraken 操作简单，非常容易上手
@@ -34,7 +35,7 @@ cover: https://s2.loli.net/2023/09/12/OBWvluSgyGxIabk.jpg
 
 ## 下载工具
 
-下载地址：[百度网盘]( https://pan.baidu.com/s/1L7mkkwj9WJaR-jcCIbFHfg?pwd=7ewn )
+下载地址：[百度网盘](https://pan.baidu.com/s/1L7mkkwj9WJaR-jcCIbFHfg?pwd=7ewn)
 
 此工具原来是在 github 上开源的，现在已经被和谐，原地址为：[github 地址](https://github.com/PMExtra/GitCracken.git%EF%BC%89)
 
@@ -45,7 +46,7 @@ cover: https://s2.loli.net/2023/09/12/OBWvluSgyGxIabk.jpg
 解压工具，进入 GitCracken 目录，在此目录依次运行一下三行命令：
 
 ```bash
-yarn install 
+yarn install
 yarn build
 yarn gitcracken patcher # Mac用户可能需要root权限，需要在前面加上sudo
 ```
@@ -65,9 +66,9 @@ yarn gitcracken patcher # Mac用户可能需要root权限，需要在前面加�
 如果显示 Free 可以尝试删除下用户的缓存目录
 
 - Windows
-	- `C:\Users\{用户名}\AppData\Roaming\\.gitkraken`
+  - `C:\Users\{用户名}\AppData\Roaming\\.gitkraken`
 - Mac
-	- `~/.gitkraken`
+  - `~/.gitkraken`
 
 再次打开软件，如果还没有出现 Pro 的话，那就是工具失效了，只能用旧版本了。
 
@@ -89,12 +90,14 @@ Windows 平台可以直接删除安装路径下的 Update.exe 程序，但是后
 原理是让自动更新程序无法下载最新的包，但不影响从官网页面下载安装包。因为我通过抓包发现软件内部请求 release.gitkraken.com 时会重定向到 release.axocdn.com，而官网下载链接直接用的后者。
 
 Hosts 文件路径：
+
 - Windows 平台：`C:\Windows\System32\drivers\etc\hosts`
 - Mac/Linux 平台：`/etc/hosts`
 
 ## 卸载
 
 Windows 卸载残留
+
 - `C:\Users\{用户名}\AppData\Roaming\\.gitkraken` （**注**：这里存放账号信息、打开过的项目、用户设置等，如果你只是升级版本，可以不用删除）
 - `C:\Users\{用户名}\AppData\Roaming\GitKraken`
 - `C:\Users\{用户名}\AppData\Local\gitkraken` （**注**：这是默认安装位置，如果安装完成后桌面没有快捷方式，可从这里启动）
@@ -129,6 +132,7 @@ rm -r ~/.gitkraken
 下载汉化后的 json：[json地址](https://pan.baidu.com/s/1HOtq3TvOsiyTBRNPAtcYtw?pwd=barp)
 
 将下载好的 `strings.json` 替换到 GitKraken 语言目录下的 `strings.json`
+
 - Windows: `%程序安装目录%\gitkraken\app-x.x.x\resources\app\src\strings.json` (x.x.x 是你的 GitKraken 版本)
 - Mac: `/Applications/GitKraken.app/Contents/Resources/app.asar.unpacked/src/strings.json`
 - Linux: `/usr/share/gitkraken/resources/app.asar.unpacked/src` (感谢@lyydhy 10.31补充 Gitkraken是deepin 通过deb 安装的)

@@ -13,6 +13,7 @@ cover: https://s2.loli.net/2023/09/05/7r8UFMQuoc39da5.jpg
 ## npm-check-upadtes的缺点
 
 由于历史的原因，check包有如下的缺点：
+
 - 不支持`monorepo`
 - 无法在`major/minor/patch`模式之间切换
 
@@ -124,9 +125,7 @@ import { defineConfig } from 'taze'
 
 export default defineConfig({
   // 忽略某个包
-  exclude: [
-    'webpack'
-  ],
+  exclude: ['webpack'],
   // 获取最新的包信息，而不是从缓存中
   force: true,
   // 修改package.json
@@ -135,8 +134,8 @@ export default defineConfig({
   install: true,
   // 为每个包使用不同的更新模式
   packageMode: {
-    'typescript': 'major',
-    'unocss': 'ignore',
+    typescript: 'major',
+    unocss: 'ignore',
     '/vue/': 'latest'
   }
 })

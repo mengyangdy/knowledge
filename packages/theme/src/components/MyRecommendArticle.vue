@@ -1,30 +1,31 @@
 <template>
-  <div class="recommend"
+  <div
+v-if="_recommend !== false && (recommendList.length || emptyText)"
+       class="recommend"
        :class="{ card: sidebarStyle === 'card' }"
-       v-if="_recommend !== false && (recommendList.length || emptyText)"
        data-pagefind-ignore="all">
     <!-- 头部 -->
     <div class="card-header">
-      <span class="title" v-if="title">{{ title }}</span>
-      <el-button
+      <span v-if="title" class="title">{{ title }}</span>
+      <ElButton
         v-if="showChangeBtn"
         size="small"
         type="primary"
         text
         @click="changePage"
       >{{ nextText }}
-      </el-button
+      </ElButton
       >
     </div>
     <!-- 文章列表 -->
-    <ol class="recommend-container" v-if="currentWikiData.length">
+    <ol v-if="currentWikiData.length" class="recommend-container">
       <li v-for="(v, idx) in currentWikiData" :key="v.route">
         <!-- 序号 -->
         <i class="num">{{ startIdx + idx + 1 }}</i>
         <!-- 简介 -->
         <div class="des">
           <!-- title -->
-          <el-link
+          <ElLink
             type="info"
             class="title"
             :class="{
@@ -32,7 +33,7 @@
             }"
             :href="v.route"
           >{{ v.meta.title }}
-          </el-link
+          </ElLink
           >
           <!-- 描述信息 -->
           <div class="suffix">
@@ -42,17 +43,17 @@
         </div>
       </li>
     </ol>
-    <div class="empty-text" v-else>{{ emptyText }}</div>
+    <div v-else class="empty-text">{{ emptyText }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 
 import {formatBlogShowDate} from "@dylanjs/utils";
-import {useArticles, useBlogConfig} from "../composables/config/blog";
 import {computed, ref} from "vue";
 import {useRoute, withBase} from "vitepress";
 import {ElButton,ElLink} from "element-plus";
+import {useArticles, useBlogConfig} from "../composables/config/blog";
 
 const {recommend: _recommend} = useBlogConfig()
 const sidebarStyle = computed(() => {
@@ -108,12 +109,12 @@ const recommendList = computed(() => {
   return topList.concat(normalList)
 })
 
-const isCurrentDoc = (value: string) => {
+function isCurrentDoc (value: string) {
   return value === decodeURIComponent(route.path).replace(/.html$/, '')
 }
 
 const currentPage = ref(1)
-const changePage = () => {
+function changePage () {
   const newIdx =
     currentPage.value % Math.ceil(recommendList.value.length / pageSize.value)
   currentPage.value = newIdx + 1

@@ -1,15 +1,16 @@
 import {useData, useRoute, withBase} from "vitepress";
 
 
-import {
+import type {
   Component,
+  InjectionKey,
+  Ref} from "vue";
+import {
   computed,
   defineComponent,
   h,
   inject,
-  InjectionKey,
   provide,
-  Ref,
   ref
 } from "vue";
 
@@ -99,9 +100,9 @@ export function useCurrentArticle () {
   const docs=computed(()=>blogConfig.config?.blog?.pagesData)
   const currentArticle=computed(()=>{
     const currentPath=route.path.replace(/.html$/,'')
-    //兼容中文路径
+    // 兼容中文路径
     const okPaths=[currentPath,decodeURIComponent(currentPath)]
-    //兼容 /index.md
+    // 兼容 /index.md
     if (currentPath.endsWith('/')) {
       okPaths.push(
         ...[`${currentPath}index`,`${decodeURIComponent(currentPath)}index`]

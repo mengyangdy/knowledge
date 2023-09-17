@@ -1,11 +1,11 @@
-import { Theme } from "../../composables/config";
+import path from "node:path";
+import fs from "node:fs";
 import { glob } from "fast-glob";
-import path from "path";
-import fs from "fs";
 import matter from "gray-matter";
-import { getDefaultTitle, getFileBirthTime, getTextSummary } from "./index";
 
 import { formatBlogDate } from "@dylanjs/utils";
+import type { Theme } from "../../composables/config";
+import { getDefaultTitle, getFileBirthTime, getTextSummary } from "./index";
 
 export function getArticles(cfg?: Partial<Theme.BlogConfig>) {
   // srcDir 文件目录 process.argv 执行命令穿的参数 执行的命令为vitepress dev docs  可以获取到docs目录

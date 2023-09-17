@@ -6,6 +6,7 @@ tags:
 date: 2023-09-12
 cover: https://s2.loli.net/2023/09/12/Icw6mLTa9AHrMNl.jpg
 ---
+
 # npm 和 pnpm 清除缓存文件
 
 ## Npm 清除缓存
@@ -55,4 +56,3 @@ pnpm store path
 ```bash
 pnpm store prune
 ```
-

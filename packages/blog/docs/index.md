@@ -1,8 +1,8 @@
 ---
 layout: home
 blog:
- name: Dylan
- motto: 你的指尖,拥有改变世界的力量
- inspiring: 千万不要因为走得太久，而忘记了我们为什么出发
- pageSize: 8
+  name: Dylan
+  motto: 前端成长之路
+  inspiring: 记录前端学习中遇到的各种问题和新知识
+  pageSize: 10
 ---

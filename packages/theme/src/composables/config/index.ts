@@ -55,15 +55,15 @@ export namespace Theme {
     layout?: string
     categories: string[]
     tags: string[]
-    //文章首页置顶
+    // 文章首页置顶
     top?: number
-    //手动控制相关文章列表的顺序
+    // 手动控制相关文章列表的顺序
     recommend?: number | false
-    //时间线
+    // 时间线
     timeline: string
-    //专栏 合集
+    // 专栏 合集
     album: string
-    //是否发布
+    // 是否发布
     publish?: boolean
   }
 
@@ -99,7 +99,7 @@ export namespace Theme {
     title?: string
     pageSize?: number
     nextText?: string
-    //是否展示当前正在浏览的文章在左侧
+    // 是否展示当前正在浏览的文章在左侧
     showSelf?: boolean
     filter?: (page: Theme.PageData) => boolean
     empty?: string | boolean

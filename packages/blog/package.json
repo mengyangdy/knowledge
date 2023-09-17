@@ -1,11 +1,12 @@
 {
   "name": "blog",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
+    "preview": "vitepress preview docs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@dylanjs/vitepress-theme": "workspace:*",

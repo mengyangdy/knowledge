@@ -5,9 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import MyRecommendArticle from "./MyRecommendArticle.vue";
-import {useBlogConfig} from "../composables/config/blog";
 import {computed} from "vue";
+import {useBlogConfig} from "../composables/config/blog";
+import MyRecommendArticle from "./MyRecommendArticle.vue";
 
 const {recommend: _recommend} = useBlogConfig()
 const sidebarStyle = computed(() =>

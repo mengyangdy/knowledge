@@ -1,23 +1,23 @@
 <template>
-  <div class="doc-analyze" v-if="showAnalyze" data-pagefind-ignore="all">
+  <div v-if="showAnalyze" class="doc-analyze" data-pagefind-ignore="all">
     <span>
-      <el-icon><EditPen /></el-icon>
+      <ElIcon><EditPen /></ElIcon>
       字数：{{ wordCount }} 个字
     </span>
     <span>
-      <el-icon><AlarmClock /></el-icon>
+      <ElIcon><AlarmClock /></ElIcon>
       预计：{{ readTime }} 分钟
     </span>
   </div>
-  <div class="meta-des" ref="$des" id="hack-article-des">
+  <div id="hack-article-des" ref="$des" class="meta-des">
     <!-- TODO：是否需要原创？转载等标签，理论上可以添加标签解决，可以参考 charles7c -->
     <span v-if="author && !hiddenAuthor" class="author">
-      <el-icon title="本文作者"><UserFilled /></el-icon>
+      <ElIcon title="本文作者"><UserFilled /></ElIcon>
       <a
+        v-if="currentAuthorInfo"
         class="link"
         :href="currentAuthorInfo.url"
         :title="currentAuthorInfo.des"
-        v-if="currentAuthorInfo"
       >
         {{ currentAuthorInfo.nickname }}
       </a>
@@ -26,19 +26,19 @@
       </template>
     </span>
     <span v-if="publishDate && !hiddenTime" class="publishDate">
-      <el-icon :title="timeTitle"><Clock /></el-icon>
+      <ElIcon :title="timeTitle"><Clock /></ElIcon>
       {{ publishDate }}
     </span>
     <span v-if="tags.length" class="tags">
-      <el-icon :title="timeTitle"><CollectionTag /></el-icon>
-      <a class="link" :href="`/?tag=${tag}`" v-for="tag in tags" :key="tag"
+      <ElIcon :title="timeTitle"><CollectionTag /></ElIcon>
+      <a v-for="tag in tags" :key="tag" class="link" :href="`/?tag=${tag}`"
       >{{ tag }}
       </a>
     </span>
     <!-- 封面展示 -->
-    <!--<ClientOnly>-->
-    <!--  <MyDocCover/>-->
-    <!--</ClientOnly>-->
+    <!-- <ClientOnly> -->
+    <!--  <MyDocCover/> -->
+    <!-- </ClientOnly> -->
   </div>
 </template>
 
@@ -49,15 +49,15 @@ import { useData, useRoute } from 'vitepress'
 import { computed, onMounted, ref, watch } from 'vue'
 import { ElIcon } from 'element-plus'
 import {
-  UserFilled,
-  Clock,
-  EditPen,
   AlarmClock,
-  CollectionTag
+  Clock,
+  CollectionTag,
+  EditPen,
+  UserFilled
 } from '@element-plus/icons-vue'
+import  { countWord,formatBlogShowDate } from '@dylanjs/utils'
 import { useBlogConfig, useCurrentArticle } from '../composables/config/blog'
-import  { formatBlogShowDate,countWord } from '@dylanjs/utils'
-import { Theme } from '../composables/config'
+import type { Theme } from '../composables/config'
 
 const { article, authorList } = useBlogConfig()
 const { frontmatter } = useData()
@@ -98,7 +98,7 @@ const readTime = computed(() => {
 const route = useRoute()
 const $des = ref<HTMLDivElement>()
 
-const analyze = () => {
+function analyze () {
   if (!$des.value) {
     return
   }

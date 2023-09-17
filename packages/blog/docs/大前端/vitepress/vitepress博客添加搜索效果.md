@@ -6,6 +6,7 @@ tag:
 date: 2023-09-13
 cover: https://s2.loli.net/2023/09/13/y65Osd7bTNDapqH.jpg
 ---
+
 # vitepress 博客添加搜索效果
 
 Vitepress 的搜索一般都是使用的 [algolia](https://www.algolia.com/)
@@ -37,9 +38,9 @@ export default defineConfig({
     algolia: {
       appId: 'Algolia 应用程序的 ID，随便起',
       apiKey: '只有读能力的 Api Key',
-      indexName: '你的 algolia 的 index 名',
-    },
-  },
+      indexName: '你的 algolia 的 index 名'
+    }
+  }
 })
 ```
 
@@ -51,8 +52,8 @@ export default defineConfig({
 
 ```json
 {
-  "index_name": "dylanjs_blog_top_search",//在algolia中创建的index_name
-  "start_urls": ["http://mengyang.online/"],// 自己的网站
+  "index_name": "dylanjs_blog_top_search", // 在algolia中创建的index_name
+  "start_urls": ["http://mengyang.online/"], // 自己的网站
   "rateLimit": 8,
   "maxDepth": 10,
   "selectors": {
@@ -72,23 +73,18 @@ export default defineConfig({
       "global": true
     }
   },
-  "selectors_exclude": [
-    "aside",
-    ".page-footer",
-    ".next-and-prev-link",
-    ".table-of-contents"
-  ],
+  "selectors_exclude": ["aside", ".page-footer", ".next-and-prev-link", ".table-of-contents"],
   "custom_settings": {
     "attributesForFaceting": ["lang", "tags"]
   },
   "js_render": true
 }
-
 ```
 
 然后在 github 上创建 `ALGOLIA_API_KEY` 和 `ALGOLIA_APP_ID`，key 是 admin 的 key
 
 创建 github 工作流：
+
 ```yml
 name: algolia
 on:
@@ -109,5 +105,4 @@ jobs:
           APPLICATION_ID: ${{ secrets.ALGOLIA_APP_ID }}
           API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
           CONFIG: ${{ steps.algolia_config.outputs.config }}
-
 ```

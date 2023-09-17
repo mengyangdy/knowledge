@@ -1,25 +1,26 @@
 <template>
-  <div class="comment" v-if="show" id="giscus-comment" data-pagefind-ignore="all" ref="commentEl">
-    <el-affix :class="{hidden:commentIsVisible}" class="comment-btn" target="main" position="bottom" :offset="40">
-      <el-button @click="handleScrollToComment" plain :icon="Comment" type="primary">
+  <div v-if="show" id="giscus-comment" ref="commentEl" class="comment" data-pagefind-ignore="all">
+    <ElAffix :class="{hidden:commentIsVisible}" class="comment-btn" target="main" position="bottom" :offset="40">
+      <ElButton plain :icon="Comment" type="primary" @click="handleScrollToComment">
         评论
-      </el-button>
-    </el-affix>
-    <component v-if="showComment" :is="'script'"
-               src="https://giscus.app/client.js"
-               :data-repo="commentConfig.repo"
-               :data-repo-id="commentConfig.repoId"
-               :data-category="commentConfig.category"
-               :data-category-id="commentConfig.categoryId"
-               :data-mapping="commentConfig.mapping || 'pathname'"
-               data-reactions-enabled="1"
-               data-emit-metadata="0"
-               :data-input-position="commentConfig.inputPosition || 'top'"
-               :data-theme="isDark ? 'dark' : 'light'"
-               :data-lang="commentConfig.lang || 'zh-CN'"
-               crossorigin="anonymous"
-               :data-loading="commentConfig.loading || 'eager'"
-               async/>
+      </ElButton>
+    </ElAffix>
+    <component
+      :is="commentComponent" v-if="showComment"
+      src="https://giscus.app/client.js"
+      :data-repo="commentConfig.repo"
+      :data-repo-id="commentConfig.repoId"
+      :data-category="commentConfig.category"
+      :data-category-id="commentConfig.categoryId"
+      :data-mapping="commentConfig.mapping || 'pathname'"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      :data-input-position="commentConfig.inputPosition || 'top'"
+      :data-theme="isDark ? 'dark' : 'light'"
+      :data-lang="commentConfig.lang || 'zh-CN'"
+      crossorigin="anonymous"
+      :data-loading="commentConfig.loading || 'eager'"
+      async/>
   </div>
 </template>
 
@@ -29,16 +30,17 @@
 import {useData, useRoute} from "vitepress";
 import {computed, ref, watch} from "vue";
 import {useDark, useElementVisibility} from "@vueuse/core";
-import {useGiscusConfig} from "../composables/config/blog";
-import {Theme} from "../composables/config";
 import {ElAffix, ElButton} from "element-plus";
 import {Comment} from '@element-plus/icons-vue'
+import {useGiscusConfig} from "../composables/config/blog";
+import type {Theme} from "../composables/config";
 
 const {frontmatter} = useData()
 const commentEl = ref(null)
 const commentIsVisible = useElementVisibility(commentEl)
+const commentComponent='script'
 
-const handleScrollToComment = () => {
+function handleScrollToComment() {
   document.querySelector('#giscus-comment')?.scrollIntoView({
     behavior: 'smooth',
     block: 'start'

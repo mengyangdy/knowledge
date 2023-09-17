@@ -118,7 +118,9 @@
   [command-dialog-footer] {
     align-items: center;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 -1px 0 0 #e0e3e8, 0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+    box-shadow:
+      0 -1px 0 0 #e0e3e8,
+      0 -3px 6px 0 rgba(69, 98, 155, 0.12);
     display: flex;
     flex-direction: row-reverse;
     flex-shrink: 0;

@@ -8,11 +8,11 @@
       <ClientOnly>
         <MyArticleAnalyze/>
       </ClientOnly>
-      <!--图片预览-->
+      <!-- 图片预览 -->
       <MyImagePreview/>
     </template>
-    <!--自定义首页-->
-    <template #home-hero-before v-if="isBlogTheme">
+    <!-- 自定义首页 -->
+    <template v-if="isBlogTheme" #home-hero-before>
       <div class="home">
         <div class="header-banner">
           <MyHomeBanner/>
@@ -27,11 +27,11 @@
         </div>
       </div>
     </template>
-    <!--侧边栏-->
-    <template #sidebar-nav-after v-if="isBlogTheme">
+    <!-- 侧边栏 -->
+    <template v-if="isBlogTheme" #sidebar-nav-after>
       <MySidebar/>
     </template>
-    <!--评论-->
+    <!-- 评论 -->
     <template #doc-after>
       <MyComment/>
     </template>
@@ -40,6 +40,7 @@
 
 <script setup lang="ts" name="App">
 import Theme from 'vitepress/theme'
+import {useBlogThemeMode} from "../composables/config/blog";
 import MyAlert from "./MyAlert.vue";
 import MyPopover from "./MyPopover.vue";
 import MyArticleAnalyze from "./MyArticleAnalyze.vue";
@@ -49,7 +50,6 @@ import MyList from "./MyList.vue";
 import MyHomeInfo from "./MyHomeInfo.vue";
 import MyComment from "./MyComment.vue";
 import MySidebar from "./MySidebar.vue";
-import {useBlogThemeMode} from "../composables/config/blog";
 
 const {Layout} = Theme
 const isBlogTheme = useBlogThemeMode()

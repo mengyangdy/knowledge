@@ -1,5 +1,5 @@
 <template>
-<ElImageViewer :infinite="false" hide-on-click-modal teleported @close="show=false" :url-list='previewImageInfo.list' :initial-index="previewImageInfo.idx" v-if="show" />
+<ElImageViewer v-if="show" :infinite="false" hide-on-click-modal teleported :url-list='previewImageInfo.list' :initial-index="previewImageInfo.idx" @close="show=false" />
 </template>
 
 <script setup lang="ts">
@@ -13,7 +13,7 @@ const previewImageInfo=reactive<{url:string;list:string[];idx:number}>({
   idx:0
 })
 
-const previewImage=(e:Event)=>{
+function previewImage (e:Event) {
   const target=e.target as HTMLElement
   const currentTarget=e.currentTarget as HTMLElement
   if (target.tagName.toLowerCase() === 'img') {
