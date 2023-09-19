@@ -1,0 +1,77 @@
+---
+title: nuxt3项目新建的时候报错的解决方案
+tags:
+  - vue
+  - nuxt3
+date: 2023-09-19
+cover: https://s2.loli.net/2023/09/19/uZSpKVlnYP4z3H7.jpg
+---
+
+# nuxt3项目新建的时候报错的解决方案
+
+新建 nuxt3 的时候一直报错 `Error: Failed to download template from registry: fetch failed`，也就是说 `无法从注册表下载模板：获取失败`。
+
+查看 [官网](https://nuxt.com/docs/getting-started/installation) 的新建模板操作：
+
+```bash
+pnpm dlx nuxi@latest init <project-name>
+```
+
+然后使用这个命令创建项目的时候一直报错：
+
+```text
+ Desktop  pnpm dlx nuxi@latest init nuxtdemo
+Packages: +1
++
+Progress: resolved 2, reused 1, downloaded 0, added 1, done
+
+ ERROR  Error: Failed to download template from registry: fetch failed
+
+NativeCommandExitException: Program "node.exe" ended with non-zero exit code: 1.
+```
+
+因为 nuxt 的项目是从 git 上下载的，可能是因为我们网络不通的问题导致的，我们 ping 一下网站看下是否可以 ping 通：
+
+```shell
+ping raw.githubusercontent.com
+```
+
+然后终端报错：
+
+```shell
+Ping 请求找不到主机 raw.githubusercontent.com。请检查该名称，然后重试。
+```
+
+发现了确实是因为访问不到网站导致的，我们前往 [ipaddress](https://sites.ipaddress.com/raw.githubusercontent.com/) 的网站上查看 `# githubusercontent` 的 `ip` 地址：
+
+![](https://s2.loli.net/2023/09/19/ZpKaRs8i2Nl1gf4.png)
+
+然后在电脑的 `hosts` 文件中添加一行：
+
+windows 上 `hosts` 文件的地址是在 `C:\Windows\System32\drivers\etc`
+
+mac 上的 `hosts` 文件的地址是在 `/etc/hosts`
+
+```shell
+185.199.108.133 raw.githubusercontent.com
+```
+
+然后再次在终端 ping 一下看看能不能通了：
+
+```
+ping raw.githubusercontent.com
+```
+
+![](https://s2.loli.net/2023/09/19/S12Ymb9yJZnpf8i.png)
+
+如果通了的话我们就可以再次执行新建项目的命令看下能不能下载下来：
+
+下载项目的话会让我们做出一些选择：
+
+![](https://s2.loli.net/2023/09/19/NYbq1JXmIld8rPU.png)
+
+这个意思是用那个包管理工具，我们选择 `pnpm`
+
+![](https://s2.loli.net/2023/09/19/65kXvhHmJCyzsAg.png)
+
+然后就可以看到已经下载好了通过 cd 到目标文件夹就可以开始了。
