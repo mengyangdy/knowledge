@@ -1,6 +1,6 @@
 {
   "name": "@dylanjs/vitepress-theme",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "vitepress博客主题",
   "exports": {
     ".": "./src/index.ts",
