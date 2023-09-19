@@ -241,6 +241,7 @@ export namespace Theme {
     timeZone?:number
   }
 
+
   export interface Config extends DefaultTheme.Config {
     blog?: BlogConfig
   }

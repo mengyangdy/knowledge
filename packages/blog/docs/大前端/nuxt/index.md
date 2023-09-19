@@ -42,7 +42,7 @@ ping raw.githubusercontent.com
 Ping 请求找不到主机 raw.githubusercontent.com。请检查该名称，然后重试。
 ```
 
-发现了确实是因为访问不到网站导致的，我们前往 [ipaddress](https://sites.ipaddress.com/raw.githubusercontent.com/) 的网站上查看 `# githubusercontent` 的 `ip` 地址：
+发现了确实是因为访问不到网站导致的，我们前往 [ipaddress](https://sites.ipaddress.com/raw.githubusercontent.com/) 的网站上查看 `githubusercontent` 的 `ip` 地址：
 
 ![](https://s2.loli.net/2023/09/19/ZpKaRs8i2Nl1gf4.png)
 

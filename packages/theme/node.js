@@ -1,32 +1,34 @@
 "use strict";
-const __create = Object.create;
-const __defProp = Object.defineProperty;
-const __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-const __getOwnPropNames = Object.getOwnPropertyNames;
-const __getProtoOf = Object.getPrototypeOf;
-const __hasOwnProp = Object.prototype.hasOwnProperty;
-function __export (target, all) {
-  for (const name in all)
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
-}
-function __copyProps (to, from, except, desc) {
+};
+var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
-    for (const key of __getOwnPropNames(from))
+    for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
         __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
   return to;
-}
-function __toESM (mod, isNodeMode, target) {
-  return target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
-)
-}
-const __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/node.ts
-const node_exports = {};
+var node_exports = {};
 __export(node_exports, {
   defineConfig: () => defineConfig,
   getThemeConfig: () => getThemeConfig,
@@ -35,37 +37,33 @@ __export(node_exports, {
 module.exports = __toCommonJS(node_exports);
 
 // ../../node_modules/.pnpm/vitepress-plugin-tabs@0.3.0_vitepress@1.0.0-rc.4_vue@3.3.4/node_modules/vitepress-plugin-tabs/dist/index.js
-const __create2 = Object.create;
-const __defProp2 = Object.defineProperty;
-const __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
-const __getOwnPropNames2 = Object.getOwnPropertyNames;
-const __getProtoOf2 = Object.getPrototypeOf;
-const __hasOwnProp2 = Object.prototype.hasOwnProperty;
-function __commonJS (cb, mod) {
-  return function __require() {
+var __create2 = Object.create;
+var __defProp2 = Object.defineProperty;
+var __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames2 = Object.getOwnPropertyNames;
+var __getProtoOf2 = Object.getPrototypeOf;
+var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames2(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}
-}
-function __copyProps2 (to, from, except, desc) {
+};
+var __copyProps2 = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
-    for (const key of __getOwnPropNames2(from))
+    for (let key of __getOwnPropNames2(from))
       if (!__hasOwnProp2.call(to, key) && key !== except)
         __defProp2(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc2(from, key)) || desc.enumerable });
   }
   return to;
-}
-function __toESM2 (mod, isNodeMode, target) {
-  return target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
+};
+var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__getProtoOf2(mod)) : {}, __copyProps2(
   // If the importer is in node compatibility mode or this is not an ESM
   // file that has been converted to a CommonJS file using a Babel-
   // compatible transform (i.e. "__esModule" has not been set), then set
   // "default" to the CommonJS "module.exports" for node compatibility.
   isNodeMode || !mod || !mod.__esModule ? __defProp2(target, "default", { value: mod, enumerable: true }) : target,
   mod
-)
-}
-const require_markdown_it_container = __commonJS({
-  "../../node_modules/.pnpm/markdown-it-container@3.0.0/node_modules/markdown-it-container/index.js": function(exports, module2) {
+));
+var require_markdown_it_container = __commonJS({
+  "../../node_modules/.pnpm/markdown-it-container@3.0.0/node_modules/markdown-it-container/index.js"(exports, module2) {
     "use strict";
     module2.exports = function container_plugin(md, name, options) {
       function validateDefault(params) {
@@ -78,9 +76,9 @@ const require_markdown_it_container = __commonJS({
         return slf.renderToken(tokens, idx, _options, env, slf);
       }
       options = options || {};
-      const min_markers = 3; const marker_str = options.marker || ":"; const marker_char = marker_str.charCodeAt(0); const marker_len = marker_str.length; const validate = options.validate || validateDefault; const render = options.render || renderDefault;
+      var min_markers = 3, marker_str = options.marker || ":", marker_char = marker_str.charCodeAt(0), marker_len = marker_str.length, validate = options.validate || validateDefault, render = options.render || renderDefault;
       function container2(state, startLine, endLine, silent) {
-        let pos; let nextLine; let marker_count; let markup; let params; let token; let old_parent; let old_line_max; let auto_closed = false; let start = state.bMarks[startLine] + state.tShift[startLine]; let max = state.eMarks[startLine];
+        var pos, nextLine, marker_count, markup, params, token, old_parent, old_line_max, auto_closed = false, start = state.bMarks[startLine] + state.tShift[startLine], max = state.eMarks[startLine];
         if (marker_char !== state.src.charCodeAt(start)) {
           return false;
         }
@@ -139,13 +137,13 @@ const require_markdown_it_container = __commonJS({
         old_line_max = state.lineMax;
         state.parentType = "container";
         state.lineMax = nextLine;
-        token = state.push(`container_${  name  }_open`, "div", 1);
+        token = state.push("container_" + name + "_open", "div", 1);
         token.markup = markup;
         token.block = true;
         token.info = params;
         token.map = [startLine, nextLine];
         state.md.block.tokenize(state, startLine + 1, nextLine);
-        token = state.push(`container_${  name  }_close`, "div", -1);
+        token = state.push("container_" + name + "_close", "div", -1);
         token.markup = state.src.slice(start, pos);
         token.block = true;
         state.parentType = old_parent;
@@ -153,19 +151,19 @@ const require_markdown_it_container = __commonJS({
         state.line = nextLine + (auto_closed ? 1 : 0);
         return true;
       }
-      md.block.ruler.before("fence", `container_${  name}`, container2, {
+      md.block.ruler.before("fence", "container_" + name, container2, {
         alt: ["paragraph", "reference", "blockquote", "list"]
       });
-      md.renderer.rules[`container_${  name  }_open`] = render;
-      md.renderer.rules[`container_${  name  }_close`] = render;
+      md.renderer.rules["container_" + name + "_open"] = render;
+      md.renderer.rules["container_" + name + "_close"] = render;
     };
   }
 });
-const import_markdown_it_container = __toESM2(require_markdown_it_container(), 1);
-const tabMarker = "=";
-const tabMarkerCode = tabMarker.charCodeAt(0);
-const minTabMarkerLen = 2;
-function ruleBlockTab (state, startLine, endLine, silent) {
+var import_markdown_it_container = __toESM2(require_markdown_it_container(), 1);
+var tabMarker = "=";
+var tabMarkerCode = tabMarker.charCodeAt(0);
+var minTabMarkerLen = 2;
+var ruleBlockTab = (state, startLine, endLine, silent) => {
   let pos = state.bMarks[startLine] + state.tShift[startLine];
   const max = state.eMarks[startLine];
   if (state.parentType !== "container") {
@@ -228,13 +226,13 @@ function ruleBlockTab (state, startLine, endLine, silent) {
   state.lineMax = oldLineMax;
   state.line = nextLine;
   return true;
-}
-function parseTabsParams (input) {
+};
+var parseTabsParams = (input) => {
   const match = input.match(/key:(\S+)/);
   return {
     shareStateKey: match == null ? void 0 : match[1]
   };
-}
+};
 var tabsPlugin = (md) => {
   md.use(import_markdown_it_container.default, "tabs", {
     render(tokens, index) {
@@ -263,16 +261,16 @@ var tabsPlugin = (md) => {
 `;
     }
   };
-  md.renderer.rules.tab_open = renderTab;
-  md.renderer.rules.tab_close = renderTab;
+  md.renderer.rules["tab_open"] = renderTab;
+  md.renderer.rules["tab_close"] = renderTab;
 };
 
 // src/utils/node/index.ts
-const import_child_process = require("node:child_process");
-const import_utils = require("@dylanjs/utils");
+var import_node_child_process = require("child_process");
+var import_utils = require("@dylanjs/utils");
 
 // src/constants/index.ts
-const removeBlank = /^\s+|\s+$/g;
+var removeBlank = /^\s+|\s+$/g;
 
 // src/utils/node/index.ts
 function aliasObjectToArray(obj) {
@@ -309,7 +307,7 @@ function clearMatterContent(content) {
 function getFileBirthTime(url) {
   let date = /* @__PURE__ */ new Date();
   try {
-    const infoStr = (0, import_child_process.spawnSync)("git", ["log", "-1", '--pretty="%ci"', url]).stdout?.toString().replace(/["']/g, "").trim();
+    const infoStr = (0, import_node_child_process.spawnSync)("git", ["log", "-1", '--pretty="%ci"', url]).stdout?.toString().replace(/["']/g, "").trim();
     if (infoStr) {
       date = new Date(infoStr);
     }
@@ -323,7 +321,7 @@ function getTextSummary(text, count = 100) {
 }
 
 // src/utils/node/mdPlugins.ts
-function getMarkdownPlugins(cfg) {
+async function getMarkdownPlugins(cfg) {
   const markdownPlugin = [];
   if (cfg?.tags) {
     markdownPlugin.push(tabsPlugin);
@@ -331,7 +329,7 @@ function getMarkdownPlugins(cfg) {
   if (cfg) {
     cfg.mermaid = cfg?.mermaid ?? true;
     if (cfg?.mermaid !== false) {
-      const { MermaidMarkdown } = require("vitepress-plugin-mermaid");
+      const { MermaidMarkdown } = await import("vitepress-plugin-mermaid");
       markdownPlugin.push(MermaidMarkdown);
     }
   }
@@ -349,6 +347,7 @@ function registerMdPlugins(vpCfg, plugins) {
   }
 }
 function wrapperCfgWithMermaid(config) {
+  console.log("=>(mdPlugins.ts:41) config", config);
   const extendThemeConfig = config.extends?.themeConfig?.blog || {};
   const resultConfig = extendThemeConfig.mermaid === false ? config : {
     ...config,
@@ -357,14 +356,14 @@ function wrapperCfgWithMermaid(config) {
   assignMermaid(resultConfig);
   return resultConfig;
 }
-function assignMermaid(config) {
+async function assignMermaid(config) {
   if (!config?.mermaid)
     return;
   if (!config.vite)
     config.vite = {};
   if (!config.vite.plugins)
     config.vite.plugins = [];
-  const { MermaidPlugin } = require("vitepress-plugin-mermaid");
+  const { MermaidPlugin } = await import("vitepress-plugin-mermaid");
   config.vite.plugins.push(MermaidPlugin(config.mermaid));
   if (!config.vite.resolve)
     config.vite.resolve = {};
@@ -393,12 +392,11 @@ function supportRunExtendsPlugin(config) {
 }
 
 // src/utils/node/theme.ts
-const import_fast_glob = require("fast-glob");
-const import_path = __toESM(require("node:path"));
-const import_fs = __toESM(require("node:fs"));
-const import_gray_matter = __toESM(require("gray-matter"));
-const import_utils2 = require("@dylanjs/utils");
-
+var import_node_path = __toESM(require("path"));
+var import_node_fs = __toESM(require("fs"));
+var import_fast_glob = require("fast-glob");
+var import_gray_matter = __toESM(require("gray-matter"));
+var import_utils2 = require("@dylanjs/utils");
 function getArticles(cfg) {
   const srcDir = cfg?.srcDir || process.argv.slice(2)?.[1] || ".";
   const files = import_fast_glob.glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] });
@@ -406,11 +404,11 @@ function getArticles(cfg) {
     let route = v.replace(".md", "");
     route = route.replace(
       new RegExp(
-        `^${import_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_path.default.sep}`, "g"), "/")}`
+        `^${import_node_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_node_path.default.sep}`, "g"), "/")}`
       ),
       ""
     );
-    const fileContent = import_fs.default.readFileSync(v, "utf-8");
+    const fileContent = import_node_fs.default.readFileSync(v, "utf-8");
     const { data: frontmatter } = (0, import_gray_matter.default)(fileContent, {
       excerpt: true
     });
@@ -445,17 +443,6 @@ function getArticles(cfg) {
   return data;
 }
 function patchVPThemeConfig(cfg, vpThemeConfig = {}) {
-  const RSS = cfg?.RSS;
-  if (RSS && RSS.icon !== false) {
-    vpThemeConfig.socialLinks = [
-      {
-        icon: {
-          svg: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 448 512"><path d="M400 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM112 416c-26.51 0-48-21.49-48-48s21.49-48 48-48s48 21.49 48 48s-21.49 48-48 48zm157.533 0h-34.335c-6.011 0-11.051-4.636-11.442-10.634c-5.214-80.05-69.243-143.92-149.123-149.123c-5.997-.39-10.633-5.431-10.633-11.441v-34.335c0-6.535 5.468-11.777 11.994-11.425c110.546 5.974 198.997 94.536 204.964 204.964c.352 6.526-4.89 11.994-11.425 11.994zm103.027 0h-34.334c-6.161 0-11.175-4.882-11.427-11.038c-5.598-136.535-115.204-246.161-251.76-251.76C68.882 152.949 64 147.935 64 141.774V107.44c0-6.454 5.338-11.664 11.787-11.432c167.83 6.025 302.21 141.191 308.205 308.205c.232 6.449-4.978 11.787-11.432 11.787z" fill="currentColor"></path></svg>'
-        },
-        link: RSS?.url
-      }
-    ];
-  }
   vpThemeConfig.sidebar = patchDefaultThemeSideBar(cfg)?.sidebar;
   return vpThemeConfig;
 }
@@ -471,9 +458,8 @@ function patchDefaultThemeSideBar(cfg) {
 }
 
 // src/utils/node/vitePlugins.ts
-const import_path2 = __toESM(require("node:path"));
-const import_child_process2 = require("node:child_process");
-
+var import_node_path2 = __toESM(require("path"));
+var import_node_child_process2 = require("child_process");
 function getVitePlugins(cfg) {
   const plugins = [];
   const buildEndFn = [];
@@ -516,7 +502,7 @@ function inlinePagefindPlugin(buildEndFn) {
     const { log } = console;
     log();
     log("=== pagefind: https://pagefind.app/ ===");
-    let command = `npx pagefind --source ${import_path2.default.join(
+    let command = `npx pagefind --source ${import_node_path2.default.join(
       process.argv.slice(2)?.[1] || ".",
       ".vitepress/dist"
     )}`;
@@ -525,7 +511,7 @@ function inlinePagefindPlugin(buildEndFn) {
     }
     log(command);
     log();
-    (0, import_child_process2.execSync)(command, {
+    (0, import_node_child_process2.execSync)(command, {
       stdio: "inherit"
     });
   });
@@ -548,12 +534,12 @@ function registerVitePlugins(vpCfg, plugins) {
 }
 
 // src/node.ts
-function getThemeConfig(cfg) {
+async function getThemeConfig(cfg) {
   const pagesData = getArticles(cfg);
   const extraVPConfig = {};
   const vitePlugins = getVitePlugins(cfg);
   registerVitePlugins(extraVPConfig, vitePlugins);
-  const markdownPlugin = getMarkdownPlugins(cfg);
+  const markdownPlugin = await getMarkdownPlugins(cfg);
   registerMdPlugins(extraVPConfig, markdownPlugin);
   return {
     themeConfig: {

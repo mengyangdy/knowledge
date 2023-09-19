@@ -187,9 +187,290 @@ export async function setupCli() {
   }
   //循环上面的命令
   for await (const [command, {desc, action}] of Object.entries(commands)) {
-    cli.command(command, desc).action(action)
+    cli.command(command, desc).action(action).allowUnknownOptions()
   }
 
   cli.parse()
 }
 ```
+
+其中`allowUnknownOptions()`这个命令是为了让我们命令行输入未定义的命令不报错，如果没有这个函数执行，当输入未知的命令的时候，cli将会报错。
+
+以下为各个命令的解析：
+
+### git-commit命令
+
+git-commit命令主要接受了两个参数：一个是我们定义的提交类型，一个是我们定义的提交范围。
+
+git-commit主要是通过`enquirer`库来生成选择器和输入信息，当这些信息都输入完之后，我们通过字符串拼接将其拼接成一个字符串，然后通过执行git commit -m <字符串>来提交这些信息。
+
+```js
+export async function gitCommit(
+  gitCommitTypes: CliOption['gitCommitTypes'],
+  gitCommitScopes: CliOption['gitCommitScopes']
+) {
+  const typesChoices = gitCommitTypes.map(([name, title]) => {
+    const nameWithSuffix = `${name}:`
+    const message = `${nameWithSuffix.padEnd(12)}${title}`
+    return {
+      name,
+      message
+    }
+  })
+  const scopesChoices = gitCommitScopes.map(([name, title]) => ({
+    name,
+    message: `${name.padEnd(30)} (${title})`
+  }))
+  const result = await enquirer.prompt<PromptObject>([
+    {
+      name: 'types',
+      type: 'select',
+      message: '请选择提交的类型',
+      choices: typesChoices
+    },
+    {
+      name: 'scopes',
+      type: 'select',
+      message: '选择一个scope',
+      choices: scopesChoices
+    },
+    {
+      name: 'description',
+      type: 'text',
+      message: '请输入提交描述',
+    }
+  ])
+  const commitMsg = `${result.types}(${result.scopes}): ${result.description}`
+  await execCommand('git', ['commit', '-m', commitMsg], {stdio: 'inherit'})
+}
+```
+
+execCommand方法是封装的一个主要执行各种命令的方法,通过`execa`这个库来执行各种命令：
+
+```js
+import type {Options} from 'execa'
+
+export async function execCommand(cmd: string, args: string[], options?: Options) {
+  const {execa} = await import ('execa')
+  const res = await execa(cmd, args, options)
+  return res?.stdout?.trim() || ''
+}
+```
+
+### init-simple-git-hooks命令
+
+此命令的作用是为了生成git hooks文件夹的。
+
+此命令执行的时候主要做了以下几件事：
+
+- 先在项目根目录中获取下.husky文件夹
+- 判断下.husky这个目录存在不存在
+- 然后获取下项目根目录的.git文件夹下面的hooks文件夹
+- 如果.husky文件夹存在的话就将`core.hooksPath`配置为.husky,git运行的时候将查找位于当前工作目录下的 .husky 文件夹中的钩子文件
+- 然后清空git的hooks文件夹，执行`npx simple-git-hooks`命令
+
+```js
+export async function initSimpleGitHooks(cwd = process.cwd()) {
+  // 获取.husky文件夹路径
+  const huskyDir = path.join(cwd, '.husky')
+  // 判断目录存在不存在
+  const existHusky = existsSync(huskyDir)
+  // 获取git/hooks目录路径
+  const gitHooksDir = path.join(cwd, 'git', 'hooks')
+  // 如果.husky目录存在的话,就把这个目录设置为git的hooks目录
+  if (existHusky) {
+    await rimraf(huskyDir)
+    await execCommand('git', ['config', 'core.hooksPath', gitHooksDir], { stdio: 'inherit' })
+  }
+
+  // 先清空目录
+  await rimraf(gitHooksDir)
+  await execCommand('npx', ['simple-git-hooks'], { stdio: 'inherit' })
+}
+```
+
+**注意：**
+
+此命令需要在执行`pnpm install`的时候就对项目进行hooks初始化，所以我们需要在项目的scripts里面写上`"prepare": "dy init-simple-git-hooks"`,此命令主要是在初始化的时候执行此命令初始化
+
+另外还需在`.package.json`里面配置如下选项：
+
+```json
+{
+  "devDependencies":{
+    ...
+  },
+  "simple-git-hooks": {
+    "commit-msg": "pnpm dy git-commit-verify",
+    "pre-commit": "pnpm dy lint-staged"
+  }
+}
+```
+
+这样在每次执行git-commit的时候就会执行上面的两个命令。
+
+### git-commit-verify命令
+
+这个命令实在每次执行git-commit的时候校验提交的commit信息是否符合规范，如果不符合规范的话就抛出错误，符合规范的话就继续执行。
+
+```js
+export async function gitCommitVerify() {
+  // 获取目录 C:/Users/my466/Desktop/git-demo
+  const gitPath = await execCommand('git', ['rev-parse', '--show-toplevel'])
+  // 获取当前目录下的.git文件夹下面的COMMIT_EDITMSG文件
+  const gitMsgPath = path.join(gitPath, '.git', 'COMMIT_EDITMSG')
+  // feat(projects)：kkk  获取的是最后一次的提交信息
+  const commitMsg = readFileSync(gitMsgPath, 'utf-8').trim()
+  const REG_EXP = /(?<type>[a-z]+)(\((?<scope>.+)\))?(?<breaking>!)?: (?<description>.+)/i
+  if (!REG_EXP.test(commitMsg)) {
+    throw new Error(
+      `${bgRed(' ERROR ')} ${red('Git提交信息不符合 Angular 规范!\n\n')}${green(
+        '推荐使用命令 pnpm commit 生成符合规范的Git提交信息'
+      )}`
+    )
+  }
+}
+```
+
+### lint-staged命令
+
+这个命令是为了执行 `lint-staged` 的，`lint-staged` 是一个前端的文件过滤工具，它仅过滤 git 代码暂存区文件，当执行 git-commit 的时候，`pre-commit` 狗子会启动，执行 `lint-staged` 命令。
+
+````js
+export async function execLintStaged(config: Record<string, string | string[]>) {
+  const lintStaged = (await import('lint-staged')).default
+
+  return lintStaged({
+    config,
+    allowEmpty: true
+  })
+}```
+
+传入的参数为：
+
+```js
+action:async ()=>{
+    const passed = await       execLintStaged(cliOptions.lintStagedConfig).catch(() => {
+    process.exitCode = 1
+    })
+    process.exitCode = passed ? 0 : 1
+}
+````
+
+### cleanup 命令
+
+此命令的主要作用是为了删除 `node_modules` 和 `dist` 等的文件夹。
+
+````js
+import {rimraf} from "rimraf"
+
+export async function cleanup(paths: string[]) {
+  await rimraf(paths, {glob: true})
+}```
+
+传入的参数为：
+
+````
+
+// 执行清空依赖项命令后需要删除的文件夹
+cleanupDirs: [
+'**/dist',
+'**/package-lock.json',
+'**/yarn.lock',
+'**/pnpm-lock.yaml',
+'**/node_modules',
+'!node_modules/**'
+]
+
+````
+
+### prettier-write 命令
+
+此命令的作用是执行 `prettier` 命令，并且传入设置好的参数，格式化那些文件夹。
+
+**注意：**
+
+这个 `prettier` 命令并不会格式化我们常用的 vue、ts、js 等文件夹，这些文件夹的格式化交给了 `eslint`
+
+```js
+import {execCommand} from "../shared";
+
+export async function prettierWrite(writeGlob: string[]) {
+  await execCommand('npx', ['prettier', '--write', '.', ...writeGlob], {
+    stdio: 'inherit'
+  })
+}```
+
+它的参数不包含我们常用的文件夹和不需要格式化的文件夹：
+
+```js
+const eslintExt = '*.{js,jsx,mjs,cjs,json,ts,tsx,mts,cts,vue,svelte,astro}'
+prettierWriteGlob: [
+    `!**/${eslintExt}`,
+    '!*.min.*',
+    '!CHANGELOG.md',
+    '!dist',
+    '!LICENSE*',
+    '!output',
+    '!coverage',
+    '!public',
+    '!temp',
+    '!package-lock.json',
+    '!pnpm-lock.yaml',
+    '!yarn.lock',
+    '!.github',
+    '!__snapshots__',
+    '!node_modules'
+  ]```
+
+### taze 命令
+
+这个命令主要是执行 `taze` 命令，用来升级各种的依赖包。
+
+```js
+import { execCommand } from "../shared";
+
+export async function taze() {
+  const args=process.argv.slice(3)
+  execCommand("npx", ["taze", ...args], { stdio: "inherit" });
+}
+````
+
+`taze` 的命令跟在命令行的后面即可。这就是我们需要使用 `process.argv.slice` 截取的意思，从第三个参数后面的就是 `taze` 的参数。
+
+### changelog 命令
+
+这个命令主要是为了生成 `changelog.md` 文件。因为方法比较多，就另外写了一个包 `@dylanjs/changelog`，这个包以后再讲。
+
+````js
+import { generateChangelog, generateTotalChangelog } from '@dylanjs/changelog';
+import type { ChangelogOption } from '@dylanjs/changelog';
+
+export async function genChangelog(options?: Partial<ChangelogOption>, total = false) {
+  if (total) {
+    await generateTotalChangelog(options);
+  } else {
+    await generateChangelog(options);
+  }
+}```
+
+如果有参数也就是穿 `--total` 的时候，会根据所有的 tag 生成所有的 changelog，而不传的话则会生成最后一个 tag 的 changelog。
+
+### release 命令
+
+这个命令的主要作用是使用 `bumpp` 包自动生成版本号、tag，自动提交等等的动作,，也可以自行一些自定义的命令：
+
+```js
+import versionBump from 'bumpp';
+
+export async function release() {
+  await versionBump({
+    files: ['**/package.json', '!**/node_modules'],
+    execute: 'npx dy changelog',
+    all: true,
+    tag: true,
+    commit: 'chore(projects): release v%s',
+    push: true
+  });
+}
+````

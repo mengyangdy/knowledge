@@ -1,5 +1,6 @@
 import {tabsMarkdownPlugin} from 'vitepress-plugin-tabs'
-import type {UserConfig} from "vitepress";
+
+// import type {UserConfig} from "vitepress";
 import type {Theme} from '../../composables/config'
 import {aliasObjectToArray} from "./index";
 
@@ -37,7 +38,7 @@ export function registerMdPlugins(vpCfg: any, plugins: any[]) {
   }
 }
 
-export function wrapperCfgWithMermaid(config: UserConfig<Theme.Config>): any {
+export function wrapperCfgWithMermaid(config: any): any {
   const extendThemeConfig = (config.extends?.themeConfig?.blog || {}) as Theme.BlogConfig
 
   // 开关支持mermaid
@@ -74,7 +75,7 @@ export async function assignMermaid(config: any) {
   ]
 }
 
-export function supportRunExtendsPlugin(config: UserConfig<Theme.Config>) {
+export function supportRunExtendsPlugin(config: any) {
   if (!config.markdown)
     config.markdown = {}
   if (config.extends?.markdown?.config) {

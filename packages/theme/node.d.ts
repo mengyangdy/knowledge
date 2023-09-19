@@ -229,7 +229,7 @@ declare namespace Theme {
  * 获取主题配置
  * @param cfg 主题配置
  */
-declare function getThemeConfig(cfg?: Partial<Theme.BlogConfig>): any;
+declare function getThemeConfig(cfg?: Partial<Theme.BlogConfig>): Promise<any>;
 declare function defineConfig(config: UserConfig<Theme.Config>): any;
 
 export { defineConfig, getThemeConfig };
