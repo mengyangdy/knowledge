@@ -291,7 +291,9 @@ export async function initSimpleGitHooks(cwd = process.cwd()) {
 
 **注意：**
 
-此命令需要在执行`pnpm install`的时候就对项目进行hooks初始化，所以我们需要在项目的scripts里面写上`"prepare": "dy init-simple-git-hooks"`,此命令主要是在初始化的时候执行此命令初始化
+此命令需要在执行 `pnpm install` 的时候就对项目进行 hooks 初始化，所以我们需要在项目的 scripts 里面写上 `"prepare": "dy init-simple-git-hooks"`,此命令主要是在初始化的时候执行此命令初始化
+
+并且需要提前安装开发依赖：`simple-git-hooks`
 
 另外还需在`.package.json`里面配置如下选项：
 
