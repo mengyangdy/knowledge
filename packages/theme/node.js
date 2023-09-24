@@ -347,7 +347,6 @@ function registerMdPlugins(vpCfg, plugins) {
   }
 }
 function wrapperCfgWithMermaid(config) {
-  console.log("=>(mdPlugins.ts:41) config", config);
   const extendThemeConfig = config.extends?.themeConfig?.blog || {};
   const resultConfig = extendThemeConfig.mermaid === false ? config : {
     ...config,

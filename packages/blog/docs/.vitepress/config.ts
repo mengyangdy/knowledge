@@ -1,215 +1,222 @@
-import { defineConfig, getThemeConfig } from "@dylanjs/vitepress-theme/node"
+import { defineConfig, getThemeConfig } from '@dylanjs/vitepress-theme/node'
 
-import themePkg from "@dylanjs/vitepress-theme/package.json"
+import themePkg from '@dylanjs/vitepress-theme/package.json'
 
 // https://vitepress.dev/reference/site-config
 
 const blogTheme = getThemeConfig({
-  author: "Dylan",
+  author: 'Dylan',
   comment: {
-    repo: "ATQQ/sugar-blog",
-    repoId: "MDEwOlJlcG9zaXRvcnkyNDEyNDUyOTk",
-    category: "Announcements",
-    categoryId: "DIC_kwDODmEcc84COVc6",
-    inputPosition: "top",
+    repo: 'ATQQ/sugar-blog',
+    repoId: 'MDEwOlJlcG9zaXRvcnkyNDEyNDUyOTk',
+    category: 'Announcements',
+    categoryId: 'DIC_kwDODmEcc84COVc6',
+    inputPosition: 'top'
   },
   popover: {
-    title: "联系我",
+    title: '联系我',
     body: [
-      { type: "text", content: "👇公众号👇---👇 微信 👇" },
+      { type: 'text', content: '👇公众号👇---👇 微信 👇' },
       {
-        type: "image",
-        src: "https://img.cdn.sugarat.top/mdImg/MTYxNTAxODc2NTIxMA==615018765210",
+        type: 'image',
+        src: 'https://img.cdn.sugarat.top/mdImg/MTYxNTAxODc2NTIxMA==615018765210'
       },
       {
-        type: "text",
-        content: "欢迎大家私信交流",
-      },
+        type: 'text',
+        content: '欢迎大家私信交流'
+      }
     ],
-    duration: -1,
+    duration: -1
   },
   friend: [],
   search: false,
   recommend: {
     showSelf: true,
-    nextText: "下一页",
-    style: "sidebar",
+    nextText: '下一页',
+    style: 'sidebar'
   },
   authorList: [
     {
-      nickname: "Dylan",
-      url: "http://mengyang.online/",
-      des: "你的指尖,拥有改变世界的力量",
-    },
-  ],
+      nickname: 'Dylan',
+      url: 'http://mengyang.online/',
+      des: '你的指尖,拥有改变世界的力量'
+    }
+  ]
 })
 
 const extraHead: any =
-  process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === 'production'
     ? [
         [
-          "script",
+          'script',
           {
-            charset: "UTF-8",
-            id: "LA_COLLECT",
-            src: "//sdk.51.la/js-sdk-pro.min.js",
-          },
+            charset: 'UTF-8',
+            id: 'LA_COLLECT',
+            src: '//sdk.51.la/js-sdk-pro.min.js'
+          }
         ],
-        [
-          "script",
-          {},
-          'LA.init({id:"3FbAqLI3SfMDBcIj",ck:"3FbAqLI3SfMDBcIj"})',
-        ],
+        ['script', {}, 'LA.init({id:"3FbAqLI3SfMDBcIj",ck:"3FbAqLI3SfMDBcIj"})']
       ]
     : []
 
 export default defineConfig({
   extends: blogTheme,
-  title: "前端成长之路",
-  description:
-    "Dylan的个人博客，记录随笔与学习笔记，大前端相关的知识，高频面试题，个人面经等",
+  title: '前端成长之路',
+  description: 'Dylan的个人博客，记录随笔与学习笔记，大前端相关的知识，高频面试题，个人面经等',
   ignoreDeadLinks: true,
-  lang: "zh-cn",
+  lang: 'zh-cn',
   vite: {
     server: {
       port: 3000,
-      host: "0.0.0.0",
+      host: '0.0.0.0'
     }
   },
   lastUpdated: true,
   head: [
     [
-      "meta",
+      'meta',
       {
-        name: "theme-color",
-        content: "#ffffff",
-      },
+        name: 'theme-color',
+        content: '#ffffff'
+      }
     ],
     [
-      "link",
+      'link',
       {
-        rel: "icon",
-        href: "/favicon.ico",
-        type: "image/png",
-      },
+        rel: 'icon',
+        href: '/favicon.ico',
+        type: 'image/png'
+      }
     ],
     [
-      "link",
+      'link',
       {
-        rel: "alternate icon",
-        href: "/favicon.ico",
-        type: "image/png",
-        sizes: "16x16",
-      },
+        rel: 'alternate icon',
+        href: '/favicon.ico',
+        type: 'image/png',
+        sizes: '16x16'
+      }
     ],
     [
-      "meta",
+      'meta',
       {
-        name: "author",
-        content: "Dylan",
-      },
+        name: 'author',
+        content: 'Dylan'
+      }
     ],
     [
-      "link",
+      'link',
       {
-        rel: "mask-icon",
-        href: "/favicon.ico",
-        color: "#ffffff",
-      },
+        rel: 'mask-icon',
+        href: '/favicon.ico',
+        color: '#ffffff'
+      }
     ],
     [
-      "link",
+      'link',
       {
-        rel: "apple-touch-icon",
-        href: "/favicon.ico",
-        sizes: "180x180",
-      },
+        rel: 'apple-touch-icon',
+        href: '/favicon.ico',
+        sizes: '180x180'
+      }
     ],
-    ...extraHead,
+    ...extraHead
   ],
   themeConfig: {
-    lastUpdatedText: "上次更新于",
+    lastUpdatedText: '上次更新于',
     search: {
-      provider: "algolia",
+      provider: 'algolia',
       options: {
-        appId: "XK3ASI0PM0",
-        apiKey: "71b718af7f109179d825ed0af2133deb",
-        indexName: "dylanjs_blog_top_search",
-        placeholder: "请输入要搜索的内容...",
-      },
+        appId: 'XK3ASI0PM0',
+        apiKey: '71b718af7f109179d825ed0af2133deb',
+        indexName: 'dylanjs_blog_top_search',
+        placeholder: '请输入要搜索的内容...'
+      }
     },
     footer: {
       // message: '<a target="_blank" href="https://beian.miit.gov.cn/">备案信息</a>',
-      copyright: `© 2023-present Dylan | <a href="https://github.com/mengyang94982/knowledge/tree/master/packages/theme">@dylanjs/vitepress-theme@${themePkg.version} </a>`,
+      copyright: `© 2023-present Dylan | <a href="https://github.com/mengyang94982/knowledge/tree/master/packages/theme">@dylanjs/vitepress-theme@${themePkg.version} </a>`
     },
-    logo: "/logo.png",
+    logo: '/logo.png',
     editLink: {
-      pattern:
-        "https://github.com/mengyang94982/knowledge/tree/master/packages/blog/docs/:path",
-      text: "去 GitHub 上编辑内容",
+      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/docs/:path',
+      text: '去 GitHub 上编辑内容'
     },
     outline: {
-      level: "deep",
-      label: "目录",
+      level: 'deep',
+      label: '目录'
     },
-    outlineTitle: "目录",
+    outlineTitle: '目录',
     nav: [
       {
-        text: "大前端",
+        text: '大前端',
         items: [
           {
-            text: "HTML",
-            link: "/大前端/html/",
+            text: 'HTML',
+            link: '/大前端/html/'
           },
           {
-            text: "CSS",
-            link: "/大前端/css/",
+            text: 'CSS',
+            link: '/大前端/css/'
           },
           {
-            text: "JavaScript",
-            link: "/大前端/JavaScript/",
+            text: 'JavaScript',
+            link: '/大前端/JavaScript/'
           },
           {
-            text: "NodeJS",
-            link: "/大前端/node/",
+            text: 'NodeJS',
+            link: '/大前端/node/'
           },
           {
-            text: "NestJS",
-            link: "/大前端/nest/",
+            text: 'NestJS',
+            link: '/大前端/nest/'
           },
           {
-            text: "vitepress",
-            link: "/大前端/vitepress/",
-          },
-        ],
+            text: 'vitepress',
+            link: '/大前端/vitepress/'
+          }
+        ]
       },
       {
-        text: "工程化",
+        text: '工程化',
         items: [
           {
-            text: "vite",
-            link: "/工程化/vite/",
+            text: 'vite',
+            link: '/工程化/vite/'
           },
           {
-            text: "Git",
-            link: "/工程化/git/",
+            text: 'Git',
+            link: '/工程化/git/'
           },
           {
-            text: "ESLint",
-            link: "/工程化/eslint/",
+            text: 'ESLint',
+            link: '/工程化/eslint/'
           },
           {
-            text: "软件",
-            link: "/工程化/software/",
-          },
-        ],
+            text: 'npm',
+            link: '/工程化/npm/'
+          }
+        ]
       },
+      {
+        text: '计算机基础',
+        items: [
+          {
+            text: '软件',
+            link: '/计算机基础/软件/'
+          },
+          {
+            text: 'http',
+            link: '/计算机基础/http/'
+          }
+        ]
+      }
     ],
     socialLinks: [
       {
-        icon: "github",
-        link: "https://github.com/mengyang94982",
-      },
-    ],
-  },
+        icon: 'github',
+        link: 'https://github.com/mengyang94982'
+      }
+    ]
+  }
 })
