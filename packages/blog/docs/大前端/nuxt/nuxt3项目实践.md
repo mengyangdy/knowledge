@@ -615,7 +615,7 @@ const { apiBaseUrl } = runtimeConfig.public
 
 ### 方法二使用 vite 配置
 
-根目录创建.env 目录，创建环境变量文件：
+根目录创建.env 目录，创建环境变量文件.env.dev：
 
 ```text
 VITE_REQUEST_BASE_URL = '/m-staff-center/api/v1'
