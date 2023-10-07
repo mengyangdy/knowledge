@@ -1,20 +1,33 @@
 <template>
-  <div v-if="tags.length" class="card tags" data-pagefind-ignore="all">
+  <div
+    v-if="tags.length"
+    class="card tags"
+    data-pagefind-ignore="all"
+  >
     <!-- 头部 -->
     <div class="card-header">
       <span class="title">🏷 标签</span>
       <ElTag
-v-if="activeTag.label" :type="(activeTag.type as any)" :effect="colorMode" closable
-              @close="handleCloseTag">
+        v-if="activeTag.label"
+        :type="activeTag.type as any"
+        :effect="colorMode"
+        closable
+        @close="handleCloseTag"
+      >
         {{ activeTag.label }}
       </ElTag>
     </div>
     <!-- 标签列表 -->
     <ul class="tag-list">
-      <li v-for="(tag,idx) in tags" :key="tag">
+      <li
+        v-for="(tag, idx) in tags"
+        :key="tag"
+      >
         <ElTag
-:type="tagType[idx % tagType.length]" :effect="colorMode"
-                @click="handleTagClick(tag,tagType[idx % tagType.length])">
+          :type="tagType[idx % tagType.length]"
+          :effect="colorMode"
+          @click="handleTagClick(tag, tagType[idx % tagType.length])"
+        >
           {{ tag }}
         </ElTag>
       </li>
@@ -23,20 +36,17 @@ v-if="activeTag.label" :type="(activeTag.type as any)" :effect="colorMode" closa
 </template>
 
 <script setup lang="ts">
-
-import {computed, watch} from "vue";
-import {useBrowserLocation, useDark} from "@vueuse/core";
-import {useRouter} from "vitepress";
-import {ElTag} from "element-plus";
-import {useActiveTag, useArticles, useCurrentPageNum} from "../composables/config/blog";
+import { computed, watch } from 'vue'
+import { useBrowserLocation, useDark } from '@vueuse/core'
+import { useRouter } from 'vitepress'
+import { ElTag } from 'element-plus'
+import { useActiveTag, useArticles, useCurrentPageNum } from '../composables/config/blog'
 
 const router = useRouter()
 
 const docs = useArticles()
 const tags = computed(() => {
-  return [
-    ...new Set(docs.value.map(v => v.meta.tag || []).flat(3))
-  ]
+  return [...new Set(docs.value.map(v => v.meta.tag || []).flat(3))]
 })
 const activeTag = useActiveTag()
 const isDark = useDark({
@@ -47,14 +57,14 @@ const colorMode = computed(() => (isDark.value ? 'light' : 'dark'))
 
 const tagType: any = ['', 'info', 'success', 'warning', 'danger']
 const currentPage = useCurrentPageNum()
-function handleCloseTag () {
+function handleCloseTag() {
   activeTag.value.label = ''
   activeTag.value.type = ''
   currentPage.value = 1
   router.go(`${window.location.origin}${router.route.path}`)
 }
 const location = useBrowserLocation()
-function handleTagClick (tag: string, type: string) {
+function handleTagClick(tag: string, type: string) {
   if (tag === activeTag.value.label) {
     handleCloseTag()
     return
@@ -62,19 +72,19 @@ function handleTagClick (tag: string, type: string) {
   activeTag.value.type = type
   activeTag.value.label = tag
   currentPage.value = 1
-  router.go(
-    `${location.value.origin}${router.route.path}?tag=${tag}&type=${type}`
-  )
+  router.go(`${location.value.origin}${router.route.path}?tag=${tag}&type=${type}`)
 }
 
-watch(location, () => {
+watch(
+  location,
+  () => {
     if (location.value.href) {
       const url = new URL(location.value.href!)
       activeTag.value.type = url.searchParams.get('type') || ''
       activeTag.value.label = url.searchParams.get('tag') || ''
     }
   },
-  {immediate: true}
+  { immediate: true }
 )
 </script>
 

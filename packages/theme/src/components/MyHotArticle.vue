@@ -1,21 +1,41 @@
 <template>
-  <div v-if="recommendList.length || empty" class="card recommend" data-pagefind-ignore="all">
+  <div
+    v-if="recommendList.length || empty"
+    class="card recommend"
+    data-pagefind-ignore="all"
+  >
     <!-- 头部 -->
     <div class="card-header">
       <span class="title">{{ title }}</span>
-      <ElButton v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
+      <ElButton
+        v-if="showChangeBtn"
+        size="small"
+        type="primary"
+        text
+        @click="changePage"
+      >
         {{ nextText }}
       </ElButton>
     </div>
     <!-- 文章列表 -->
-    <ol v-if="currentWikiData.length" class="recommend-container">
-      <li v-for="(v,idx) in currentWikiData" :key="v.route">
+    <ol
+      v-if="currentWikiData.length"
+      class="recommend-container"
+    >
+      <li
+        v-for="(v, idx) in currentWikiData"
+        :key="v.route"
+      >
         <!-- 序号 -->
         <i class="num">{{ idx + 1 }}</i>
         <!-- 简介 -->
         <div class="des">
           <!-- title -->
-          <ElLink type="info" class="title" :href="withBase(v.route)">
+          <ElLink
+            type="info"
+            class="title"
+            :href="withBase(v.route)"
+          >
             {{ v.meta.title }}
           </ElLink>
           <!-- 描述信息 -->
@@ -28,19 +48,23 @@
         </div>
       </li>
     </ol>
-    <div v-else class="empty-text">{{ empty }}</div>
+    <div
+      v-else
+      class="empty-text"
+    >
+      {{ empty }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { withBase } from 'vitepress'
+import { formatBlogShowDate } from '@dylanjs/utils'
+import { computed, ref } from 'vue'
+import { ElButton, ElLink } from 'element-plus'
+import { useArticles, useBlogConfig } from '../composables/config/blog.js'
 
-import {withBase} from "vitepress";
-import {formatBlogShowDate} from "@dylanjs/utils"
-import {computed, ref} from "vue";
-import {ElButton, ElLink} from "element-plus";
-import {useArticles, useBlogConfig} from "../composables/config/blog.js";
-
-const {hotArticle} = useBlogConfig()
+const { hotArticle } = useBlogConfig()
 const title = computed(() => hotArticle?.title || '🔥 精选文章')
 const nextText = computed(() => hotArticle?.nextText || '换一组')
 const pageSize = computed(() => hotArticle?.pageSize || 10)
@@ -57,7 +81,7 @@ const recommendList = computed(() => {
 })
 
 const currentPage = ref(1)
-function changePage () {
+function changePage() {
   const newIdx = currentPage.value % Math.ceil(recommendList.value.length / pageSize.value)
   currentPage.value = newIdx + 1
 }

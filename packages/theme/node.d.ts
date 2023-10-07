@@ -40,6 +40,7 @@ declare namespace Theme {
         title: string;
         date: string;
         tag?: string[];
+        type: string;
         description?: string;
         descriptionHTML?: string;
         cover?: string;

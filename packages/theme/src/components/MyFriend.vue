@@ -1,14 +1,27 @@
 <template>
-  <div v-if="friendList?.length" class="card friend-wrapper">
+  <div
+    v-if="friendList?.length"
+    class="card friend-wrapper"
+  >
     <!-- 头部 -->
     <div class="card-header">
       <span class="title">🤝 友情链接</span>
     </div>
     <!-- 友链列表 -->
     <ol class="friend-list">
-      <li v-for="v in friendList" :key="v.nickname">
-        <a :href="v.url" target="_blank">
-          <ElAvatar :size="50" :src="v.avatar" :alt="v.alt"/>
+      <li
+        v-for="v in friendList"
+        :key="v.nickname"
+      >
+        <a
+          :href="v.url"
+          target="_blank"
+        >
+          <ElAvatar
+            :size="50"
+            :src="v.avatar"
+            :alt="v.alt"
+          />
           <div>
             <span class="nickname">{{ v.nickname }}</span>
             <p class="des">{{ v.des }}</p>
@@ -20,19 +33,19 @@
 </template>
 
 <script setup>
-import {ElAvatar} from "element-plus";
-import {useDark} from "@vueuse/core";
-import {computed} from "vue";
-import {getImageUrl} from "@dylanjs/utils";
-import {useBlogConfig} from "../composables/config/blog.ts";
+import { ElAvatar } from 'element-plus'
+import { useDark } from '@vueuse/core'
+import { computed } from 'vue'
+import { getImageUrl } from '@dylanjs/utils'
+import { useBlogConfig } from '../composables/config/blog.ts'
 
 const isDark = useDark({
   storageKey: 'vitepress-theme-appearance'
 })
-const {friend} = useBlogConfig()
+const { friend } = useBlogConfig()
 const friendList = computed(() => {
   return friend?.map(v => {
-    const {avatar, nickname} = v
+    const { avatar, nickname } = v
     const avatarUrl = getImageUrl(avatar, isDark.value)
     let alt = nickname
     if (typeof avatar !== 'string') {
@@ -45,7 +58,6 @@ const friendList = computed(() => {
     }
   })
 })
-
 </script>
 
 <style scoped lang="scss">

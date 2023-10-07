@@ -1,5 +1,5 @@
-import type {ElButton} from "element-plus";
-import type {DefaultTheme} from "vitepress";
+import type { ElButton } from 'element-plus'
+import type { DefaultTheme } from 'vitepress'
 
 export namespace BlogPopover {
   export interface Title {
@@ -29,21 +29,16 @@ export namespace BlogPopover {
   }
 
   export type Value = Title | Text | Image | Button
-
 }
 
-export type ThemeableImage = | string
-  | { src: string; alt?: string }
-  | { light: string; dark: string; alt?: string }
-
-
+export type ThemeableImage = string | { src: string; alt?: string } | { light: string; dark: string; alt?: string }
 
 export namespace Theme {
-
   export interface PageMeta {
     title: string
     date: string
     tag?: string[]
+    type: string
     description?: string
     descriptionHTML?: string
     cover?: string
@@ -152,105 +147,111 @@ export namespace Theme {
     time:
       | string
       | {
-      start: string
-      end?: string
-      lastupdate?:string
+          start: string
+          end?: string
+          lastupdate?: string
+        }
+    status?: {
+      text: string
+      type?: 'tip' | 'warning' | 'danger'
     }
-    status?:{
-      text:string
-      type?:
-        'tip'|'warning'|'danger'
-    }
-    url?:string
-    github?:|string|{
-      owner:string
-      repo:string
-      branch?:string
-      path?:string
-    }
-    cover?:|string|string[]|{
-      urls:string[]
-      layout?:'swiper'|'list'
-    }
-    links?:{
-      title:string
-      url:string
+    url?: string
+    github?:
+      | string
+      | {
+          owner: string
+          repo: string
+          branch?: string
+          path?: string
+        }
+    cover?:
+      | string
+      | string[]
+      | {
+          urls: string[]
+          layout?: 'swiper' | 'list'
+        }
+    links?: {
+      title: string
+      url: string
     }[]
-    tags?:string[]
-    top?:number
+    tags?: string[]
+    top?: number
   }
 
-  export type SearchConfig=|boolean|'pagefind'|{
-    btnPlaceholder?:string
-    placeholder?:string
-    emptyText?:string
-    heading?:string
-    mode?:boolean|'pagefind'
-  }
+  export type SearchConfig =
+    | boolean
+    | 'pagefind'
+    | {
+        btnPlaceholder?: string
+        placeholder?: string
+        emptyText?: string
+        heading?: string
+        mode?: boolean | 'pagefind'
+      }
 
-  export interface UserWorks{
-    title:string
-    description?:string
-    topTitle?:string
-    list:UserWork[]
+  export interface UserWorks {
+    title: string
+    description?: string
+    topTitle?: string
+    list: UserWork[]
   }
 
   export interface BlogConfig {
     blog?: false
     pagesData: PageData[]
-    srcDir?:string
-    author?:string
-    hotArticle?:HotArticle
-    home?:HomeBlog
+    srcDir?: string
+    author?: string
+    hotArticle?: HotArticle
+    home?: HomeBlog
     /**
      * 本地全文搜索定制
      * 内置pagefind 实现，
      * VitePress 官方提供 minisearch 实现，
      * 社区提供 flexsearch 实现
      */
-    search?:SearchConfig
+    search?: SearchConfig
     /**
      * 配置评论
      * power by https://giscus.app/zh-CN
      */
-    comment?:GiscusConfig|false
+    comment?: GiscusConfig | false
     /**
      * 阅读文章左侧的推荐文章（替代默认的sidebar）
      */
-    recommend?:RecommendArticle|false
-    article?:ArticleConfig
-    alert?:Alert
-    popover?:Popover
-    friend?:FriendLink[]
-    authorList?:Omit<FriendLink, 'avatar'>[]
+    recommend?: RecommendArticle | false
+    article?: ArticleConfig
+    alert?: Alert
+    popover?: Popover
+    friend?: FriendLink[]
+    authorList?: Omit<FriendLink, 'avatar'>[]
     /**
      * 启用 [vitepress-plugin-tabs](https://www.npmjs.com/package/vitepress-plugin-tabs)
      * @default false
      */
-    tags?:boolean
-    works?:UserWorks
+    tags?: boolean
+    works?: UserWorks
     /**
      * https://mermaid.js.org/config/setup/modules/mermaidAPI.html#mermaidapi-configuration-defaults for options
      * @default false
      */
-    mermaid?:any
+    mermaid?: any
     /**
      * 设置解析 frontmatter 里 date 的时区
      * @default 8 => 'UTC+8'
      * */
-    timeZone?:number
+    timeZone?: number
   }
-
 
   export interface Config extends DefaultTheme.Config {
     blog?: BlogConfig
   }
 
-  export interface HomeConfig{
+  export interface HomeConfig {
     /**
      * @deprecated
      * 此方法已经废弃，这个定义将在未来某一刻被移除，请为 inspiring 配置数租来实现相同的效果
      */
-    handleChangeSlogan?:(oldSlogan:string)=>string|Promise<string>
+    handleChangeSlogan?: (oldSlogan: string) => string | Promise<string>
   }
 }

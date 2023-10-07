@@ -401,12 +401,7 @@ function getArticles(cfg) {
   const files = import_fast_glob.glob.sync(`${srcDir}/**/*.md`, { ignore: ["node_modules"] });
   const data = files.map((v) => {
     let route = v.replace(".md", "");
-    route = route.replace(
-      new RegExp(
-        `^${import_node_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_node_path.default.sep}`, "g"), "/")}`
-      ),
-      ""
-    );
+    route = route.replace(new RegExp(`^${import_node_path.default.join(srcDir, "/").replace(new RegExp(`\\${import_node_path.default.sep}`, "g"), "/")}`), "");
     const fileContent = import_node_fs.default.readFileSync(v, "utf-8");
     const { data: frontmatter } = (0, import_gray_matter.default)(fileContent, {
       excerpt: true
@@ -421,12 +416,12 @@ function getArticles(cfg) {
       meta.date = getFileBirthTime(v);
     } else {
       const timeZone = cfg?.timeZone ?? 8;
-      meta.date = (0, import_utils2.formatBlogDate)(
-        /* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
-      );
+      meta.date = (0, import_utils2.formatBlogDate)(/* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`));
     }
     meta.tags = typeof meta.tags === "string" ? [meta.tags] : meta.tags;
     meta.tag = [meta.tag || []].flat().concat([.../* @__PURE__ */ new Set([...meta.tags || []])]);
+    const typeArr = route.split("/");
+    meta.type = typeArr.slice(0, typeArr.length - 1).join("-");
     const wordCount = 100;
     meta.description = meta.description || getTextSummary(fileContent, wordCount);
     meta.cover = meta.cover ?? (fileContent.match(/[!]\[.*?\]\((https:\/\/.+)\)/)?.[1] || "");
