@@ -75,3 +75,27 @@ ping raw.githubusercontent.com
 ![](https://s2.loli.net/2023/09/19/65kXvhHmJCyzsAg.png)
 
 然后就可以看到已经下载好了通过 cd 到目标文件夹就可以开始了。
+
+## 造成的原因
+
+我们可以从 nuxt 的 issue 中的 [issue](https://github.com/nuxt/cli/issues/159) 中找到类似的情况，nuxt 的脚手架 nuxi 使用了 [giget](https://github.com/unjs/giget) 来从 [nuxt 模板仓库](https://github.com/nuxt/starter)中获取文件。
+
+giget 所做的事情就是利用 node 从 github 上的仓库中拉去模板，giget 和 [degit](https://github.com/Rich-Harris/degit) 都可以从 github 上拉去仓库内容，不同的是 degit 支持自动从环境变量中获取 `https_proxy` 进行代理，而 giget 没有做处理。
+
+## 其他解决方法
+
+### 手动克隆模板仓库
+
+```bash
+git clone -b v3 https://github.com/nuxt/starter.git nuxt3-demo
+```
+
+-b 是指定分支，现在最新的 nuxt 3 是在 v3 的分支上
+
+### 使用 degit 拉取代码
+
+```bash
+degit 'nuxt/starter#v3' nuxt3-demo
+```
+
+`#v3` 代表下载相应的分支。
