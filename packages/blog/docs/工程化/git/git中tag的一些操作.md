@@ -1,10 +1,10 @@
 ---
 title: git中tag的一些操作
-tag:
+tags:
   - git
   - tag
 date: 2023-09-09
-cover:
+cover: https://s2.loli.net/2023/09/29/R3NMgTX2dAGsjWz.jpg
 ---
 
 # git 中 tag 的一些操作

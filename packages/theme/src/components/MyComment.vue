@@ -1,12 +1,30 @@
 <template>
-  <div v-if="show" id="giscus-comment" ref="commentEl" class="comment" data-pagefind-ignore="all">
-    <ElAffix :class="{hidden:commentIsVisible}" class="comment-btn" target="main" position="bottom" :offset="40">
-      <ElButton plain :icon="Comment" type="primary" @click="handleScrollToComment">
+  <div
+    v-if="show"
+    id="giscus-comment"
+    ref="commentEl"
+    class="comment"
+    data-pagefind-ignore="all"
+  >
+    <ElAffix
+      :class="{ hidden: commentIsVisible }"
+      class="comment-btn"
+      target="main"
+      position="bottom"
+      :offset="40"
+    >
+      <ElButton
+        plain
+        :icon="Comment"
+        type="primary"
+        @click="handleScrollToComment"
+      >
         评论
       </ElButton>
     </ElAffix>
     <component
-      :is="commentComponent" v-if="showComment"
+      :is="commentComponent"
+      v-if="showComment"
       src="https://giscus.app/client.js"
       :data-repo="commentConfig.repo"
       :data-repo-id="commentConfig.repoId"
@@ -20,25 +38,24 @@
       :data-lang="commentConfig.lang || 'zh-CN'"
       crossorigin="anonymous"
       :data-loading="commentConfig.loading || 'eager'"
-      async/>
+      async
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { useData, useRoute } from 'vitepress'
+import { computed, ref, watch } from 'vue'
+import { useDark, useElementVisibility } from '@vueuse/core'
+import { ElAffix, ElButton } from 'element-plus'
+import { Comment } from '@element-plus/icons-vue'
+import { useGiscusConfig } from '../composables/config/blog'
+import type { Theme } from '../composables/config'
 
-
-import {useData, useRoute} from "vitepress";
-import {computed, ref, watch} from "vue";
-import {useDark, useElementVisibility} from "@vueuse/core";
-import {ElAffix, ElButton} from "element-plus";
-import {Comment} from '@element-plus/icons-vue'
-import {useGiscusConfig} from "../composables/config/blog";
-import type {Theme} from "../composables/config";
-
-const {frontmatter} = useData()
+const { frontmatter } = useData()
 const commentEl = ref(null)
 const commentIsVisible = useElementVisibility(commentEl)
-const commentComponent='script'
+const commentComponent = 'script'
 
 function handleScrollToComment() {
   document.querySelector('#giscus-comment')?.scrollIntoView({
@@ -63,12 +80,7 @@ const show = computed(() => {
   if (!giscusConfig) {
     return giscusConfig
   }
-  return (
-    giscusConfig.repo &&
-    giscusConfig.repoId &&
-    giscusConfig.category &&
-    giscusConfig.categoryId
-  )
+  return giscusConfig.repo && giscusConfig.repoId && giscusConfig.category && giscusConfig.categoryId
 })
 
 const isDark = useDark({

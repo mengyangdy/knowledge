@@ -23,38 +23,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue"
-import { useData } from "vitepress"
-import { useBlogConfig } from "../composables/config/blog"
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useData } from 'vitepress'
+import { useBlogConfig } from '../composables/config/blog'
 
 const { site, frontmatter } = useData()
 const { home } = useBlogConfig()
 
-const name = computed(
-  () => (frontmatter.value.blog?.name ?? site.value.title) || home?.name || ""
-)
+const name = computed(() => (frontmatter.value.blog?.name ?? site.value.title) || home?.name || '')
 
-const motto = computed(() => frontmatter.value.blog?.motto || home?.motto || "")
+const motto = computed(() => frontmatter.value.blog?.motto || home?.motto || '')
 
-const inspiring = ref("")
+const inspiring = ref('')
 const inspiringList = computed<string[]>(() => {
-  return [
-    ...new Set(
-      [frontmatter.value.blog?.inspiring, home?.inspiring]
-        .flat()
-        .filter((v) => !!v)
-    ),
-  ]
+  return [...new Set([frontmatter.value.blog?.inspiring, home?.inspiring].flat().filter(v => !!v))]
 })
 const inspiringIndex = ref<number>(-1)
-const inspiringTimeout = computed<number>(
-  () => frontmatter.value.blog?.inspiringTimeout || home?.inspiringTimeout || 0
-)
+const inspiringTimeout = computed<number>(() => frontmatter.value.blog?.inspiringTimeout || home?.inspiringTimeout || 0)
 watch(inspiringTimeout, () => {
   startTimer()
 })
 const timer = ref<any>()
-function startTimer () {
+function startTimer() {
   if (timer.value) {
     clearTimeout(timer.value)
   }
@@ -74,18 +64,19 @@ onUnmounted(() => {
   }
 })
 
-async function changeSlogan () {
+async function changeSlogan() {
   // 启动定时器
   startTimer()
-  if (inspiringList.value.length < 1) 
-return
+  if (inspiringList.value.length < 1) {
+    return
+  }
   inspiringIndex.value = (inspiringIndex.value + 1) % inspiringList.value.length
   const newValue = inspiringList.value[inspiringIndex.value]
   if (newValue === inspiring.value) {
     return
   }
   // 重新渲染数据，同时触发动画
-  inspiring.value = ""
+  inspiring.value = ''
   setTimeout(() => {
     inspiring.value = newValue
   }, 100)
@@ -111,7 +102,7 @@ h1 {
     margin-left: 10px;
 
     &::before {
-      content: "- ";
+      content: '- ';
     }
   }
 }

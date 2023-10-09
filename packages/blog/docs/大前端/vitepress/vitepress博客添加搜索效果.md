@@ -86,7 +86,7 @@ export default defineConfig({
 创建 github 工作流：
 
 ```yml
-name: algolia
+name: 更新algolia爬虫数据
 on:
   push:
     branches:
@@ -95,6 +95,10 @@ jobs:
   algolia:
     runs-on: ubuntu-latest
     steps:
+      - name: Sleep for 200s
+        uses: juliangruber/sleep-action@v2.0.0
+        with:
+          time: 200s
       - uses: actions/checkout@v3
       - name: Get the content of algolia.json as config
         id: algolia_config

@@ -1,5 +1,9 @@
 <template>
-  <div v-if="showAnalyze" class="doc-analyze" data-pagefind-ignore="all">
+  <div
+    v-if="showAnalyze"
+    class="doc-analyze"
+    data-pagefind-ignore="all"
+  >
     <span>
       <ElIcon><EditPen /></ElIcon>
       字数：{{ wordCount }} 个字
@@ -9,9 +13,16 @@
       预计：{{ readTime }} 分钟
     </span>
   </div>
-  <div id="hack-article-des" ref="$des" class="meta-des">
+  <div
+    id="hack-article-des"
+    ref="$des"
+    class="meta-des"
+  >
     <!-- TODO：是否需要原创？转载等标签，理论上可以添加标签解决，可以参考 charles7c -->
-    <span v-if="author && !hiddenAuthor" class="author">
+    <span
+      v-if="author && !hiddenAuthor"
+      class="author"
+    >
       <ElIcon title="本文作者"><UserFilled /></ElIcon>
       <a
         v-if="currentAuthorInfo"
@@ -25,14 +36,25 @@
         {{ author }}
       </template>
     </span>
-    <span v-if="publishDate && !hiddenTime" class="publishDate">
+    <span
+      v-if="publishDate && !hiddenTime"
+      class="publishDate"
+    >
       <ElIcon :title="timeTitle"><Clock /></ElIcon>
       {{ publishDate }}
     </span>
-    <span v-if="tags.length" class="tags">
+    <span
+      v-if="tags.length"
+      class="tags"
+    >
       <ElIcon :title="timeTitle"><CollectionTag /></ElIcon>
-      <a v-for="tag in tags" :key="tag" class="link" :href="`/?tag=${tag}`"
-      >{{ tag }}
+      <a
+        v-for="tag in tags"
+        :key="tag"
+        class="link"
+        :href="`/?tag=${tag}`"
+      >
+        {{ tag }}
       </a>
     </span>
     <!-- 封面展示 -->
@@ -48,33 +70,26 @@
 import { useData, useRoute } from 'vitepress'
 import { computed, onMounted, ref, watch } from 'vue'
 import { ElIcon } from 'element-plus'
-import {
-  AlarmClock,
-  Clock,
-  CollectionTag,
-  EditPen,
-  UserFilled
-} from '@element-plus/icons-vue'
-import  { countWord,formatBlogShowDate } from '@dylanjs/utils'
+import { AlarmClock, Clock, CollectionTag, EditPen, UserFilled } from '@element-plus/icons-vue'
+import { countWord, formatBlogShowDate } from '@dylanjs/utils'
 import { useBlogConfig, useCurrentArticle } from '../composables/config/blog'
 import type { Theme } from '../composables/config'
 
 const { article, authorList } = useBlogConfig()
 const { frontmatter } = useData()
 const tags = computed(() => {
-  const { tag, tags, categories } = frontmatter.value
+  const { tag, tags } = frontmatter.value
+
   return [
     ...new Set(
       []
-        .concat(tag, tags, categories)
+        .concat(tag, tags)
         .flat()
-        .filter((v) => !!v)
+        .filter(v => !!v)
     )
   ]
 })
-const showAnalyze = computed(
-  () => frontmatter.value?.readingTime ?? article?.readingTime ?? true
-)
+const showAnalyze = computed(() => frontmatter.value?.readingTime ?? article?.readingTime ?? true)
 
 const wordCount = ref(0)
 const imageCount = ref(0)
@@ -98,20 +113,16 @@ const readTime = computed(() => {
 const route = useRoute()
 const $des = ref<HTMLDivElement>()
 
-function analyze () {
+function analyze() {
   if (!$des.value) {
     return
   }
-  document.querySelectorAll('.meta-des').forEach((v) => v.remove())
+  document.querySelectorAll('.meta-des').forEach(v => v.remove())
   const docDomContainer = window.document.querySelector('#VPContent')
-  const imgs = docDomContainer?.querySelectorAll<HTMLImageElement>(
-    '.content-container .main img'
-  )
+  const imgs = docDomContainer?.querySelectorAll<HTMLImageElement>('.content-container .main img')
   imageCount.value = imgs?.length || 0
 
-  const words =
-    docDomContainer?.querySelector('.content-container .main')?.textContent ||
-    ''
+  const words = docDomContainer?.querySelector('.content-container .main')?.textContent || ''
 
   wordCount.value = countWord(words)
   docDomContainer?.querySelector('h1')?.after($des.value!)
@@ -141,21 +152,13 @@ const publishDate = computed(() => {
   return formatBlogShowDate(currentArticle.value?.meta?.date || '')
 })
 
-const timeTitle = computed(() =>
-  frontmatter.value.date ? '发布时间' : '最近修改时间'
-)
+const timeTitle = computed(() => (frontmatter.value.date ? '发布时间' : '最近修改时间'))
 const hiddenTime = computed(() => frontmatter.value.date === false)
 
 const { theme } = useData<Theme.Config>()
 const globalAuthor = computed(() => theme.value.blog?.author || '')
-const author = computed(
-  () =>
-    (frontmatter.value.author || currentArticle.value?.meta.author) ??
-    globalAuthor.value
-)
-const currentAuthorInfo = computed(() =>
-  authorList?.find((v) => author.value === v.nickname)
-)
+const author = computed(() => (frontmatter.value.author || currentArticle.value?.meta.author) ?? globalAuthor.value)
+const currentAuthorInfo = computed(() => authorList?.find(v => author.value === v.nickname))
 const hiddenAuthor = computed(() => frontmatter.value.author === false)
 
 watch(
