@@ -176,4 +176,24 @@ export const useUserStore = defineStore('user', () => {
 
 使用 `skipHydrate` 方法，来进行标记 `state` 属性不能被激活，需要到浏览器中读取数值，这样处理后再页面刷新的时候也能保持数据的内容了
 
-https://juejin.cn/post/7216174863445737528?searchId=202310091642037E1BAAE2D7E7422BF746#heading-6
+## 使用自定义插件
+
+除了以上两种方案以外，如果想用其他的方式来实现的话可以使用 `pinia` 插件来实现。
+
+在 [pinia插件文档](https://pinia.vuejs.org/core-concepts/plugins.html#nuxt-js)中介绍了 `nuxt` 环境中如何使用 `pinia` 插件了：
+
+```js
+// plugins/myPiniaPlugin.ts
+import {PiniaPluginContext} from 'pinia'
+function MyPiniaPlugin({store}:PiniaPluginContext) {
+  store.userInfo = localStorage.get('userInfo')
+  store.token = localStorage.get('token')
+
+}
+
+export default defineNuxtPlugin(({$pinia}) => {
+  $pinia.use(MyPiniaPlugin)
+})
+```
+
+这样我们在页面加载的时候就可以从缓存中获取到值。
