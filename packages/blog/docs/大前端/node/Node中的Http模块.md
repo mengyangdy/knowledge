@@ -63,9 +63,9 @@ server2.listen(9000, () => {
 
 - Server 通过 listen 方法来开启服务器，并且在某一个主机和端口上监听网络请求
   - 也就是当我们通过 ip: port 的方式发送到我们监听的 web 服务器上时
-  - 我们就恶意对其进行相关的处理
+  - 我们就可以对其进行相关的处理
 - Listen 函数有三个参数：
-  - 端口 port：可以不传，系统会默认分配，后续项目中哦我们会写入到环境变量中
+  - 端口 port：可以不传，系统会默认分配，后续项目中我们会写入到环境变量中
   - 主机 host: 通常可以传入 localhost、ip 地址 127.0.0.1、或者 ip 地址 0.0.0.0，默认是 0.0.0.0
     - localhost: 本质上是一个域名，通常情况下会被解析成 127.0.0.1
     - 127.0.0.1：回环地址（Loop Back Address）, 表达的意思其实是我们主机自己发出去额包，直接被自己接收
@@ -240,3 +240,149 @@ res.writeHead(200, {
   - 在 node 中，使用的是 http 内置模块
 
 ## 文件上传
+
+使用 http 模块来实现的文件上传会非常的麻烦，以下展示一下：
+
+### 错误的做法
+
+1. 因为文件上传的类型为 fomData 属于 body 数据，所以我们需要使用 req. on 来监听表单数据的传输，如果数据超过 64 KB 的话还会分为多次来进行传入，具体实现就是多次出发 req. on
+2. 创建写入的流。每次读取到数据的时候使用创建的写入流写入数据，在 req. on 监听的 end 事件中关闭流。
+3. 这样做是错误的做法，因为我们获取到的 body 的 formData 数据会有别的数据，比如 name: dylan, photo: 图片，我们只需要图片，而写入流会把 key 也就是 name 和 phone，还有多余的 value: dylan 也写入到流的数据中，所有最后我们的到的数据是一个大杂烩，而不是一个图片，所以就算我们写入完后命名为 png 也打不开。
+
+```js
+const http = require('http')
+const fs = require('fs')
+
+const server = http.createServer((req, res) => {
+  if (req.url === '/upload') {
+    // 创建写入的流 writable的stream
+    const writeStream = fs.createWriteStream('./foo.png', {
+      flags: 'a+'
+    })
+    // 也可以不是用writeStream.write和writeSream.close两个方法
+    // req.pipe(writeStream)
+    // 客户端传递的数据是表单数据（请求体）
+    req.on('data', data => {
+      console.log('🚀 ~ file: update.js:6 ~ server ~ data:', data)
+      // 这样解析图片文件是错误的 会把key和value（也就是图片）混在一起，然后图片解析不出来
+      // 需要抛出没用的数据也就是key，然后保存图片文件
+      writeStream.write(data)
+    })
+
+    req.on('end', () => {
+      writeStream.close()
+      res.end('文件上传成功了')
+    })
+  }
+})
+
+server.listen(8000, () => {
+  console.log(`服务器开启成功了`)
+})
+```
+
+### 正确的做法
+
+1.  使用二进制对前端传过来的数据进行编码
+2.  这次我们不需要使用读入流来读取数据，而是定义一个 formData 字段来存储所有的传过来的数据。
+3.  当所有的数据获取完毕后我们对数据进行截取，去除掉多余的数据，只留下图片的数据然后保存下来即可。
+
+apifox 上传的数据：
+
+![](https://s2.loli.net/2023/10/17/TBQo6xbR3CzFyI5.png)
+
+![](https://s2.loli.net/2023/10/17/HzFLMXDnW4I51p3.png)
+
+红横线下面的为图片的数据，上面的为多余的数据，需要删除掉
+
+![](https://s2.loli.net/2023/10/17/t5uYCPoZ89q3cKR.png)
+
+红横线下面的为多余的 boundary 数据也需要删除掉
+
+```js
+const http = require('http')
+const fs = require('fs')
+
+const server = http.createServer((req, res) => {
+  //二进制编码
+  req.setEncoding('binary')
+
+  //图片最后面的一些数据
+  const boundary = req.headers['content-type'].split('; ')[1].replace('boundary=', '')
+
+  let formData = ''
+  req.on('data', data => {
+    console.log('🚀 ~ file: upload1.js:7 ~ req.on ~ data:', data)
+    formData += data
+  })
+
+  req.on('end', () => {
+    console.log(formData)
+    //1. 截取从image/jpeg位置开始后面的所有的数据
+
+    let imgType = 'image/jpeg'
+    let imageTypePosition = formData.indexOf(imgType) + imgType.length
+    let imageData = formData.substring(imageTypePosition)
+
+    //2. imageData开始位置有两个空格
+    imageData = imageData.replace(/^\s\s*/, '')
+
+    //3. 替换最后的boundary
+    imageData = imageData.substring(0, imageData.indexOf(`--${boundary}--`))
+
+    //4. 将imageData的数据存储文件中
+    fs.writeFile('./bar.png', imageData, 'binary', () => {
+      console.log('文件存储成功')
+      res.end(`文件上传成功了`)
+    })
+  })
+})
+
+server.listen(8000, () => {
+  console.log(`服务器启动了`)
+})
+```
+
+### 浏览器上传
+
+以上的数据都是使用 apifox 来完成的，下面我们使用浏览器代码来实现以下文件上传：
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" />
+    <button>上传</button>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      //文件上传的逻辑
+      const btnEl = document.querySelector('button')
+      btnEl.onclick = function () {
+        //1. 创建表单对象
+        const formData = new FormData()
+        //2. 将选中的图标文件放入表单
+        const inputEl = document.querySelector('input')
+        formData.set('phone', inputEl.files[0])
+
+        //3. 发送post请求，将表单数据携带到服务器
+        axios({
+          method: 'post',
+          url: 'http://localhost:8000',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+      }
+    </script>
+  </body>
+</html>
+```
