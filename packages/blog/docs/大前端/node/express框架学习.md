@@ -4,7 +4,7 @@ tags:
   - node
   - express
 date: 2023-10-18
-cover:
+cover: https://s2.loli.net/2023/10/18/FklTJ8oOZHev3L4.jpg
 ---
 
 # express 框架学习
@@ -92,7 +92,18 @@ app.listen(8000, () => {
   - 更改请求（request）和响应（response）对象
   - 结束请求-响应周期（返回数据）
   - 调用栈中的下一个中间件
--
+- 如果当前中间件功能没有结束请求-响应周期，则必须调用 next () 将控制权传递给下一个中间件功能，否则，请求将被挂起
+
+![](https://s2.loli.net/2023/10/18/5RwIQO49pkY7PTC.png)
+
+### 应用中间件-自己编写
+
+- name 如何将一个中间件应用到我们的应用程序中呢？
+  - exporess 主要提供了两种方式：
+    - app/router. use
+    - app/router. methods
+  - 可以是 app，也可以是 router，router 方式的我们后续再学习
+  - methods 指的是常用的请求方式，比如：app. get 或者 app. post
 
 ## express 请求响应
 
