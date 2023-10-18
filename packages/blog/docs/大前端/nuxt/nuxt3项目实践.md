@@ -106,7 +106,7 @@ const id = ref(route.params.id)
 
 只要放在方括号里面的内容，就会被转换为路由参数，这样我们就可以在文件名或目录中混合和匹配多个参数：
 
-```text
+```txt
 -| pages/
 ---| index.vue
 ---| users-[group]/
@@ -127,7 +127,7 @@ const id = ref(route.params.id)
 
 如果想制作嵌套路由的话，只需要目录和文件名相同，就制作成了一个嵌套路由：
 
-```text
+```txt
 -| pages/
 ---| company/
 ------| child.vue
@@ -213,7 +213,7 @@ console.log(route.meta.title) //这个页面的title
 
 在 layouts 中新建的其他 vue 文件就是一些自定义配置的布局文件：
 
-```text
+```txt
 -| layouts/
 ---| default.vue
 ---| custom.vue
@@ -257,7 +257,7 @@ definePageMeta({
 
 默认情况下, `Nuxt` 会自动导入 components 目录下面的任何一个组件，组件名会基于这个组件的路径、目录和文件名:
 
-```text
+```txt
 | components/
 --| common
 ----| Upload.vue
@@ -415,7 +415,7 @@ definePageMeta({
 
 放置在 middleware 目录中带有. global 后缀的文件，每次路由更改的时候会自动运行。
 
-```text
+```txt
 -| middleware/
 ---| auth.global.ts
 ```

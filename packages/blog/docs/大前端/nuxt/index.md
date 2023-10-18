@@ -19,7 +19,7 @@ pnpm dlx nuxi@latest init <project-name>
 
 然后使用这个命令创建项目的时候一直报错：
 
-```text
+```txt
  Desktop  pnpm dlx nuxi@latest init nuxtdemo
 Packages: +1
 +
