@@ -1,10 +1,10 @@
 ---
 title: JS中使用笛卡尔积算法实现SKU
-tag:
+tags:
   - 笛卡尔乘积
   - sku
 date: 2023-08-28
-cover: https://s2.loli.net/2023/08/28/aetMuxEYX7nDkpl.jpg
+cover: https://s2.loli.net/2023/09/29/jUa9t3IcBxKf18g.jpg
 ---
 
 # JS 中使用笛卡尔积算法实现 SKU

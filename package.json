@@ -9,7 +9,7 @@
     "blog:preview": "pnpm --filter 'blog' preview",
     "stub": "pnpm -r run stub",
     "lint": "eslint . --fix",
-    "format": "dy prettier-write",
+    "fm": "dy prettier-write",
     "cm": "dy git-commit",
     "cleanup": "dy cleanup",
     "ncu": "dy taze",

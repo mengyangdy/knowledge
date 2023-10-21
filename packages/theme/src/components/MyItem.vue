@@ -1,79 +1,135 @@
 <template>
-  <a class="blog-item" :href="withBase(route)">
-    <i v-if="!!pin" class="pin"></i>
+  <a
+    class="blog-item"
+    :href="withBase(route)"
+  >
+    <i
+      v-if="!!pin"
+      class="pin"
+    ></i>
     <!-- 标题 -->
-    <p v-if="inMobile" class="title">{{ title }}</p>
+    <p
+      v-if="inMobile"
+      class="title"
+    >
+      {{ title }}
+    </p>
     <div class="info-container">
       <!-- 左侧信息 -->
       <div class="info-part">
         <!-- 标题 -->
-        <p v-if="!inMobile" class="title">{{ title }}</p>
+        <p
+          v-if="!inMobile"
+          class="title"
+        >
+          {{ title }}
+        </p>
         <!-- 简短介绍 -->
-        <p v-if="!descriptionHTML && !! description" class="description">
+        <p
+          v-if="!descriptionHTML && !!description"
+          class="description"
+        >
           {{ description }}
         </p>
         <template v-if="descriptionHTML">
-          <div class="description-html" v-html="descriptionHTML"></div>
+          <div
+            class="description-html"
+            v-html="descriptionHTML"
+          ></div>
         </template>
         <!-- 底部补充信息 -->
-        <div v-if="!inMobile" class="badge-list">
-          <span v-if="author" class="split">{{ author }}</span>
+        <div
+          v-if="!inMobile"
+          class="badge-list"
+        >
+          <span
+            v-if="author"
+            class="split"
+          >
+            {{ author }}
+          </span>
           <span class="split">{{ showTime }}</span>
-          <span v-if="tag?.length" class="split">{{ tag.join(' . ') }}</span>
+          <span class="split">{{ type }}</span>
+          <span
+            v-if="tag?.length"
+            class="split"
+          >
+            {{ tag.join(' . ') }}
+          </span>
         </div>
       </div>
       <!-- 右侧封面图 -->
-      <div v-if="cover" class="cover-img" :style="`background-image:url(${cover});`"></div>
+      <div
+        v-if="cover"
+        class="cover-img"
+        :style="`background-image:url(${cover});`"
+      ></div>
     </div>
     <!-- 底部补充描述 -->
-    <div v-if="inMobile" class="badge-list">
-      <span v-if="author" class="split">{{ author }}</span>
+    <div
+      v-if="inMobile"
+      class="badge-list"
+    >
+      <span
+        v-if="author"
+        class="split"
+      >
+        {{ author }}
+      </span>
       <span class="split">{{ showTime }}</span>
-      <span v-if="tag?.length" class="split">{{ tag.join(' · ') }}</span>
+      <span class="split">{{ type }}</span>
+      <span
+        v-if="tag?.length"
+        class="split"
+      >
+        {{ tag.join(' · ') }}
+      </span>
     </div>
   </a>
 </template>
 
 <script setup>
+import { withBase } from 'vitepress'
+import { useWindowSize } from '@vueuse/core'
+import { computed } from 'vue'
+import { formatBlogShowDate } from '@dylanjs/utils'
 
-import {withBase} from "vitepress";
-import {useWindowSize} from "@vueuse/core";
-import {computed} from "vue";
-import {formatBlogShowDate} from "@dylanjs/utils";
-
-const props=defineProps({
-  route:{
-    type:String
+const props = defineProps({
+  route: {
+    type: String
   },
-  title:{
-    type:String
+  title: {
+    type: String
   },
-  date:{
-    type:String || Date
+  date: {
+    type: String || Date
   },
-  sticky:{
-    type:Number
+  sticky: {
+    type: Number
   },
-  description:{
-    type:String
+  description: {
+    type: String
   },
-  descriptionHTML:{
-    type:String
+  descriptionHTML: {
+    type: String
   },
-  tag:{
-    type:Array
+  tag: {
+    type: Array
   },
-  author:{
-    type:String
+  author: {
+    type: String
   },
-  cover:{
-    type:String ||Boolean
+  cover: {
+    type: String || Boolean
   },
-  pin:{
-    type:Number
+  pin: {
+    type: Number
   },
+  type: {
+    type: String
+  }
 })
-const {width} = useWindowSize()
+const { width } = useWindowSize()
 const inMobile = computed(() => width.value <= 500)
 const showTime = computed(() => {
   return formatBlogShowDate(props.date)
@@ -101,7 +157,7 @@ const showTime = computed(() => {
   height: 30px;
   top: -4px;
   left: -4px;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .blog-item:hover .pin {
@@ -113,11 +169,7 @@ const showTime = computed(() => {
   position: absolute;
   width: 120%;
   height: 30px;
-  background-image: linear-gradient(
-      45deg,
-      var(--blog-theme-color),
-      var(--blog-theme-color)
-  );
+  background-image: linear-gradient(45deg, var(--blog-theme-color), var(--blog-theme-color));
   transform: rotate(-45deg) translateY(-20px);
   display: flex;
   align-items: center;

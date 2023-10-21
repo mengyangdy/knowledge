@@ -1,57 +1,63 @@
 <template>
   <Layout>
     <template #layout-top>
-      <MyAlert/>
-      <MyPopover/>
+      <MyAlert />
+      <MyPopover />
     </template>
     <template #doc-before>
       <ClientOnly>
-        <MyArticleAnalyze/>
+        <MyArticleAnalyze />
       </ClientOnly>
       <!-- 图片预览 -->
-      <MyImagePreview/>
+      <MyImagePreview />
     </template>
     <!-- 自定义首页 -->
-    <template v-if="isBlogTheme" #home-hero-before>
+    <template
+      v-if="isBlogTheme"
+      #home-hero-before
+    >
       <div class="home">
         <div class="header-banner">
-          <MyHomeBanner/>
+          <MyHomeBanner />
         </div>
         <div class="content-wrapper">
           <div class="blog-list-wrapper">
-            <MyList/>
+            <MyList />
           </div>
           <div class="blog-info-wrapper">
-            <MyHomeInfo/>
+            <MyHomeInfo />
           </div>
         </div>
       </div>
     </template>
     <!-- 侧边栏 -->
-    <template v-if="isBlogTheme" #sidebar-nav-after>
-      <MySidebar/>
+    <template
+      v-if="isBlogTheme"
+      #sidebar-nav-after
+    >
+      <MySidebar />
     </template>
     <!-- 评论 -->
     <template #doc-after>
-      <MyComment/>
+      <MyComment />
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts" name="App">
 import Theme from 'vitepress/theme'
-import {useBlogThemeMode} from "../composables/config/blog";
-import MyAlert from "./MyAlert.vue";
-import MyPopover from "./MyPopover.vue";
-import MyArticleAnalyze from "./MyArticleAnalyze.vue";
-import MyImagePreview from "./MyImagePreview.vue";
-import MyHomeBanner from "./MyHomeBanner.vue";
-import MyList from "./MyList.vue";
-import MyHomeInfo from "./MyHomeInfo.vue";
-import MyComment from "./MyComment.vue";
-import MySidebar from "./MySidebar.vue";
+import { useBlogThemeMode } from '../composables/config/blog'
+import MyAlert from './MyAlert.vue'
+import MyPopover from './MyPopover.vue'
+import MyArticleAnalyze from './MyArticleAnalyze.vue'
+import MyImagePreview from './MyImagePreview.vue'
+import MyHomeBanner from './MyHomeBanner.vue'
+import MyList from './MyList.vue'
+import MyHomeInfo from './MyHomeInfo.vue'
+import MyComment from './MyComment.vue'
+import MySidebar from './MySidebar.vue'
 
-const {Layout} = Theme
+const { Layout } = Theme
 const isBlogTheme = useBlogThemeMode()
 </script>
 

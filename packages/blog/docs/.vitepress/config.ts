@@ -29,7 +29,6 @@ const blogTheme = getThemeConfig({
     duration: -1
   },
   friend: [],
-  search: false,
   recommend: {
     showSelf: true,
     nextText: '下一页',
@@ -124,20 +123,14 @@ export default defineConfig({
   ],
   themeConfig: {
     lastUpdatedText: '上次更新于',
-    search: {
-      provider: 'algolia',
-      options: {
-        appId: 'XK3ASI0PM0',
-        apiKey: '71b718af7f109179d825ed0af2133deb',
-        indexName: 'dylanjs_blog_top_search',
-        placeholder: '请输入要搜索的内容...'
-      }
-    },
     footer: {
       // message: '<a target="_blank" href="https://beian.miit.gov.cn/">备案信息</a>',
       copyright: `© 2023-present Dylan | <a href="https://github.com/mengyang94982/knowledge/tree/master/packages/theme">@dylanjs/vitepress-theme@${themePkg.version} </a>`
     },
     logo: '/logo.png',
+    search: {
+      provider: 'local'
+    },
     editLink: {
       pattern: 'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/docs/:path',
       text: '去 GitHub 上编辑内容'
@@ -172,8 +165,24 @@ export default defineConfig({
             link: '/大前端/nest/'
           },
           {
+            text: 'Nuxt',
+            link: '/大前端/nuxt/'
+          },
+          {
             text: 'vitepress',
             link: '/大前端/vitepress/'
+          },
+          {
+            text: 'TypeScript',
+            link: '/大前端/TypeScript/'
+          },
+          {
+            text: 'uni-app',
+            link: '/大前端/uni-app/'
+          },
+          {
+            text: 'vue',
+            link: '/大前端/vue/'
           }
         ]
       },
@@ -195,6 +204,10 @@ export default defineConfig({
           {
             text: 'npm',
             link: '/工程化/npm/'
+          },
+          {
+            text: '脚手架',
+            link: '/工程化/cli/'
           }
         ]
       },
