@@ -3,7 +3,7 @@ title: webstorm使用指南
 tags:
   - webstorm
 date: 2023-10-20
-cover:
+cover: https://s2.loli.net/2023/10/21/kval6iEPRsODFX1.jpg
 ---
 
 # webstorm 使用指南

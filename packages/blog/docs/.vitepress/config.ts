@@ -165,8 +165,24 @@ export default defineConfig({
             link: '/大前端/nest/'
           },
           {
+            text: 'Nuxt',
+            link: '/大前端/nuxt/'
+          },
+          {
             text: 'vitepress',
             link: '/大前端/vitepress/'
+          },
+          {
+            text: 'TypeScript',
+            link: '/大前端/TypeScript/'
+          },
+          {
+            text: 'uni-app',
+            link: '/大前端/uni-app/'
+          },
+          {
+            text: 'vue',
+            link: '/大前端/vue/'
           }
         ]
       },
@@ -188,6 +204,10 @@ export default defineConfig({
           {
             text: 'npm',
             link: '/工程化/npm/'
+          },
+          {
+            text: '脚手架',
+            link: '/工程化/cli/'
           }
         ]
       },
