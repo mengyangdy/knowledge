@@ -159,12 +159,297 @@ console.log(p.name)
 
 ### 参数属性（Parameter Properties）
 
+- typeScript 提供了特殊的语法，可以把一个构造函数参数转成一个同名同值的类属性
+  - 这些就被称之为参数属性（parameter properties）
+  - 你可以通过在构造函数参数前添加一个可见性修饰符 public private protected 或者 readonly 来创建参数属性，最后这些类属性字段也会得到这些修饰符
+
+```ts
+class Person {
+  constructor(
+    public name: string,
+    private _age: number
+  ) {}
+  set age(newAge) {
+    this._age = newAge
+  }
+  get age() {
+    return this._age
+  }
+}
+```
+
 ## typeScript 中的抽象类
+
+### 抽象类 abstract
+
+- 我们知道，继承是多态使用的前提
+  - 所以在定义很多通用的调用接口时，我们通常会让调用者传入父类，通过多态来实现更加灵活的调用方式
+  - 但是，父类本身可能并不需要对某些方法进行具体的实现，所以父类中定义的方法，我们可以定义为抽象方法
+- 什么是抽象方法？在 ts 中没有具体实现的方法（没有方法体）就是抽象方法
+  - 抽象方法，必须存在于抽象类中
+  - 抽象类是使用 abstract 声明的类
+- 抽象类有如下的特点：
+  - 抽象类是不能被实例化（也就是不能通过 new 创建）
+  - 抽象方法必须被子类实现，否则该类必须是一个抽象类
+
+```ts
+abstract class Shape {
+  abstract getArea(): number
+}
+
+class Circle extends Shape {
+  private r: number
+  constructor(r: number) {
+    super()
+    this.r = r
+  }
+  getArea(): number {
+    return this.r * this.r * 3.14
+  }
+}
+
+class Rectangle extends Shape {
+  private width: number
+  private height: number
+
+  constructor(width: number, height: number) {
+    super()
+    this.width = width
+    this.height = height
+  }
+
+  getArea(): number {
+    return this.width * this.height
+  }
+}
+
+const circle = new Circle(10)
+const rectangle = new Rectangle(20, 30)
+
+function calcArea(shape: Shape) {
+  console.log(shape.getArea())
+}
+
+calcArea(circle)
+calcArea(rectangle)
+```
 
 ## typeScript 对象类型
 
+### 类的类型
+
+- 类本身也是可以作为一种数据类型的：
+
+```ts
+class Person {
+  name: string
+  constructor(name: string) {
+    this.name = name
+  }
+  running() {
+    console.log(this.name)
+  }
+}
+
+const p1: Person = new Person('d')
+
+const p2: Person = {
+  name: 'ab',
+  running: function () {
+    console.log(this.name)
+  }
+}
+```
+
+### 对象类型的属性修饰符（Property Modifiers）
+
+- 对象类型中的每个属性可以说明他的类型、属性是否可选、属性是否只读等信息
+- 可选属性（Optional Properties）
+  - 我们可以在属性名后面加一个?标记这个属性是可选的
+- 只读属性（Readonly Properties）
+  - 在 ts 中，属性可以被标记为 readonly，这不会改变任何运行时的行为
+  - 但是在类型检查的时候，一个标记为 readonly 的属性是不能被写入的
+
+```ts
+interface IPerson {
+  name: string
+  age?: number
+  readonly height: number
+}
+const p: IPerson = {
+  name: 'a',
+  height: 1
+}
+```
+
 ## typeScript 接口补充
+
+### 索引签名（Index Signatures）
+
+- 什么是索引签名呢？
+  - 有的时候，你不能提前知道一个类型里的所有属性的名字，但是你知道这些值的特征
+  - 这种情况，你就可以用一个索引签名（index signature）来描述可能得值的类型
+
+```ts
+interface ICollection {
+  [index: number]: any
+  length: number
+}
+
+function logCollection(collection: ICollection) {
+  for (let i = 0; i < collection.length; i++) {
+    console.log(collection[i])
+  }
+}
+
+const tuple: [string, number, number] = ['a', 1, 1]
+const array: string[] = ['1', 'b', 'c']
+logCollection(tuple)
+console.log(array)
+```
+
+- 一个索引签名的属性类型必须是 string 或者是 number
+  - 虽然 ts 可以同时支持 string 和 number 类型，但数字索引的返回类型一定要是字符索引返回类型的子类型
+
+### 接口继承
+
+- 接口和类一样是可以进行继承的，也是使用 extends 关键字
+  - 并且我们会发现，接口是支持多继承的
+
+```ts
+interface Person {
+  name: string
+  eating: () => void
+}
+
+interface Animal {
+  running: () => void
+}
+
+interface Student extends Person, Animal {
+  sno: number
+}
+
+const stu: Student = {
+  sno: 1,
+  name: 'a',
+  eating: function () {},
+  running: function () {}
+}
+```
+
+### 接口的实现
+
+- 接口定义后，也是可以被类实现的：
+  - 如果被一个类实现，那么在之后需要传入接口的地方，都可以将这个类传入
+  - 这就是面相接口开发
+
+```ts
+interface ISwim {
+  swimming: () => void
+}
+
+interface IRun {
+  running: () => void
+}
+
+class Person implements ISwim, IRun {
+  swimming() {
+    console.log('swimming')
+  }
+
+  running() {
+    console.log('running')
+  }
+}
+
+function swim(swimmer: ISwim) {
+  swimmer.swimming()
+}
+
+const p = new Person()
+swim(p)
+```
 
 ## 严格字面量检测
 
+- 对于对象的字面量赋值，在 ts 中有一个非常有意思的现象：
+
+```ts
+interface IPerson {
+  name: string
+  eating: () => void
+}
+
+const p: IPerson = {
+  name: 'w',
+  age: 1, //Object literal may only specify known properties, and age does not exist in type IPerson
+  eating: function () {}
+}
+
+function printInfo(info: IPerson) {
+  console.log(info.name, info.age) //TS2339: Property age does not exist on type IPerson
+}
+
+printInfo({ name: 'a', age: 1, height: 1 })
+
+interface IPerson {
+  name: string
+  eating: () => void
+}
+
+const obj = {
+  name: '1',
+  age: 12,
+  eating: function () {}
+}
+const p: IPerson = obj
+```
+
+- 为什么会这样呢？
+  - 每个对象字面量最初都被认为是新鲜的（fresh）
+  - 当一个新的对象字面量分配给一个变量或传递给一个非空目标类型的参数时，对象字面量指定目标类型中不存在的属性是错误的
+  - 当类型断言或对象字面量的类型扩大时，新鲜度会消失
+
 ## typeScript 枚举类型
+
+- 枚举类型是为数不多的 ts 特有的特性之一：
+  - 枚举其实就是一组可能出现的值，一个个列举出来，定义在一个类型中，这个类型就是枚举类型
+  - 枚举允许开发者定义一组命名常量，常量可以是数组、字符串类型
+
+```ts
+enum Direction {
+  LEFT,
+  RIGHT,
+  TOP,
+  BOTTOM
+}
+```
+
+- 枚举类型默认是有值的，比如上面的枚举，默认值是这样的：
+- 当然，我们也可以给枚举其他值
+  - 这个时候从 100 进行递增
+- 我们也可以给他们赋值其他的类型
+
+```ts
+enum Direction {
+	LEFT=0,
+	RIGHT=1,
+	TOP=2,
+	BOTTOM=3
+}
+
+enum Direction {
+	LEFT=100,
+	RIGHT
+	TOP
+	BOTTOM
+}
+
+enum Direction {
+	LEFT,
+	RIGHT
+	TOP='TOP',
+	BOTTOM='BOTTOM'
+}
+```
