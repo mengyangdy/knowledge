@@ -7,10 +7,10 @@ import themePkg from '@dylanjs/vitepress-theme/package.json'
 const blogTheme = getThemeConfig({
   author: 'Dylan',
   comment: {
-    repo: 'ATQQ/sugar-blog',
-    repoId: 'MDEwOlJlcG9zaXRvcnkyNDEyNDUyOTk',
+    repo: 'mengyang94982/knowledge',
+    repoId: 'R_kgDOKF80Gg',
     category: 'Announcements',
-    categoryId: 'DIC_kwDODmEcc84COVc6',
+    categoryId: 'DIC_kwDOKF80Gs4CaZPc',
     inputPosition: 'top'
   },
   popover: {
