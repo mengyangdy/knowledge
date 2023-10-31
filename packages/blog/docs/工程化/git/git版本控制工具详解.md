@@ -349,14 +349,304 @@ git reset --hard 2d44982
 
 ![Snipaste_2023-10-31_17-32-48.png](https://s2.loli.net/2023/10/31/AMFvLk6wBbYrPiN.png)
 
+- 如果我们以 SSH 的方式访问 git 仓库，name 就需要生产对应的公钥和私钥：
+  - `ssh-keygen -t ed25519 -C "your email"`
+  - `ssh-keygen -t rsa -b 2048 -C "your email"`
+  - 现在上面的方式用的比较多
+
+### 管理远程服务器
+
+- 查看远程地址：比如我们之前从 GitHub 上 clone 下来的代码，他就是有自己的远程仓库的：
+  - ` git remote`
+  - `git remote -v`
+  - -v 是-verbose 的缩写（冗长的）
+
+![iShot_2023-10-31_20.31.51.png](https://s2.loli.net/2023/10/31/54V3Lro8tTwsfkD.png)
+
+![iShot_2023-10-31_20.49.52.png](https://s2.loli.net/2023/10/31/uOEl1gfyU4tcJnZ.png)
+
+- 添加远程地址：我们也可以继续添加远程服务器（让本地的仓库和远程服务器仓库建立链接）
+  - `git remote add <shortname> <url>`
+  - `git remote add gitlab http://152.136.185.210:7888/list/demo.git`
+
+![iShot_2023-10-31_20.56.38.png](https://s2.loli.net/2023/10/31/QE7D3Mr9zPVsfLx.png)
+
+- 重命名远程地址：`git remote rename gitlab glab`
+- 移除远程地址：`git remote remove gitlab`
+
+### 本地分支的上游分支（跟踪分支）
+
+- 问题一：当前分支没有 track 的分支
+
+![iShot_2023-10-31_21.06.43.png](https://s2.loli.net/2023/10/31/wGosMuDtQFRNr6v.png)
+
+- 原因：当前分支没有和远程的 origin/master 分支进行跟踪
+  - 在没有跟踪的情况下，我们直接执行 pull 操作的时候必须指定从哪一个远程仓库中的那一个分支中获取内容
+
+![iShot_2023-10-31_21.32.21.png](https://s2.loli.net/2023/10/31/9GCkdINn1pjubM7.png)
+
+- 如果我们想要直接执行 git fetch 是有一个前提的：必须给当前分支设置一个跟踪分支
+
+![iShot_2023-10-31_21.34.28.png](https://s2.loli.net/2023/10/31/CoEykQJSO4eBi31.png)
+
+- 问题二：合并远程分支时，拒绝合并不相干的历史
+- 原因：我们将两个不相干的分支进行和合并：
+  - [https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase](https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase)
+
+![iShot_2023-10-31_21.11.50.png](https://s2.loli.net/2023/10/31/1TfaSPLmokpHI5z.png)
+
+- 简单来说就是:过去 git merge 允许将两个没有共同基础的分支进行合并，这导致了一个后果:新创建的项目可能被一个毫不怀疑的维护者合并了很多没有必要的历史，到一个已经存在的项目中，目前这个命令已经被纠正，但是我们依然可以通过-- allow-unrelated-histories 选项来逃逸这个限制，来合并两个独立的项目
+
+### 远程仓库的交互
+
+- 从远程仓库 clone 代码，将存储克隆到新创建的目录中：
+  - `git clone http://github.com/demo/demo.git`
+- 将代码 push 到远程仓库：将本地仓库的代码推送到远程仓库中
+  - 默认情况下是将当前分支（比如 master）push 到 origin 远程仓库的
+  - ` git push`
+  - `git push origin master`
+- 从远程仓库 fetch 代码：从远程仓库获取最新的代码
+  - `git fetch`
+  - `git fetch origin`
+  - 获取到代码后默认并没有合并到本地仓库，我们需要通过 merge 来合并
+  - `git merge`
+- 从远程仓库 pull 代码：上面的两次操作有点繁琐，我们可以通过一个命令来操作
+  - `git pull`
+  - `git fetch + git merge(rebase)`
+
+### 常见的开源协议
+
 ## git 的标签 tag 的用法
+
+### Git 标签（tag）- 创建 tag
+
+- 对于重大的版本我们尝尝会打上一个标签已表示它的重要性：
+  - Git 可以给仓库历史中的某一个提交打上标签
+  - 比较有代表性的是人们会使用这个功能来标记发布结点（v 1.0/v 2.0 等）
+- 创建标签;
+  - git 支持两种标签：轻量标签（lightweight）与附注标签（annotated）
+  - 附注标签：通过-a 选项，并且通过-m 添加额外的信息
+  - ` git tag v1.0`
+  - `git tag -a v1.1-m "附注标签"`
+- 默认情况下，`git push` 命令并不会传送标签到远程仓库服务器上
+  - 在创建完标签后你必须显式地推送标签到共享服务器，当其他人从仓库中克隆或拉去，他们也能得到你的那些标签
+  - `git push origin v1.0`:推送某一个结点的标签
+  - `git push origin --tags`:推送所有的标签
+
+### 删除和检出 tag
+
+- 删除本地 tag
+  - 要删除掉本地仓库上的标签，可以使用命令 ` git tag -d <tagname>`
+
+![iShot_2023-10-31_21.24.57.png](https://s2.loli.net/2023/10/31/91zSHeAFWbtNURL.png)
+
+- 删除远程 tag：
+  - 要删除远程的 tag 我们可以通过 `git push <remote> -delete <taganme>`
+
+![iShot_2023-10-31_21.46.13.png](https://s2.loli.net/2023/10/31/TBMvGAWCOocpVP6.png)
+
+- 检出 tag
+  - 如果你想查看某个标签所指向的文件版本，可以使用 `git checkout` 命令
+  - 通常我们在检出 tag 的时候还会创建一个对应的分支
+
+![iShot_2023-10-31_21.56.10.png](https://s2.loli.net/2023/10/31/ioYBPWGy1ANmLUT.png)
 
 ## git 分支的使用
 
+### git 提交对象（commit Object）
+
+- 几乎所有的版本控制系统都以某种形式支持分支
+  - 使用分支意味着你可以把你的工作从开发主线上分离开来，以免影响开发主线
+- 在进行提交操作时，Git 会保存一个提交对象（commit object）
+  - 该提交对象会包含一个指向暂存内容快照的指针
+  - 该提交对象还包含了对象的姓名和邮箱、提交时输入的信息以及指向它的父对象的指针
+    - 首次提交产生的提交对象没有父对象，普通提交操作产生的提交对象有一个父对象
+    - 而由多个分支合并产生的提交对象有多个父对象
+
+![图片 1.png](https://s2.loli.net/2023/10/31/QLlOumx68IShb5H.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/oQ8GMxw3ZOrzamR.png)
+
+### git master 分支
+
+- git 的分支，其实本质上仅仅是指向提交对象的可变指针
+  - Git 的默认分支名字是 master，在多次提交操作之后，你其实已经有一个指向最后那个提交对象的 master 分支
+  - master 分支会在每次提交时自动移动
+- Git 的 master 分支并不是一个特殊分支
+  - 它就跟其他分支完全没有区别
+  - 之所以几乎每一个仓库都有 master 分支，是因为 git init 命令默认栏目它，并且大多数人都懒得去改动他
+
+![图片 1.png](https://s2.loli.net/2023/10/31/X3zYieJg1OERQNC.png)
+
+### git 创建分支
+
+- git 是怎么创建新分支的呢？
+  - 很简单，他只是为你创建了一个可以移动的指针
+- 比如，创建一个 test 分支，你需要使用 `git branch` 命令
+  - `git branch test`
+- 那么，git 又是怎么知道当前在那一个分支上呢？
+  - 也很简单，它也是通过一个名为 HEAD 的特殊指针
+  - `git checkout test`
+
+![图片 1.png](https://s2.loli.net/2023/10/31/6TJi7uq9zjgMaEy.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/3bqgQmTSMn9pxJ2.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/UmJSh5ji4VwOI93.png)
+
+### Git 分支提交
+
+- 如果我们指向某一个分支，并且在这个分支上提交：
+
+![图片 1.png](https://s2.loli.net/2023/10/31/tHCBWVNkRFxJT8s.png)
+
+- 你也可以切换会到 master 分支，继续开发
+
+![图片 1.png](https://s2.loli.net/2023/10/31/WqDbz1oLkengpmC.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/Uvb2RmDjiA8szQW.png)
+
+### 创建分支同时切换
+
+- 创建新分支的同时切换过去
+  - 通常我们会在创建一个新分支后立即切换过去
+  - 这可以使用 `git checkout -b <newbranchname>` 一条命令搞定
+
+### 为什么需要使用分支呢？
+
+- 让我们来看一个简单的分支新建与分支合并的例子，实际工作中你可能会用到类似的工作流
+  - 开发某个项目，在默认分支 master 上进行开发
+  - 实现项目的功能需求，不断提交
+  - 并且在一个大的版本完成时，发布版本，打上一个 tgv 1.0.0
+- 继续开发后续的新功能，正在此时，你突然接到一个电话说有个很严重的问题需要紧急修补，你讲按照如下方式来处理：
+  - 切换到 tag v 1.0.0 的版本，并且创建一个分支 hotfix
+- 想要新建一个分支并同时切换到那个分支上，你可以运行一个带有 -b 参数的 `git checkout` 命令
+  - `git checkout -b hotfix`
+
+![图片 1.png](https://s2.loli.net/2023/10/31/G93wqaUiEcHsxZA.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/gkaXTWBmvxAG9Ke.png)
+
+### 分支开发和合并
+
+- 分支上开发、修复 bug
+  - 我们可以在创建的 hotfix 分支上继续开发工作或者修复 bug
+  - 当完成要做的工作后，重新打上一个新的 tag v 1.0.1
+- 切换会 master 分支，但是这个时候 master 分支也需要修复刚刚的 bug
+  - `git checkout mastr`
+  - `git merge hotfix`
+
+![图片 1.png](https://s2.loli.net/2023/10/31/eL3c6XQUsJbV9nf.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/auxf34RbV2Czv1J.png)
+
+### 查看和删除分支
+
+- 如果我们希望查看当前所有的分支，可以通过以下命令
+  - `git branch` 查看当前所有的分支
+  - `git branch -v` 同时查看最后一次提交
+  - `git branch --merged` 查看所有合并到当前分支的分支
+  - `git branch --no-merged` 查看所有没有合并到当前分支的分支
+
+![图片 1.png](https://s2.loli.net/2023/10/31/tqUYufcMCIVbHe1.png)
+
+- 如果某些已经合并的分支我们不再需要了，那么可以将其移除掉
+  - `git branch -d hotfix` 删除当前分支
+  - `git branch -D hotfix` 强制删除某一个分支
+
 ## 工作中的 Git Flow
+
+### Git 的工作流（git flow）
+
+- 由于 git 上分支的使用的便捷性，产生了很多 git 的工作流
+  - 也就是说，在整个项目开发周期的不同阶段，你可以同时拥有多个开放的分支
+  - 你可以定期地把某些主题分支合并入其他分支中
+- 比如以下的工作流：
+  - master 作为主分支
+  - develop 作为开发分支，并且有稳定版本时，合并到 master 分支时
+  - topic 作为某一个主题或者功能或者特性的分支进行开发，开发完成后合并到 develop 分支上
+
+![图片 1.png](https://s2.loli.net/2023/10/31/jFWKhR2UwMZrc9P.png)
+
+### 比较常见的 git flow
+
+![图片 1.png](https://s2.loli.net/2023/10/31/SFb2UTALV6jfcvI.png)
 
 ## git 远程分支的管理
 
+### git 的远程分支
+
+- 远程分支也是一种分支结构
+  - 以 `<remote>/<branch>` 的形式命名的
+- 如果我们刚刚 clone 下来代码，分支的结构如下
+- 如果其他人修改了代码，那么远程分支结构如下
+  - 你需要通过 fetch 来获取最新的远程分支提交信息
+
+![图片 1.png](https://s2.loli.net/2023/10/31/gCjxySfLQDdampY.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/mdFzcfxBlLZDVvg.png)
+
+### 远程分支的管理
+
+- 操作一：推送分支到远程
+  - 当你想要公开分享一个分支时，需要将其推送到有写入权限的远程仓库上
+  - 运行 `git push <remote> <branch>`
+- 操作二：跟踪远程分支
+  - 当克隆一个仓库时，他通常会自动地常见一个根是 origin/master 的 master 的分支
+  - 如果你愿意的话可以设置其他的跟踪分支，可以通过运行 `git checkout --track <remote>/<branch>`
+  - 如果你尝试检出的分支（a）不存在且（b）刚好只有一个名字与之匹配的远程分支，那么 git 就会为你创建一个跟踪分支
+    - `git checkout --track <remote>/<branch>`
+    - `git checkout <branch>`
+- 操作三：删除远程分支
+  - 如果某一个远程分支不再使用，我们想要删除掉，可以运行带有--delete 的选项的 git push 命令来删除一个远程分支
+  - `git push origin -delete <branch>`
+
 ## git rebase 的使用
 
+### git rebase 用法
+
+- 在 git 中整合来自不同分支的修改主要有两种方法：merge 以及 rebase
+
+![图片 1.png](https://s2.loli.net/2023/10/31/vo8NTtbPpKC2yUr.png)
+
+![图片 1.png](https://s2.loli.net/2023/10/31/5jZBer7NAiqVuPd.png)
+
+- 什么是 rebase 呢？
+  - 在上面的图例中，你可以提取在 c 4 中引入的不定和修改，然后在 c 3 的基础上应用一次
+  - 在 git 中，这种操作就叫做变基（rebase）
+  - 你可以使用 rebase 命令将提交到某一分支上的所有修改都移至另一分支上，就好像重新播放一样
+  - rebase 这个单词如何理解呢？
+    - 我们可以将其理解成改变当前分支的 base
+    - 比如在分支 experiment 上执行 rebase master,那么可以改变 experiment 的 base 为 master
+    - `git checkout experiment`
+    - `git rebase master`
+
+### rebase 原理
+
+- rebase 是如何工作的呢？
+  - 它的原理是首先找到这两个分支(即当前分支 experiment、变基操作的目标基底分支 master) 的最近共同祖先 C2
+  - 然后对比当前分支相对于该祖先的历次提交，提取相应的修改并存为临时文件
+  - 然后将当前分支指向目标基底 C3
+  - 最后以此将之前另存为临时文件的修改依序应用
+- 我们可以再次执行 master 上的合并操作
+  - `git checkout master`
+  - `git merge experiment`
+
+![图片 1.png](https://s2.loli.net/2023/10/31/yRXD8Iac5w9V6gN.png)
+
+### rebase 和 merge 的选择
+
+- 开发中对于 rebase 和 merge 应该如何选择呢?
+- 事实上，rebase 和 merge 是对 Git 历史的不同处理方法:
+  - merge 用于记录 git 的所有历史，那么分支的历史错综复杂，也全部记录下来
+  - rebase 用于简化历史记录，将两个分支的历史简化，整个历史更加简洁
+- 了解了 rebase 的底层原理，就可以根据自己的特定场景选择 merge 或者 rebase
+- 注意:rebase 有一条黄金法则:永远不要在主分支上使用 rebase
+  - 如果在 main 上面使用 rebase，会造成大量的提交历史在 main 分支中不同
+  - 而多人开发时，其他人依然在原来的 main 中，对于提交历史来说会有很大的变化
+
+![图片 1.png](https://s2.loli.net/2023/10/31/HKME9j2i74k3pCY.png)
+
 ## git 常见的命令
+
+![图片 1.jpg](https://s2.loli.net/2023/10/31/5sRh6dIO2qZLbtV.jpg)
