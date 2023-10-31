@@ -115,58 +115,171 @@ Date.parse(2023)
 
 ### Date. UTC 方法
 
+返回指定日期与 1970 年 1 月 1 日之间的毫秒数，UTC 时间与 GMT 时间相同
+
+语法：
+
+> _Date_.UTC(_year_, _month_, _day_, _hours_, _minutes_, _seconds_, _millisec_)
+
+```js
+Date.UTC(1971)
+// 31536000000
+```
+
 ## 获取方法
 
 ### getDate()
 
+获取一个月中的某一天
+
+```js
+new Date().getDate() //26
+```
+
 ### getDay()
+
+获取当前是星期几：
+
+```js
+new Date().getDay() //4
+//0-6，0代表的是星期天
+```
 
 ### getFullYear()
 
+获取年份：
+
+```js
+new Date().getFullYear() //2023
+```
+
 ### getHours()
+
+获取小时数：
+
+```js
+new Date().getHours() //14
+```
 
 ### getMilliseconds()
 
+获取当前的毫秒数：
+
+```js
+new Date().getMilliseconds() //487
+```
+
 ### getMinutes()
+
+获取分钟数：
+
+```js
+new Date().getMinutes() //32
+```
 
 ### getMonth()
 
+获取月份：0 代表 1 月
+
+```js
+new Date().getMonth() //9 其实现在是10月
+```
+
 ### getSeconds()
 
+获取秒数：
+
+```js
+new Date().getSeconds() //33
+```
+
 ### getTime()
+
+获取毫秒数：
+
+```js
+new Date().getTime() //1698302045279
+```
 
 ## 设置方法
 
 ### setFullYear
 
+根据本地时间为一个日期对象设置年份：
+
+> 语法：dateObj.setFullYear(yearValue[, monthValue[, dayValue]])
+
+```js
+const date = new Date()
+console.log(date) //Thu Oct 26 2023 14:39:25 GMT+0800 (中国标准时间)
+date.setFullYear(2000)
+console.log(date) //Thu Oct 26 2000 14:39:47 GMT+0800 (中国标准时间)
+```
+
 ### setMonth
+
+根据本地时间为一个日期对象设置月份：
 
 ### setDate
 
+根据本地时间来指定一个日期对象的天数
+
 ### setHours
+
+根据本地时间为一个日期对象设置小时数
 
 ### setMinutes
 
+根据本地时间为一个日期对象设置分钟数
+
 ### setSeconds
+
+根据本地时间设置一个日期对象的秒数
 
 ### setMilliseconds
 
+根据本地时间设置一个日期对象的豪秒数
+
 ### setTime
+
+从 1970-1-1 00:00:00 UTC 计时的毫秒数为来为 `Date` 对象设置时间
 
 ## 格式化方法
 
 ### toString
 
+返回Date对象的字符串形式
+
 ### toDateString
+
+返回Date对象“日期”部分（*年月日* ）的字符串形式
 
 ### toTimeString
 
+返回Date对象“时间”部分（*时分秒* ）的字符串形式
+
 ### toLocaleString
+
+基于本地时间格式，返回Date对象的字符串形式
 
 ### toLocaleDateString
 
+基于本地时间格式，返回Date对象“ 日期”部分（*年月日* ）的字符串形式
+
 ### toLocaleTimeString
+
+基于本地时间格式，返回Date对象“时间”部分（*时分秒* ）的字符串形式
 
 ### toGMTString
 
+基于GMT时间格式，返回Date对象的字符串形式
+
 ### toUTCString
+
+基于UTC时间格式，返回Date对象的字符串形式
+
+## 获取时间戳的常用几种方法
+
+- +new Date()
+- new Date.getTime()
+- new Date().valueOf()

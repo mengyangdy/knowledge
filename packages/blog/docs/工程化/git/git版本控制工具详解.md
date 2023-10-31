@@ -55,7 +55,7 @@ cover: https://s2.loli.net/2023/10/23/Wye9snUJOxqMgrC.jpg
 
 ## 集中式和分布式的区别
 
-### 集中式版本管理
+### 集中式版本控制
 
 - CVS 和 SVN 都是属于集中式版本控制系统（Centralized Version Systems,简称 CVCS）
   - 他们的主要特点是单一的集中管理的服务器，保存所有文件的修订版本
@@ -139,7 +139,7 @@ git config user.name
 
 ![Snipaste_2023-10-24_11-50-31.png](https://s2.loli.net/2023/10/24/bWDQ3wK2YxhXtBH.png)
 
-### git 的命令（alias）
+### git 的别名（alias）
 
 - git 并不会在你输入部分命令时自动推断出你想要的命令
   - 如果不想每次输入完整的 git 命令，可以通过 git config 文件来轻松的为每一个命令设置一个别名
@@ -234,6 +234,8 @@ git clone https://github.com/mengyang44253/dylan-cli.git
 - 在实际开发中，这个文件通常不需要手动的创建，在必要的时候添加自己的忽略内容即可
 - 比如一些常见的文件夹、本地环境变量、日志文件、编辑器自动生成的文件
 
+![Snipaste_2023-10-26_14-06-30.png](https://s2.loli.net/2023/10/26/qIhfA3uRrTWFn6a.png)
+
 ### 文件更新提交 - git commit
 
 - 现在的暂存区已经准备就绪了，可以提交了
@@ -242,95 +244,110 @@ git clone https://github.com/mengyang44253/dylan-cli.git
   - 可以在 commit 命令后面添加 -m 选项，将提交信息与命令放在同一行
   - `git commit -m '提交信息'`
 - 如果我们修改文件的 add 操作，加上 commit 的操作有点繁琐，那么可以将两个命令结合来使用
+  - `git commit -a -m '提交信息'`
+
+![Snipaste_2023-10-31_16-25-42.png](https://s2.loli.net/2023/10/31/dtZuqAmxsw2clWf.png)
 
 ### git 的校验和
 
 - git 中所有的数据在存储前都计算校验和，然后以校验和来引用
   - git 用以计算校验和的机制叫做 SHA-1 散列（hash，哈希）
-  - 这是一个由 40 个十六进制字符（0-9，a-f)组成的字符串，基于 git 中文件的内容或目录结构见算出来
+  - 这是一个由 40 个十六进制字符（0-9 和 a-f）组成的字符串，基于 git 中文件的内容或目录结构计算出来
+
+![第21页-31.PNG](https://s2.loli.net/2023/10/31/5KXBlip9jNYsDZr.png)
 
 ### 查看提交的历史 - git log
 
 - 在提交了若干更新，又或者克隆了某个项目之后，有时候我们想要查看一下所有的历史提交记录
 - 这个时候我们可以使用 git log 命令
-  - 不传入任何参数的默认情况下， gitlog 会按时间先后顺序列出所有的提交，最近的更新排在最上面
-  - 这个命令会列出每个提交的 sha-1 校验和、作者的名字和电子邮箱地址、提交时间以及提交说明
+  - 不传入任何参数的默认情况下，git log 会按时间先后顺序列出所有的提交，最近的更新排在最上面
+  - 这个命令会列出每个提交的 SHA-1 校验和、作者的名字和电子邮箱地址、提交时间以及提交说明
 
-`git log`:
+`git log`
+
+![Snipaste_2023-10-31_16-33-44.png](https://s2.loli.net/2023/10/31/uFSUoKR9mgqwvtx.png)
 
 `git log --pretty=oneline`
 
+![Snipaste_2023-10-31_16-34-48.png](https://s2.loli.net/2023/10/31/3DlcBeuUbjqmLf6.png)
+
 `git log --pretty=oneline --graph`
+
+![Snipaste_2023-10-31_16-37-58.png](https://s2.loli.net/2023/10/31/eiYsTU8KqvacnkR.png)
 
 ### 版本回退 - git reset
 
-- 如果想要进行版本回退，我们需要先知道目前处于哪一个版本，git 通过 HEAD 指针记录当前版本
+- 如果想要进行版本回退，我们需要先知道目前处于哪一个版本：git 通过 HEAD 指针记录当前版本
+  - HEAD 是当前分支引用的指针，它总是指向该分支上的最后一次提交
+  - 理解 HEAD 的最简方式，就是将他看做**该分支上最后一次提交**的快照
 
-  - HEAD 是丢面分支引用的指针，它总是指向该分支上的最后一次提交
-  - 理解 HEAD 的最简方式，就是将它看做该分支上的最后一次提交的快照
+![第23页-35.PNG](https://s2.loli.net/2023/10/31/Z1kRtbqFaIyOJLK.png)
 
 - 我们可以通过 HEAD 来改变 git 目前的版本指向
-  - 上一个版本就是 HEAD^,上上一个版本就是 HEAD^^
-  - 如果上 1000 个版本，我们可以使用 HEAD~1000
-  - 我们可以指定某一个 commit id
+  - 上一版本就是 HEAD^,上上一版本就是 HEAD^^
+  - 如果是上 1000 个版本，我们可以使用 HEAD~1000
+  - 我们可以制定某一个 commit id
 
 ```shell
 git reset --hard HEAD^
 git reset --hard HEAD~1000
-git reset --hard 2b44982
+git reset --hard 2d44982
 ```
 
 ## git 远程仓库和验证
 
 ### 什么是远程仓库？
 
-- 什么是远程仓库（Remote Repository）呢？
+- 什么是远程仓库呢？（Remote Repository）呢？
   - 目前我们的代码是保存在一个本地仓库中，也就意味着我们只是在进行本地操作
   - 在真实开发中，我们通常是多人开发的，所以我们会将管理的代码共享到远程仓库中
 - 那么如何创建一个远程仓库呢？
-  - 远程仓库通常是搭建在某一个服务器上的（当然本地也是可以的，但是本地很难共享）
+  - 远程仓库通常是搭建在某一个服务器上的（当然本地也可以，但是本地很难共享）
   - 所以我们需要在 git 服务器上搭建一个远程仓库
 - 目前我们有如下方式可以使用 git 服务器
-  - 使用第三方的 Git 服务器，比如 GitHub、gitee、gitlab 等
-  - 在自己服务器搭建一个 Git 服务
+  - 使用第三方的 git 服务器，比如 github、Gitee、gitlab
+  - 在自己服务器搭建一个 git 服务
+
+![第24页-36.PNG](https://s2.loli.net/2023/10/31/DpLVRZe4IdNabut.png)
 
 ### 远程仓库的验证
 
-- 常见的远程仓库有那些呢？目前比较流行的是三种：
-  - GitHub： https://github.com/
-  - Gitee： https://gitee.com/
-  - 自己搭建 Gitlab： http://152.136.185.210:7888/
-- 对于私有的仓库我们想要进行操作，远程仓库会对我们的身份进行验证
+- 常见的远程仓库有那些呢？目前比较流行实用的是三种：
+  - github：[https://github.com/](https://github.com/)
+  - gitee：[https://gitee.com/](https://gitee.com/)
+  - 自己搭建的 gitlab：[http://152.136.185.210:7888/](http://152.136.185.210:7888/)
+- 对于私有的仓库我们想要进行操作，远程仓库对我们的身份进行验证
   - 如果没有验证，任何人都可以随意操作仓库是一件非常危险的事情
-- 目前 Git 服务器验证手段主要有两种：
+- 目前 git 服务器验证手段主要有两种：
   - 方式一：基于 HTTP 的凭证存储（Credential Storage）
   - 方式二：基于 SSH 的密钥
 
-#### http 凭证
+#### 凭证
 
 - 因为本身 HTTP 协议是无状态的连接，所以每一个连接都需要用户名和密码
   - 如果每次都这样操作，那么会非常麻烦
-  - 幸运的是，Git 拥有一个凭证系统来处理这个事情
-- 下面有一些 Git Crediential 的选项
-  - 选项一：默认所有都不缓存，每一次连接斗争询问你的用户名和密码
-  - 选项二：`cach` 模式会将凭证存放在内存中一段时间，密码永远不会被存储在磁盘中，并且在 15 分钟后从内存中清除
-  - 选项三：`store` 模式会将凭证用铭文的形式存放在磁盘中，并且永不过期
-  - 选项四：如果你使用的是 Mac，Git 还有一种 `osxkeychain` 模式，它会将凭证缓存到你系统用户的钥匙串中（加密的）
+  - 幸运的是，git 拥有一个凭证系统来处理这个事情
+- 下面有一些 git Crediential 的选项
+  - 选项一：默认所有都不缓存。每一次连接都会询问你的用户名和密码
+  - 选项二：`cache` 模式会将凭证存放在内存中一段时间。密码永远不会被存储在磁盘中，并且在 15 分钟后从内存中清除
+  - 选项三：`store` 模式会将凭证用明文的形式存放在磁盘中，并且永不过期
+  - 选项四：如果你使用的是 Mac，Git 还有一种 “osxkeychain” 模式，它会将凭证缓存到你系统用户的钥匙串中（加密的）
   - 选项五：如果你使用的是 Windows，你可以安装一个叫做 `Git Credential Manager for Windows` 的辅助工具
-    - 可以在 `https://github.com/Microsoft/Git-Credential-Manager-for-Windows` 下载
+    - 可以在 [https://github.com/Microsoft/Git-Credential-Manager-for-Windows](https://github.com/Microsoft/Git-Credential-Manager-for-Windows) 下载
+
+下面的命令如果显示 manager 或者 manager-core 就是证明我们使用了 git 的存储工具了：
+
+![Snipaste_2023-10-31_16-53-13.png](https://s2.loli.net/2023/10/31/wsSY7CLAvFHErni.png)
 
 #### SSH 密钥
 
 - Secure Shell（安全外壳协议，简称 SSH）是一种加密的网络传输协议，可在不安全的网络中为网络服务提供安全的传输环境
 - SSH 以非对称加密实现身份验证
-  - 例如其中一种方法是使用自动生成的公钥-私钥来对简单地加密网络连接，随后使用密码认证进行登录
-  - 另一种方法是人工生成一堆公钥和私钥，通过生成的密钥进行认证，这样就可以在不输入密码的情况下登录
+  - 例如其中一种方法是使用自动生成的公钥-私钥对来简单地加密网络连接，随后使用密码认证进行登录
+  - 另一种方法是人工生成一对公钥和私钥，通过生成的密钥进行认证，这样就可以在不输入密码的情况下登录
   - 公钥需要放在待访问的电脑之中，而对应的私钥需要由用户自行保管
-- 如果我们以 SSH 的方式访问 Git 仓库，那么就需要生产对应的公钥和私钥
 
-### 管理远程服务器
-
-- 查看远程地址：比如我们之前从 GitHub 上 clone 下来的代码，他就是由自己的远程仓库的
+![Snipaste_2023-10-31_17-32-48.png](https://s2.loli.net/2023/10/31/AMFvLk6wBbYrPiN.png)
 
 ## git 的标签 tag 的用法
 
