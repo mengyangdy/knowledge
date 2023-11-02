@@ -52,7 +52,7 @@ vite 给我们提供了一个特殊的对象， `import.meta.env` 对象上暴�
 
 ![](https://s2.loli.net/2023/09/28/VmnGNBj54bawhZp.png)
 
-注意：这些变量是运行在环境中的，vite.config.js 中无法访问这些变量。
+注意：这些变量是运行在环境中的，vite.config.js 中无法访问这些变量。如果要在 viteConfig 中使用的话需要特殊的处理。
 
 ### vite 中自定义环境变量
 
@@ -66,3 +66,58 @@ vite 中内置了 dotenv 这个第三方库，dotenv 会自动读取.env 文件�
 - npm run dev 会加载.env 和.env. development 的配置
 - npm run dev 会加载.env 和.env.production 内的配置
 - mode 可以通过命令行 --mode 选项来重写
+
+为了防止意外地将一些环境变量泄露出去，只有以 `VITE_` 为前缀的变量才会暴露给 vite 处理
+
+我们在项目的根目录中创建 `.env` 和 `.env.development` 和 `.env.production` 三个文件：在 main 中打印下 `import.meta.env` 先运行下 `pnpm run dev`:
+
+![Snipaste_2023-11-01_10-09-10.png](https://s2.loli.net/2023/11/01/pWtHBbRrsUKQYcV.png)
+
+因为运行 `pnpm run dev` 默认运行的是 env 文件和 env.development 文件
+
+我们再运行下 build 看下打印：
+
+![Snipaste_2023-11-01_10-11-42.png](https://s2.loli.net/2023/11/01/XCDoMyR43wemkpV.png)
+
+可以看到 build 默认运行的是 production 里面的内容
+
+### 加载自定义的 env 文件
+
+我们在项目中除了可以加载开发模式（development）和生产模式（production）以外，还可以加载自定义环境，比如说我们想加载 test 环境的 env 文件：
+
+1. 指定具体运行的 mode 模式
+
+> 具体可以参考官网对 mode 的配置 [https://vitejs.cn/vite3-cn/config/shared-options.html#mode](https://vitejs.cn/vite3-cn/config/shared-options.html#mode)
+
+```json
+{
+  "scripts": {
+    "test": "vite --mode test"
+  }
+}
+```
+
+2. 根目录下创建 `.env.test` 文件并写入变量
+
+```txt
+// .env.test
+VITE_API='111'
+```
+
+### 更改 env 加载的地址
+
+现在我们的 env 文件都是在根目录创建的，如果 env 文件太多的话，会显得我们的目录太乱了,我们也可以专门创建一个文件夹来放置我们的所有的 env 文件：
+
+可以通过 envDir 来配置这个地址，可以参考：[https://vitejs.cn/vite3-cn/config/shared-options.html#envdir](https://vitejs.cn/vite3-cn/config/shared-options.html#envdir)
+
+```js
+export default defineConfig({
+  envDir: 'env'
+})
+```
+
+然后，所有的.env.xxx 文件就可以放到了项目根目录下的 env 文件夹下了
+
+### 更改环境变量 vite\_前缀
+
+如果觉得 VITE\_前面不够自定义，我们想更换这个前缀可以使用 `envPrefix` 配置来改变：[https://vitejs.cn/vite3-cn/config/shared-options.html#envdir](https://vitejs.cn/vite3-cn/config/shared-options.html#envdir)
