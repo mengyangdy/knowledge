@@ -2562,7 +2562,200 @@ pnpm install react react-dom
 
 ##### 2.代码调用
 
-Esbuild 对外暴露了一系列的 API，主要包括两类: `Build API `和 `Transform API `，我们可以在 Nodejs 代码中通过调用这些 API 来使用 Esbuild 的各种功能。
+Esbuild 对外暴露了一系列的 API，主要包括两类: `Build API ` 和 `Transform API `，我们可以在 Nodejs 代码中通过调用这些 API 来使用 Esbuild 的各种功能。
+
+#### 项目打包-Build API
+
+`Build API ` 主要用来进行项目打包，包括 `build` 、 `buildSync` 和 `serve` 三个方法。
+
+首先我们来试着在 Node.js 中使用 `build ` 方法。你可以在项目根目录新建 `build.js` 文件，内容如下:
+
+```js
+const { build, buildSync, serve } = require('esbuild')
+
+async function runBuild() {
+  // 异步方法，返回一个Promise
+  const result = await build({
+    // 下面是一些常用的配置
+    // 当前项目根目录
+    absWorkingDir: process.cwd(),
+    // 入口文件列表，为一个数组
+    entryPoints: ['./src/index.jsx'],
+    // 打包产物目录
+    outdir: 'dist',
+    // 是否需要打包，一般设为 true
+    bundle: true,
+    // 模块格式，包括`esm`、`commonjs`和`iife`
+    format: 'esm',
+    // 需要排除打包的依赖列表
+    external: [],
+    // 是否开启自动拆包
+    splitting: true,
+    // 是否生成 SourceMap 文件
+    sourcemap: true,
+    // 是否生成打包的元信息文件
+    metafile: true,
+    // 是否进行代码压缩
+    minify: true,
+    // 是否将产物写入磁盘
+    write: true,
+    // Esbuild 内置了一系列的 loader，包括 base64、binary、css、dataurl、file、js(x)、ts(x)、tex
+    // 针对一些特殊的文件，调用不同的 loader 进行加载
+    loader: {
+      '.png': 'base64'
+    }
+  })
+  console.log(result)
+}
+
+runBuild()
+```
+
+随后，你在命令行执行 `node build.js` ，就能在控制台发现如下日志信息:
+
+![iShot_2023-11-07_21.49.29.png](https://s2.loli.net/2023/11/07/jAkndGWec92oiZS.png)
+
+以上就是 Esbuild 打包的元信息，这对我们编写插件扩展 Esbuild 能力非常有用。
+
+接着，我们再观察一下 dist 目录，发现打包产物和相应的 SourceMap 文件也已经成功写入磁盘:
+
+![iShot_2023-11-07_21.50.42.png](https://s2.loli.net/2023/11/07/m5vyt6FDM4QuCXG.png)
+
+其实 `buildSync` 方法的使用几乎相同，如下代码所示:
+
+```js
+async function runBuild() {
+  const result = buildSync({
+    //省略一系列的配置
+  })
+  console.log(result)
+}
+
+runBuild()
+```
+
+但我并不推荐大家使用 `buildSync` 这种同步的 API，它们会导致两方面不良后果。一方面容易使 Esbuild 在当前线程阻塞，丧失 `并发任务处理` 的优势。另一方面，Esbuild 所有插件中都不能使用任何异步操作，这给 `插件开发` 增加了限制。
+
+因此我更推荐大家使用 `build` 这个异步 API，它可以很好地避免上述问题。
+
+在项目打包方面，除了 `build` 和 `buildSync` ，Esbuild 还提供了另外一个比较强大的 API—— `serve` 。这个 API 有 3 个特点。
+
+- 开启 serve 模式后，将在指定的端口和目录上搭建一个 `静态文件服务` ，这个服务器用原生 Go 语言实现，性能比 Nodejs 更高。
+- 类似 webpack-dev-server，所有的产物文件都默认不会写到磁盘，而是放在内存中，通过请求服务来访问。
+- **每次请求**到来时，都会进行重新构建( `rebuild` )，永远返回新的产物。
+
+> 值得注意的是，触发 rebuild 的条件并不是代码改动，而是新的请求到来。
+
+下面，我们通过一个具体例子来感受一下:
+
+```js
+const { build, buildSync, serve } = require('esbuild')
+
+async function runBuild() {
+  serve(
+    {
+      port: 8000,
+      servedir: './dist'
+    },
+    {
+      absWorkingDir: process.cwd(),
+      entryPoints: ['./src/index.jsx'],
+      bundle: true,
+      format: 'esm',
+      splitting: true,
+      sourcemap: true,
+      ignoreAnnotations: true,
+      metafile: true
+    }
+  ).then(server => {
+    console.log(`HTTP Server starts at port`, server.port)
+  })
+}
+
+runBuild()
+```
+
+我们在浏览器访问 localhost:8000 可以看到 Esbuild 服务器返回的编译产物如下所示:
+
+![iShot_2023-11-07_22.10.18.png](https://s2.loli.net/2023/11/07/YEKAFSJuM2qgh93.png)
+
+后续每次在浏览器请求都会触发 Esbuild 重新构建，而每次重新构建都是一个增量构建的过程，耗时也会比首次构建少很多(一般能减少 70% 左右)。
+
+> Serve API 只适合在开发阶段使用，不适用于生产环境。
+
+#### 单文件转译-Transform API
+
+除了项目的打包功能之后，Esbuild 还专门提供了单文件编译的能力，即 `Transform API`，与 `Build API` 类似，它也包含了同步和异步的两个方法，分别是 `transformSync` 和 `transform`，下面，我们具体使用下这些方法。
+
+首先，在项目根目录新建 `transform.js` ，内容如下:
+
+```js
+const { transform, transformSync } = require('esbuild')
+
+async function runTransform() {
+  // 第一个参数是代码字符串，第二个参数为编译配置
+  const content = await transform('const isNull = (str: string): boolean => str.length > 0;', {
+    sourcemap: true,
+    loader: 'tsx'
+  })
+  console.log(content)
+}
+
+runTransform()
+```
+
+`transformSync` 的用法类似，换成同步的调用方式即可。
+
+```js
+function runTransform() {
+  // 第一个参数是代码字符串，第二个参数为编译配置
+  const content = await transform(
+  /*参数和transform相同*/
+  )
+}
+```
+
+不过由于同步的 API 会使 Esbuild 丧失 `并发任务处理` 的优势( `Build API ` 的部分已经分析过)，我同样也不推荐大家使用 `transformSync` 。出于性能考虑，Vite 的底层实现也是采用 `transform` 这个异步的 API 进行 TS 及 JSX 的单文件转译的。
+
+#### Esbuild 插件开发
+
+我们在使用 Esbuild 的时候难免会遇到一些需要加上自定义插件的场景，并且 Vite 依赖预编译的实现中大量应用了 Esbuild 插件的逻辑。因此，插件开发是 Esbuild 中非常重要的内容。
+
+接下来，我们就一起来完成 Esbuild 的插件开发，带你掌握若干个关键的钩子使用。
+
+##### 基本概念
+
+插件开发其实就是基于原有的体系结构中进行 `扩展` 和 `自定义` 。 Esbuild 插件也不例外，通过 Esbuild 插件我们可以扩展 Esbuild 原有的路径解析、模块加载等方面的能力，并在 Esbuild 的构建过程中执行一系列自定义的逻辑。
+
+`Esbuild` 插件结构被设计为一个对象，里面有 `name` 和 `setup` 两个属性， `name` 是插件的名称， `setup` 是一个函数，其中入参是一个 `build` 对象，这个对象上挂载了一些钩子可供我们自定义一些钩子函数逻辑。以下是一个简单的 `Esbuild` 插件示例:
+
+使用插件后效果如下：
+
+那么，`build` 对象上的各种钩子函数是如何使用的呢？
+
+##### 钩子函数的使用
+
+###### 1. `onReslove` 钩子和 `onLoad` 钩子
+
+在 Esbuild 插件中， `onResolve` 和 `onload` 是两个非常重要的钩子，分别控制路径解析和模块内容加载的过程。
+
+首先，我们来说说上面插件示例中的两个钩子该如何使用。
+
+可以发现这两个钩子函数中都需要传入两个参数: `Options` 和 `Callback` 。
+
+先说说 `Options` 。它是一个对象，对于 `onResolve` 和 `onload` 都一样，包含 `filter` 和 `namespace` 两个属性，类型定义如下:
+
+`filter` 为必传参数，是一个正则表达式，它决定了要过滤出的特征文件。
+
+> 注意: 插件中的正则是使用 Go 原生正则实现的，为了不使性能过于劣化，规则应该尽可能严格。同时它本身和 JS 的正则也有所区别，不支持前瞻(? <=)、后顾(?=)和反向引用(\1)这三种规则。
+
+`namespace` 为选填参数，一般在 `onResolve` 钩子中的回调参数返回 `namespace` 属性作为标识，我们可以在 `onLoad` 钩子中通过 `namespace` 将模块过滤出来。如上述插件示例就在 `onLoad` 钩子通过`env-ns`这个 namespace 标识过滤出了要处理的 `env` 模块。
+
+除了 Options 参数，还有一个回调参数 `Callback` ，它的类型根据不同的钩子会有所不同。相比于 Options，Callback 函数入参和返回值的结构复杂得多，涉及很多属性。不过，我们也不需要看懂每个属性的细节，先了解一遍即可，常用的一些属性会在插件实战部分讲解来讲。
+
+在 onResolve 钩子中函数参数和返回值梳理如下:
+
+在 onLoad 钩子中函数参数和返回值梳理如下:
 
 ## vite 实战
 
