@@ -2072,9 +2072,497 @@ import 'virtual:svg-icons-register'
 
 雪碧图包含了所有图标的具体内容，而对于页面每个具体的图标，则通过 use 属性来引用雪碧图的对应内容:
 
-如此一来，我们就能将所有的 svg 内容都内联到 HTML 中，省去了大量 svg 的网络请 求。
+如此一来，我们就能将所有的 svg 内容都内联到 HTML 中，省去了大量 svg 的网络请求。
+
+### vite-预构建
+
+大家都知道， Vite 是一个提倡 `no-bundle` 的构建工具，相比于传统的 Webpack，能做到开发时的模块按需编译，而不用先打包完再加载。
+
+需要注意的是，我们所说的模块代码其实分为两部分，一部分是源代码，也就是业务代码，另一部分是第三方依赖的代码，即 `node_modules` 中的代码。所谓的 `no-bundle` `只是对于源代码而言`，对于第三方依赖而言，Vite 还是选择 bundle(打包)，并且使用速度极快的打包器 Esbuild 来完成这一过程，达到秒级的依赖编译速度。
+
+#### 为什么需要预构建？
+
+为什么在开发阶段我们要对第三方依赖进行预构建? 如果不进行预构建会怎么样？
+
+首先 Vite 是基于浏览器原生 ES 模块规范实现的 Dev Server，不论是应用代码，还是第三方依赖的代码，理应符合 ESM 规范才能够正常运行。
+
+![Snipaste_2023-11-07_15-53-03.png](https://s2.loli.net/2023/11/07/NqL1zmH6BYaMKQX.png)
+
+但可惜，我们没有办法控制第三方的打包规范。就目前来看，还有相当多的第三方库仍然没有 ES 版本的产物，比如大名鼎鼎的 `react` :
+
+```js
+// react 入口文件
+// 只有 CommonJS 格式
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./cjs/react.production.min.js')
+} else {
+  module.exports = require('./cjs/react.development.js')
+}
+```
+
+这种 CommonJS 格式的代码在 Vite 当中无法直接运行，我们需要将它转换成 ESM 格式的产物。
+
+此外，还有一个比较重要的问题——请求瀑布流问题。比如说，知名的 loadsh-es 库本身是有 ES 版本产物的，可以在 Vite 中直接运行。但实际上，它在加载时会发出特别多的请求，导致页面加载的前几秒几都乎处于卡顿状态，拿一个简单的 demo 项目举例，请求情况如下图所示:
+
+![Snipaste_2023-11-07_15-59-06.png](https://s2.loli.net/2023/11/07/baivPBZ8OUNW3m4.png)
+
+我在应用代码中调用了 `debounce` 方法，这个方法会依赖很多工具函数，如下图所示:
+
+![Snipaste_2023-11-07_15-59-06.png](https://s2.loli.net/2023/11/07/baivPBZ8OUNW3m4.png)
+
+每个 `import` 都会触发一次新的文件请求，因此在这种 `依赖层级深`、`涉及模块数量多` 的情况下，会触发成百上千个网络请求，巨大的请求量加上 Chrome 对同一个域名下只能同时支持 `6` 个 HTTP 并发请求的限制，导致页面加载十分缓慢，与 Vite 主导性能优势的初衷背道而驰。不过，在进行依赖的预构建之后， `lodash-es` 这个库的代码被打包成了一个文件，这样请求的数量会骤然减少，页面加载也快了许多。下图是进行预构建之后的请求情况，你可以对照看看:
+
+![Snipaste_2023-11-07_16-00-55.png](https://s2.loli.net/2023/11/07/9VyphGPnxiAw3jE.png)
+
+总之，依赖预构建主要做了两件事情：
+
+一是将其他格式(如 UMD 和 CommonJS)的产物转换为 ESM 格式，使其在浏览器通过 `<script type="module"><script> ` 的方式正常加载。
+
+二是打包第三方库的代码，将各个第三方库分散的文件合并到一起，减少 HTTP 请求数量，避免页面加载性能劣化。
+
+而这两件事情全部由性能优异的 Esbuild (基于 Golang 开发)完成，而不是传统的 `Webpack/Rollup`，所以也不会有明显的打包性能问题，反而是 Vite 项目启动飞快(秒级启动)的一个核心原因。
+
+> ps: Vite 1.x 使用了 Rollup 来进行依赖预构建，在 2.x 版本将 Rollup 换成了 Esbuild，编译速度提升了近 100 倍。
+
+#### 如何开启预构建？
+
+在 Vite 中有两种开启预构建的方式，分别是 `自动开启 ` 和 `手动开启 `。
+
+###### 自动开启
+
+首先是 `自动开启` 。当我们在第一次启动项目的时候，可以在命令行窗口看见如下的信息:
+
+![Snipaste_2023-11-07_16-08-12.png](https://s2.loli.net/2023/11/07/ev8bGqEcNWjMRQm.png)
+
+同时，在项目启动成功后，你可以在根目录下的 node_modules 中发现 .vite 目录，这就是预构建产物文件存放的目录，内容如下:
+
+![Snipaste_2023-11-07_16-09-34.png](https://s2.loli.net/2023/11/07/iDPQfK4kq6xYdWb.png)
+
+在浏览器访问页面后，打开 Dev Tools 中的网络调试面板，你可以发现第三方包的引入路径已经被重写:
+
+```txt
+import React from "react";
+// 路径被重写，定向到预构建产物文件中
+import __vite__cjsImport0_react from "/node_modules/.vite/react.js?v=979739df";
+const React = __vite__cjsImport0_react.__esModule
+ ? __vite__cjsImport0_react.default
+ : __vite__cjsImport0_react;
+```
+
+并且对于依赖的请求结果，Vite 的 Dev Server 会设置强缓存:
+
+![Snipaste_2023-11-07_16-13-40.png](https://s2.loli.net/2023/11/07/JRZ17lhfvLY23NO.png)
+
+缓存过期时间被设置为一年，表示缓存过期前浏览器对 react 预构建产物的请求不会再经过 Vite Dev Server，直接用缓存结果。
+
+当然，除了 HTTP 缓存，Vite 还设置了本地文件系统的缓存，所有的预构建产物默认缓存在 node_modules/.vite 目录中。如果以下 3 个地方都没有改动，Vite 将一直使用缓存文件:
+
+- package.json 的 `dependencies` 字段
+- 各种包管理器的 lock 文件
+- `optimizeDeps` 配置内容
+
+##### 手动开启
+
+上面提到了预构建中本地文件系统的产物缓存机制，而少数场景下我们不希望用本地的缓存文件，比如需要调试某个包的预构建结果，我推荐使用下面任意一种方法清除缓存，还有手动开启预构建:
+
+- 删除 `node_modules/.vite` 目录
+- 在 Vite 配置文件中，将 `server.force` 设为 `true`
+- 命令行执行 `npx vite --force ` 或者 `npx vite optimize`
+
+> Vite 项目的启动可以分为两步，第一步是依赖预构建，第二步才是 Dev Server 的启动， `npx vite optimize` 相比于其它的方案，仅仅完成第一步的功能。
+
+#### 自定义配置详解
+
+前面说到了如何启动预构建的问题，现在我们来谈谈怎样通过 Vite 提供的配置项来定制预构建的过程。Vite 将预构建相关的配置项都集中在 `optimizeDeps` 属性上，我们来一一拆解这些子配置项背后的含义和应用场景。
+
+##### 入口文件-entries
+
+第一个是参数是 optimizeDeps.entries ，通过这个参数你可以自定义预构建的入口文件：
+
+实际上，在项目第一次启动时，Vite 会默认抓取项目中所有的 HTML 文件（如当前脚手架项目中的 `index.html `），将 HTML 文件作为应用入口，然后根据入口文件扫描出项目中用到的第三方依赖，最后对这些依赖逐个进行编译。
+
+那么，当默认扫描 HTML 文件的行为无法满足需求的时候，比如项目入口为 vue 格式文件时，你可以通过 entries 参数来配置:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    // 为一个字符串数组
+    entries: ['./src/main.vue']
+  }
+}
+```
+
+当然，entries 配置也支持 [glob 语法](https://github.com/mrmlnc/fast-glob)，非常灵活，如:
+
+```js
+// 将所有的 .vue 文件作为扫描入口
+entries: ['**/*.vue']
+```
+
+不光是 `.vue` 文件，Vite 同时还支持各种格式的入口，包括: `html` 、 `svelte` 、 `astro` 、`js `、 `jsx` 、 `ts` 和 `tsx` 。可以看到，只要可能存在 `import` 语句的地方，Vite 都可以解析，并通过内置的扫描机制搜集到项目中用到的依赖，通用性很强。
+
+##### 添加一些依赖——include
+
+除了 `entries` ， `include` 也是一个很常用的配置，它决定了可以强制预构建的依赖项，使用方式很简单：
+
+```js
+// vite.config.ts
+optimizeDeps: {
+  // 配置为一个字符串数组，将 `lodash-es` 和 `vue`两个包强制进行预构建
+  include: ['lodash-es', 'vue']
+}
+```
+
+它在使用上并不难，真正难的地方在于，如何找到合适它的使用场景。前文中我们提到，Vite 会根据应用入口( `entries` )自动搜集依赖，然后进行预构建，这是不是说明 Vite 可以百分百准确地搜集到所有的依赖呢？事实上并不是，某些情况下 Vite 默认的扫描行为并不完全可靠，这就需要联合配置 `include` 来达到完美的预构建效果了。接下来，我们好好梳理一下到底有哪些需要配置 `include` 的场景。
+
+#### 场景一：动态 import
+
+在某些动态 import 的场景下，由于 Vite 天然按需加载的特性，经常会导致某些依赖只能在运行时被识别出来。
+
+```js
+// src/locales/zh_CN.js
+import objectAssign from 'object-assign'
+console.log(objectAssign)
+// main.tsx
+const importModule = m => import(`./locales/${m}.ts`)
+importModule('zh_CN')
+```
+
+在这个例子中，动态 import 的路径只有运行时才能确定，无法在预构建阶段被扫描出来。因此，我们在访问项目时控制台会出现下面的日志信息:
+
+![Snipaste_2023-11-07_16-25-44.png](https://s2.loli.net/2023/11/07/OePSCWGQ8IAlUEY.png)
+
+这段 log 的意思是: Vite 运行时发现了新的依赖，随之重新进行依赖预构建，并刷新页面。这个过程也叫二次预构建。在一些比较复杂的项目中，这个过程会执行很多次，如下面的日志信息所示：
+
+![Snipaste_2023-11-07_16-28-53.png](https://s2.loli.net/2023/11/07/jk4iebaZPIJD6oO.png)
+
+然而，二次预构建的成本也比较大。我们不仅需要把预构建的流程重新运行一遍，还得重新刷新页面，并且需要重新请求所有的模块。尤其是在大型项目中，这个过程会严重拖慢应用的加载速度！因此，我们要尽力避免运行时的 `二次预构建`。具体怎么做呢？你可以通过 include 参数提前声明需要按需加载的依赖:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    include: [
+      // 按需加载的依赖都可以声明到这个数组里
+      'object-assign'
+    ]
+  }
+}
+```
+
+#### 场景二: 某些包被手动 exclude
+
+`exclude` 是 `optimizeDeps` 中的另一个配置项，与 `include` 相对，用于将某些依赖从预构建的过程中排除。不过这个配置并不常用，也不推荐大家使用。如果真遇到了要在预构建中排除某个包的情况，需要注意 `它所依赖的包` 是否具有 ESM 格式，如下面这个例子:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    exclude: ['@loadable/component']
+  }
+}
+```
+
+可以看到浏览器控制台会出现如下的报错:
+
+![Snipaste_2023-11-07_16-31-49.png](https://s2.loli.net/2023/11/07/vCImwudTqbX8Vnr.png)
+
+这是为什么呢? 我们刚刚手动 exclude 的包 @loadable/component 本身具有 ESM 格式的产物，但它的某个依赖 hoist-non-react-statics 的产物并没有提供 ESM 格式，导致运行时加载失败。
+
+这个时候 include 配置就派上用场了，我们可以强制对 hoist-non-react-statics 这个间接依赖进行预构建:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    include: [
+      // 间接依赖的声明语法，通过`>`分开, 如`a > b`表示 a 中依赖的 b
+      '@loadable/component > hoist-non-react-statics'
+    ]
+  }
+}
+```
+
+在 include 参数中，我们将所有不具备 ESM 格式产物包都声明一遍，这样再次启动项目就没有问题了。
+
+#### 自定义 Esbuild 行为
+
+Vite 提供了 `esbuildOptions` 参数来让我们自定义 Esbuild 本身的配置，常用的场景是加入一些 Esbuild 插件:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    esbuildOptions: {
+      plugins: [
+        // 加入 Esbuild 插件
+      ]
+    }
+  }
+}
+```
+
+这个配置主要是处理一些特殊情况，如某个第三方包本身的代码出现问题了。接下来，我们就来讨论一下。
+
+#### 特殊情况: 第三方包出现问题怎么办？
+
+由于我们无法保证第三方包的代码质量，在某些情况下我们会遇到莫名的第三方库报错。我举一个常见的案例—— `react-virtualized` 库。这个库被许多组件库用到，但它的 ESM 格式产物有明显的问题，在 Vite 进行预构建的时候会直接抛出这个错误：
+
+![Snipaste_2023-11-07_16-34-34.png](https://s2.loli.net/2023/11/07/OKr6oIsVqvkjSw2.png)
+
+原因是这个库的 ES 产物莫名其妙多出了一行无用的代码:
+
+```js
+// WindowScroller.js 并没有导出这个模块
+import { bpfrpt_proptype_WindowScroller } from '../WindowScroller.js'
+```
+
+其实我们并不需要这行代码，但它却导致 Esbuild 预构建的时候直接报错退出了。那这一类的问题如何解决呢？
+
+##### 1.改第三方库代码
+
+首先，我们能想到的思路是直接修改第三方库的代码，不过这会带来团队协作的问题，你的改动需要同步到团队所有成员，比较麻烦。
+
+好在，我们可以使用 patch-package 这个库来解决这类问题。一方面，它能记录第三方库代码的改动，另一方面也能将改动同步到团队每个成员。
+
+`patch-package` 官方只支持 npm 和 yarn，而不支持 pnpm，不过社区中已经提供了支持 `pnpm` 的版本，这里我们来安装一下相应的包:
+
+```shell
+pnpm i @milahu/patch-package -D
+```
+
+> 注意: 要改动的包在 package.json 中必须声明确定的版本，不能有 ~ 或者 ^ 的前缀。
+
+接着，我们进入第三方库的代码中进行修改，先删掉无用的 import 语句，再在命令行输入:
+
+```shell
+npx patch-package react-virtualized
+```
+
+现在根目录会多出 `patches` 目录记录第三方包内容的更改，随后我们在 `package.json` 的 `scripts ` 中增加如下内容：
+
+```js
+{
+ "scripts": {
+ // 省略其它 script
+ "postinstall": "patch-package"
+ }
+}
+```
+
+这样一来，每次安装依赖的时候都会通过 postinstall 脚本自动应用 patches 的修改，解决了团队协作的问题。
+
+##### 2.加入 ESbuild 插件
+
+```js
+// vite.config.ts
+const esbuildPatchPlugin = {
+  name: 'react-virtualized-patch',
+  setup(build) {
+    build.onLoad(
+      {
+        filter: /react-virtualized\/dist\/es\/WindowScroller\/utils\/onScroll.js$/
+      },
+      async args => {
+        const text = await fs.promises.readFile(args.path, 'utf8')
+        return {
+          contents: text.replace('import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";', '')
+        }
+      }
+    )
+  }
+}
+// 插件加入 Vite 预构建配置
+{
+  optimizeDeps: {
+    esbuildOptions: {
+      plugins: [esbuildPatchPlugin]
+    }
+  }
+}
+```
 
 ## rollup 和 esbuild 使用
+
+### vite 的双引擎架构
+
+#### vite 架构图
+
+很多人对 Vite 的双引擎架构仅仅停留在 `开发阶段使用 Esbuild`，`生产环境用 Rollup` 的阶段，殊不知，Vite 真正的架构远没有这么简单。一图胜千言，这里放一张 Vite 架构图：
+
+![Snipaste_2023-11-07_16-47-32.png](https://s2.loli.net/2023/11/07/M3Q6EbPOlyFTJwz.png)
+
+相信对于 Vite 的双引擎架构，你可以从图中略窥一二。在接下来的内容中，我会围绕这张架构图展开双引擎的介绍，到时候你会对这份架构图理解得更透彻。
+
+#### 性能利器：Esbuild
+
+必须要承认的是， Esbuild 的确是 Vite 高性能的得力助手，在很多关键的构建阶段让 Vite 获得了相当优异的性能，如果这些阶段用传统的打包器/编译器来完成的话，开发体验要下降一大截。
+
+那么，Esbuild 到底在 Vite 的构建体系中发挥了哪些作用？
+
+##### 一、依赖预构建-作为 Bundle 工具
+
+首先是**开发阶段的依赖预构建**阶段。
+
+![Snipaste_2023-11-07_16-50-07.png](https://s2.loli.net/2023/11/07/JLIFYwV74TBsARM.png)
+
+一般来说， `node_modules` 依赖的大小动辄几百 MB 甚至上 GB ，会远超项目源代码，相信大家都深有体会。如果这些依赖直接在 Vite 中使用，会出现一系列的问题，这些问题我们在 `依赖预构建` 的小节已经详细分析过，主要是 ESM 格式的兼容性问题和海量请求的问题，不再赘述。总而言之，对于第三方依赖，需要在应用启动前进行 `打包` 并且 `转换为ESM 格式`。
+
+Vite 1.x 版本中使用 Rollup 来做这件事情，但 Esbuild 的性能实在是太恐怖了，Vite 2.x果断采用 Esbuild 来完成第三方依赖的预构建，至于性能到底有多强，大家可以参照它与传统打包工具的性能对比图:
+
+![Snipaste_2023-11-07_17-05-49.png](https://s2.loli.net/2023/11/07/f9Obrzye3CcVKLJ.png)
+
+- 当然，Esbuild 作为打包工具也有一些缺点：
+  - 不支持降级到 ES 5 的代码。这意味着在低端浏览器代码会跑不起来
+  - 不支持 `const enum` 等语法。这意味着单独使用这些语法在 esbuild 中会直接抛错
+  - 不提供操作打包产物的接口，像 Rollup 中灵活处理打包产物的能力(如 renderChunk 钩子)在 Esbuild 当中完全没有
+  - 不支持自定义 Code Splitting 策略。传统的 Webpack 和 Rollup 都提供了自定义拆包策略的 API，而 Esbuild 并未提供，从而降级了拆包优化的灵活性
+
+尽管 Esbuild 作为一个社区新兴的明星项目，有如此多的局限性，但依然不妨碍 Vite 在开发阶段使用它成功启动项目并获得极致的性能提升，生产环境处于稳定性考虑当然是采用功能更加丰富、生态更加成熟的 Rollup 作为依赖打包工具了。
+
+##### 二、单文件编译-作为 TS 和 JSX 编译工具
+
+在依赖预构建阶段， Esbuild 作为 Bundler 的角色存在。而在 TS(X)/JS(X) 单文件编译上面，Vite 也使用 Esbuild 进行语法转译，也就是将 Esbuild 作为 Transformer 来用。大家可以在架构图中 `Vite Plugin Pipeline` 部分注意到:
+
+![Snipaste_2023-11-07_17-08-20.png](https://s2.loli.net/2023/11/07/W4BQ6YcbARHFDje.png)
+
+也就是说，Esbuild 转译 TS 或者 JSX 的能力通过 Vite 插件提供，这个 Vite 插件在开发环境和生产环境都会执行，因此，我们可以得出下面这个结论:
+
+> Vite 已经将 Esbuild 的 Transformer 能力用到了生产环境。尽管如此，对于低端浏览器场景，Vite 仍然可以做到语法和 Polyfill 安全
+
+这部分能力用来替换原先 Babel 或者 TSC 的功能，因为无论是 Babel 还是 TSC 都有性能问题，大家对这两个工具普遍的认知都是: 慢，太慢了。
+
+当 Vite 使用 Esbuild 做单文件编译之后，提升可以说相当大了，我们以一个巨大的、50多 MB 的纯代码文件为例，来对比 Esbuild 、 Babel 、 TSC 包括 SWC 的编译性能:
+
+![](https://i.niupic.com/images/2023/11/07/bZl6.png)
+
+可以看到，虽然 Esbuild Transfomer 能带来巨大的性能提升，但其自身也有局限性，最大的局限性就在于 TS 中的类型检查问题。这是因为 Esbuild 并没有实现 TS 的类型系统，在编译 `TS` (或者 `TSX` ) 文件时仅仅抹掉了类型相关的代码，暂时没有能力实现类型检查。
+
+##### 三、代码压缩-作为压缩工具
+
+从架构图中可以看到，在生产环境中 Esbuild 压缩器通过插件的形式融入到了 Rollup 的打包流程中:
+
+![](https://i.niupic.com/images/2023/11/07/bZl8.png)
+
+那为什么 Vite 要将 Esbuild 作为生产环境下默认的压缩工具呢？因为压缩效率实在太高了!
+
+传统的方式都是使用 Terser 这种 JS 开发的压缩器来实现，在 Webpack 或者 Rollup 中作为一个 Plugin 来完成代码打包后的压缩混淆的工作。但 Terser 其实很慢，主要有 2个原因。
+
+- 压缩这项工作涉及大量 AST 操作，并且在传统的构建流程中，AST 在各个工具之间无法共享，比如 Terser 就无法与 Babel 共享同一个 AST，造成了很多重复解析的过程。
+- JS 本身属于解释性 + JIT（即时编译） 的语言，对于压缩这种 CPU 密集型的工作，其性能远远比不上 Golang 这种原生语言。
+
+因此，Esbuild 这种从头到尾共享 AST 以及原生语言编写的 Minifier 在性能上能够甩开了传统工具的好几倍。
+
+总的来说，Vite 将 Esbuild 作为自己的性能利器，将 Esbuild 各个垂直方向的能力( `Bundler` 、 `Transformer` 、 `Minifier` )利用的淋漓尽致，给 Vite 的高性能提供了有利的保证。
+
+#### 构建基石-Rollup
+
+Rollup 在 Vite 中的重要性一点也不亚于 Esbuild，它既是 Vite 用作生产环境打包的核心工具，也直接决定了 Vite 插件机制的设计。那么，Vite 到底基于 Rollup 做了哪些事情？
+
+##### 生产环境 Bundle
+
+虽然 ESM 已经得到众多浏览器的原生支持，但生产环境做到完全 no-bundle 也不行，会有网络性能问题。为了在生产环境中也能取得优秀的产物性能，Vite 默认选择在生产环境中利用 Rollup 打包，并基于 Rollup 本身成熟的打包能力进行扩展和优化，主要包含3 个方面:
+
+- CSS 代码分割。如果某个异步模块中引入了一些 CSS 代码，Vite 就会自动将这些 CSS 抽取出来生成单独的文件，提高线上产物的缓存复用率 。
+- 自动预加载。Vite 会自动为入口 chunk 的依赖自动生成预加载标签 `<link rel="moduelpreload">` ，如:
+
+```html
+<head>
+  <!-- 省略其它内容 -->
+  <!-- 入口 chunk -->
+  <script
+    type="module"
+    crossorigin
+    src="/assets/index.250e0340.js"
+  ></script>
+  <!-- 自动预加载入口 chunk 所依赖的 chunk-->
+  <link
+    rel="modulepreload"
+    href="/assets/vendor.293dca09.js"
+  />
+</head>
+```
+
+这种适当预加载的做法会让浏览器提前下载好资源，优化页面性能。
+
+异步 Chunk 加载优化。在异步引入的 Chunk 中，通常会有一些公用的模块，如现有两个异步引入的 Chunk: A 和 B ，而且两者有一个公共依赖 C，如下图:
+
+![](https://i.niupic.com/images/2023/11/07/bZld.png)
+
+一般情况下，Rollup 打包之后，会先请求 A，然后浏览器在加载 A 的过程中才决定请求和加载 C，但 Vite 进行优化之后，请求 A 的同时会自动预加载 C，通过优化 Rollup 产物依赖加载方式节省了不必要的网络开销。
+
+##### 兼容插件机制
+
+无论是开发阶段还是生产环境，Vite 都根植于 Rollup 的插件机制和生态，如下面的架构图所示：
+
+![](https://i.niupic.com/images/2023/11/07/bZlf.png)
+
+在开发阶段，Vite 借鉴了 [WMR](https://github.com/preactjs/wmr) 的思路，自己实现了一个 `Plugin Container` ，用来模拟 Rollup 调度各个 Vite 插件的执行逻辑，而 Vite 的插件写法完全兼容 Rollup，因此在生产环境中将所有的 Vite 插件传入 Rollup 也没有问题。
+
+反过来说，Rollup 插件却不一定能完全兼容 Vite(这部分我们会在插件开发小节展开来说)。不过，目前仍然有不少 Rollup 插件可以直接复用到 Vite 中，你可以通过这个站点查看所有兼容 Vite 的 Rollup 插件: [vite-rollup-plugins.patak.dev/](https://vite-rollup-plugins.patak.dev/) 。
+
+狼叔在[《以框架定位论前端的先进性》](https://mp.weixin.qq.com/s/mt2Uyh-lpHqHAHqjsen7zw)提到现代前端框架的几大分类，Vite 属于人有我优的类型，因为类似的工具之前有 [Snowpack](https://www.snowpack.dev/)，Vite 诞生之后补齐了作为一个 no-bundle 构建工具的 Dev Server 能力(如 HMR)，确实比现有的工具能力更优。但更重要的是，Vite 在`社区生态`方面比 Snowpack 更占先天优势。
+
+Snowpack 自研了一套插件机制，类似 Rollup 的 Hook 机制，可以看出借鉴了 Rollup的插件机制，但并不能兼容任何现有的打包工具。如果需要打包，只能调用其它打包工具的 API，自身不提供打包能力。
+
+而 Vite 的做法是从头到尾根植于的 Rollup 的生态，设计了和 Rollup 非常吻合的插件机制，而 Rollup 作为一个非常成熟的打包方案，从诞生至今已经迭代了六年多的时间，npm 年下载量达到上亿次，产物质量和稳定性都经历过大规模的验证。某种程度上说，这种根植于已有成熟工具的思路也能打消或者降低用户内心的疑虑，更有利于工具的推广和发展。
+
+### Esbuild 功能使用与插件开发
+
+#### Esbuild 为什么性能极高？
+
+Esbuild 是由 Figma 的 CTO 「Evan Wallace」基于 Golang 开发的一款打包工具，相比传统的打包工具，主打性能优势，在构建速度上可以比传统工具快 10~100 倍。那么，它是如何达到这样超高的构建性能的呢？主要原因可以概括为 4 点：
+
+- **使用 Golang 开发**，构建逻辑代码直接被编译为原生机器码，而不用像 JS 一样先代码解析为字节码，然后转换为机器码，大大节省了程序运行时间。
+- **多核并行**。内部打包算法充分利用多核 CPU 优势，所有的步骤尽可能并行，这也是得益于 Go 当中多线程共享内存的优势。
+- **从零造轮子**。几乎没有使用任何第三方库，所有逻辑自己编写，大到 AST 解析，小到字符串的操作，保证极致的代码性能。
+- **高效的内存利用**。Esbuild 中从头到尾尽可能地复用一份 AST 节点数据，而不用像 JS 打包工具中频繁地解析和传递 AST 数据（如 string -> TS -> JS -> string)，造成内存的大量浪费。
+
+#### Esbuild 功能使用
+
+接下来我们正式学习 Esbuild 的功能使用。首先我们执行 pnpm init -y 新建一个项目, 然后通过如下的命令完成 Esbuild 的安装:
+
+```shell
+pnpm i esbuild
+```
+
+使用 Esbuild 有 2 种方式，分别是 `命令行调用` 和 `代码调用`。
+
+##### 1.命令行调用
+
+命令行方式调用也是最简单的使用方式。我们先来写一些示例代码，新建 src/index.jsx 文件，内容如下:
+
+```js
+// src/index.jsx
+import Server from 'react-dom/server'
+let Greet = () => <h1>Hello, juejin!</h1>
+console.log(Server.renderToString(<Greet />))
+```
+
+注意安装一下所需的依赖，在终端执行如下的命令:
+
+```shell
+pnpm install react react-dom
+```
+
+接着到 package.json 中添加 build 脚本:
+
+```json
+"scripts": {
+ "build": "./node_modules/.bin/esbuild src/index.jsx --bundle --outfile=dist/out.js"
+ },
+```
+
+现在，你可以在终端执行 `pnpm run build `，可以发现如下的日志信息:
+
+![Snipaste_2023-11-07_17-57-46.png](https://s2.loli.net/2023/11/07/ZzS1raMxR2BeyNm.png)
+
+说明我们已经成功通过命令行完成了 Esbuild 打包！但命令行的使用方式不够灵活，只能传入一些简单的命令行参数，稍微复杂的场景就不适用了，所以一般情况下我们还是会用代码调用的方式。
+
+##### 2.代码调用
+
+Esbuild 对外暴露了一系列的 API，主要包括两类: `Build API `和 `Transform API `，我们可以在 Nodejs 代码中通过调用这些 API 来使用 Esbuild 的各种功能。
 
 ## vite 实战
 
