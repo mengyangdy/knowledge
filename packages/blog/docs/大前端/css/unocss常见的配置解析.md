@@ -64,7 +64,7 @@ shortcuts: {
 
 ## theme 主题
 
-`unocss` 同样支持主题歘同，我们在配置中通过设置 `theme` 字段来设置变量，用法：
+`unocss` 同样支持主题配置，我们在配置中通过设置 `theme` 字段来设置变量，用法：
 
 ```js
 theme: {
