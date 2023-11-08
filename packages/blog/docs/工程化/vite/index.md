@@ -4705,7 +4705,714 @@ accept(cb: (mod: any) => void): void
 }
 ```
 
-这里稍微解释一下， `import.meta` 对象为现代浏览器原生的一个内置对象，Vite 所做的事情就是在这个对象上的 `hot` 属性中定义了一套完整的属性和方法。因此，在 Vite 当中，你就可以通过 `import.meta.hot` 来访问关于 HMR 的这些属性和方法，比如`import.meta.hot.accept()` 。接下来，我们就来一一熟悉这些 API 的使用方式。
+这里稍微解释一下， `import.meta` 对象为现代浏览器原生的一个内置对象，Vite 所做的事情就是在这个对象上的 `hot` 属性中定义了一套完整的属性和方法。因此，在 Vite 当中，你就可以通过 `import.meta.hot` 来访问关于 HMR 的这些属性和方法，比如 `import.meta.hot.accept()` 。接下来，我们就来一一熟悉这些 API 的使用方式。
+
+##### 模块更新时逻辑：hot.accept
+
+在 `import.meta.hot` 对象上有一个非常关键的方法 `accept` ，因为它决定了 Vite 进行热更新的边界，那么如何来理解这个 accept 的含义呢?
+
+从字面上来看，它表示接受的意思。没错，它就是用来 `接受模块更新` 的。一旦 Vite 接受了这个更新，当前模块就会被认为是 HMR 的边界。那么，Vite 接受谁的更新呢?这里会有三种情况:
+
+- 接受 `自身模块` 的更新
+- 接受 `某个子模块` 的更新
+- 接受 `多个子模块` 的更新
+
+这三种情况分别对应 accept 方法三种不同的使用方式，下面我们就一起来分析一下。
+
+###### 1.接受自身更新
+
+当模块接受自身的更新时，则当前模块会被认为 HMR 的边界。也就是说，除了当前模块，其他的模块均未受到任何影响。下面是我准备的一张示例图，你可以参考一下:
+
+![iShot_2023-11-08_21.13.09.png](https://s2.loli.net/2023/11/08/uZIamXTLF9y8sWj.png)
+
+为了加深你的理解，这里我们以一个实际的例子来操练一下。这个例子已经放到  
+了 [Github 仓库](https://github.com/sanyuan0704/juejin-book-vite/tree/main/13-hmr-api) 中，你可以把这个链接克隆到本地，然后跟着我一步步添加内容。首先展示一下整体的目录结构:
+
+```txt
+.
+├── favicon.svg
+├── index.html
+├── node_modules
+│   └── ...
+├── package.json
+├── src
+│ ├── main.ts
+│   ├── render.ts
+│   ├── state.ts
+│   ├── style.css
+│   └── vite-env.d.ts
+└── tsconfig.json
+```
+
+这里我放出一些关键文件的内容，如下面的 `index.html `:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="favicon.svg"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <p>
+      count:
+      <span id="count">0</span>
+    </p>
+    <script
+      type="module"
+      src="/src/main.ts"
+    ></script>
+  </body>
+</html>
+```
+
+里面的 DOM 结构比较简单，同时引入了 `/src/main.ts` 这个文件，内容如下:
+
+```js
+import { render } from './render'
+import { initState } from './state'
+render()
+initState()
+```
+
+文件依赖了 `render.ts` 和 `state.ts` ，前者负责渲染文本内容，而后者负责记录当前的页面状态:
+
+```js
+// src/render.ts
+// 负责渲染文本内容
+import './style.css'
+export const render = () => {
+const app = document.querySelector<HTMLDivElement>('#app')! app.innerHTML = `
+    <h1>Hello Vite!</h1>
+    <p target="_blank">This is hmr test.123</p>
+  `
+}
+// src/state.ts
+// 负责记录当前的页面状态 export function initState() {
+let count = 0; setInterval(() => {
+let countEle = document.getElementById('count');
+    countEle!.innerText =  ++count + '';
+  }, 1000);
+}
+```
+
+好了，仓库当中关键的代码就目前这些了。现在，你可以执行 `pnpm i` 安装依赖，然后 `npm run dev` 启动项目，在浏览器访问可以看到这样的内容:
+
+![iShot_2023-11-08_21.19.23.png](https://s2.loli.net/2023/11/08/RCdoyImvFf1QlOU.png)
+
+同时，每隔一秒钟，你可以看到这里的 `count` 值会加一。OK，现在你可以试着改动一 下 `render.ts` 的渲染内容，比如增加一些文本:
+
+```js
+// render.ts
+export const render = () => {
+}
+const app = document.querySelector<HTMLDivElement>('#app')!
+app.innerHTML = `
+<h1>Hello Vite!</h1>
+<p target="_blank">This is hmr test.123 这是增加的文本</p>
+`
+}
+```
+
+效果如下所示：
+
+![iShot_2023-11-08_21.21.04.png](https://s2.loli.net/2023/11/08/nxzuZg9l6cYqEoH.png)
+
+页面的渲染内容是更新了，但不知道你有没有注意到最下面的 `count` 值瞬间被置零了，并且查看控制台，也有这样的 log:
+
+```txt
+[vite] page reload src/render.ts
+```
+
+很明显，当 `render.ts` 模块发生变更时，Vite 发现并没有 HMR 相关的处理，然后直接刷新页面了。
+
+现在让我们在 `render.ts` 中加上如下的代码:
+
+```js
+// 条件守卫
++ if (import.meta.hot) {
++ import.meta.hot.accept((mod) => mod.render())
++ }
+```
+
+`import.meta.hot` 对象只有在开发阶段才会被注入到全局，生产环境是访问不到的，另外增加条件守卫之后，打包时识别到 if 条件不成立，会自动把这部分代码从打包产物中移除，来优化资源体积。因此，我们只需要增加这个条件守卫语句。
+
+接下来，可以注意到我们对于 `import.meta.hot.accept` 的使用:
+
+```js
+import.meta.hot.accept(mod => mod.render())
+```
+
+这里我们传入了一个回调函数作为参数，入参即为 Vite 给我们提供的更新后的模块内容，在浏览器中打印 mod 内容如下，正好是 render 模块最新的内容:
+
+![iShot_2023-11-08_21.25.44.png](https://s2.loli.net/2023/11/08/yA27KvxTRs45hfg.png)
+
+我们在回调中调用了一下 `mod.render` 方法，也就是当模块变动后，每次都重新渲染一遍内容。这时你可以试着改动一下渲染的内容，然后到浏览器中注意一下 `count` 的情况，并没有被重新置零，而是保留了原有的状态:
+
+![iShot_2023-11-08_21.27.27.png](https://s2.loli.net/2023/11/08/vX59ehMycAKxkOg.png)
+
+没错，现在 `render` 模块更新后，只会重新渲染这个模块的内容，而对于 state 模块的内容并没有影响，并且控制台的 log 也发生了变化:
+
+```txt
+[vite] hmr update /src/render.ts
+```
+
+现在我们算是实现了初步的 HMR，也在实际的代码中体会到了 accept 方法的用途。当然，在这个例子中我们传入了一个回调函数来手动调用 render 逻辑，但事实上你也可以什么参数都不传，这样 vite 只会把 `render` 模块的最新内容执行一遍，但 `render` 模块内部只声明了一个函数，因此直接调用 `import.meta.hot.accept()` 并不会重新渲染页面。
+
+###### 2.接受依赖模块的更新
+
+上面介绍了 `接受自身模块更新` 的情况，现在来分析一下 `接受依赖模块更新` 是如何做到的。先给大家放一张原理图，直观地感受一下:
+
+![iShot_2023-11-08_21.30.17.png](https://s2.loli.net/2023/11/08/N78KEzJewfviMIl.png)
+
+还是拿示例项目来举例， `main` 模块依赖 `render` 模块，也就是说， `main` 模块是 `render` 父模块，那么我们也可以在 `main` 模块中接受 `render` 模块的更新，此时 HMR 边界就是 `main` 模块了。
+
+我们将 `render` 模块的 accept 相关代码先删除：
+
+```js
+// render.ts
+- if (import.meta.hot) {
+- import.meta.hot.accept((mod) => mod.render())
+- }
+```
+
+然后在 `main` 模块增加如下代码：
+
+```js
+// main.ts
+import { render } from './render';
+import './state';
+render();
+
++if (import.meta.hot) {
+
++  import.meta.hot.accept('./render.ts', (newModule) => {
++    newModule.render();
++  })
++}
+```
+
+在这里我们同样是调用 accept 方法，与之前不同的是，第一个参数传入一个依赖的路径，也就是 `render` 模块的路径，这就相当于告诉 Vite: 我监听了 `render` 模块的更新，当它的内容更新的时候，请把最新的内容传给我。同样的，第二个参数中定义了模块变化后的回调函数，这里拿到了 `render` 模块最新的内容，然后执行其中的渲染逻辑，让页面展示最新的内容。
+
+通过接受一个依赖模块的更新，我们同样又实现了 HMR 功能，你可以试着改动 `render` 模块的内容，可以发现页面内容正常更新，并且状态依然保持着原样。
+
+###### 3.接受多个子模块的更新
+
+接下来是最后一种 accept 的情况——接受多个子模块的更新。有了上面两种情况的铺垫，这里再来理解第三种情况就容易多了，我依然先给出原理示意图:
+
+这里的意思是**父模块可以接受多个子模块的更新**，**当其中任何一个子模块更新之后，父模块会成为 HMR 边界**。还是拿之前的例子来演示，现在我们更改 main 模块代码:
+
+```js
+// main.ts
+import { render } from './render';
+import { initState } from './state';
+render();
+initState();
++if (import.meta.hot) {
++  import.meta.hot.accept(['./render.ts', './state.ts'], (modules) => {
++    console.log(modules);
++  })
++}
+```
+
+在代码中我们通过 accept 方法接受了 `render` 和 `state` 两个模块的更新，接着让我们手动改动一下某一个模块的代码，观察一下回调中 `modules` 的打印内容。例如当我改  
+动 `state` 模块的内容时，回调中拿到的 modules 是这样的:
+
+![iShot_2023-11-08_21.35.10.png](https://s2.loli.net/2023/11/08/vVXIrtRJ6dFgO5Y.png)
+
+可以看到 Vite 给我们的回调传来的参数 `modules` 其实是一个数组，和我们第一个参数声明的子模块数组一一对应。因此 `modules` 数组第一个元素是 `undefined` ，表示 `render` 模块并没有发生变化，第二个元素为一个 Module 对象，也就是经过变动后 `state` 模块的最新内容。于是在这里，我们根据 `modules` 进行自定义的更新，修改 `main.ts` :
+
+```js
+// main.ts
+import { render } from './render'
+import { initState } from './state'
+render()
+initState()
+if (import.meta.hot) {
+  import.meta.hot.accept(['./render.ts', './state.ts'], modules => {
+    // 自定义更新
+    const [renderModule, stateModule] = modules
+    if (renderModule) {
+      renderModule.render()
+    }
+    if (stateModule) {
+      stateModule.initState()
+    }
+  })
+}
+```
+
+现在，你可以改动两个模块的内容，可以发现，页面的相应模块会更新，并且对其它的模块没有影响。但实际上你会发现另外一个问题，当改动了 `state` 模块的内容之后，页面的内容会变得错乱:
+
+![iShot_2023-11-08_21.37.03.png](https://s2.loli.net/2023/11/08/WlRSX56xrPfvj8F.png)
+
+这是为什么呢?
+
+我们快速回顾一下 `state` 模块的内容:
+
+```js
+// state.ts
+export function initState() { let count = 0; setInterval(() => {
+let countEle = document.getElementById('count');
+    countEle!.innerText =  ++count + '';
+  }, 1000);
+}
+```
+
+其中设置了一个定时器，但当模块更改之后，这个定时器并没有被销毁，紧接着我们在 accept 方法调用 `initState` 方法又创建了一个新的定时器，导致 count 的值错乱。那如何来解决这个问题呢?这就涉及到新的 HMR 方法—— `dispose` 方法了。
+
+##### 模块销毁时逻辑：hot.dispose
+
+这个方法相较而言就好理解多了，代表在模块更新、旧模块需要销毁时需要做的一些事情，拿刚刚的场景来说，我们可以通过在 `state` 模块中调用 dispose 方法来轻松解决定时器共存的问题，代码改动如下:
+
+```js
+// state.ts
+let timer: number | undefined;
+if (import.meta.hot) { import.meta.hot.dispose(() => {
+if (timer) { clearInterval(timer);
+} })
+}
+export function initState() {
+let count = 0;
+timer = setInterval(() => {
+let countEle = document.getElementById('count');
+    countEle!.innerText =  ++count + '';
+  }, 1000);
+}
+```
+
+此时，我们再来到浏览器观察一下 HMR 的效果:
+
+![iShot_2023-11-08_21.40.44.png](https://s2.loli.net/2023/11/08/5mUjWOLXewBxCa3.png)
+
+可以看到，当我稍稍改动一下 `state` 模块的内容(比如加个空格)，页面确实会更新，而且也没有状态错乱的问题，说明我们在模块销毁前清除定时器的操作是生效的。但你又可以很明显地看到一个新的问题: 原来的状态丢失了， count ` ` 的内容从 `64` 突然变成 `1` 。这又是为什么呢?
+
+让我们来重新梳理一遍热更新的逻辑:
+
+![iShot_2023-11-08_21.41.28.png](https://s2.loli.net/2023/11/08/mcHGfJUbhVrIKSM.png)
+
+当我们改动了 `state` 模块的代码， `main` 模块接受更新，执行 accept 方法中的回调，接着会执行 `state` 模块的 `initState` 方法。注意了，此时新建的 `initstate` 方法的确会初始化定时器，但同时也会初始化 `count` 变量，也就是 `count` 从 `0` 开始计数了! 这显然是不符合预期的，我们期望的是每次改动 state `模块`，之前的状态都保存下来。怎么来实现呢?
+
+##### 共享数据：hot.data 属性
+
+这就不得不提到 hot 对象上的 data 属性了，这个属性用来在不同的模块实例间共享一些数据。使用上也非常简单，让我们来重构一下 `state` 模块:
+
+```js
+let timer: number | undefined;
+if (import.meta.hot) {
++ // 初始化 count
++ if (!import.meta.hot.data.count) { + import.meta.hot.data.count = 0; +}
+  import.meta.hot.dispose(() => {
+    if (timer) {
+      clearInterval(timer);
+    }
+}) }
+export function initState() {
++  const getAndIncCount = () => {
++    const data = import.meta.hot?.data || {
++      count: 0
++    };
++    data.count = data.count + 1;
++    return data.count;
++  };
+  timer = setInterval(() => {
+    let countEle = document.getElementById('count');
++    countEle!.innerText =  getAndIncCount() + '';
+  }, 1000);
+}
+```
+
+我们在 `import.meta.hot.data` 对象上挂载了一个 `count` 属性，在二次执行 `initState` 的时候便会复用 `import.meta.hot.data` 上记录的 count 值，从而实现状态的保存。
+
+此时，我们终于大功告成，基本实现了这个示例应用的 HMR 的功能。在这个过程中，我们用到了核心的 `accept` 、 `dispose` 和 `data` 属性和方法。当然还有一些方法将会给大家进行介绍，但相较而言就比较简单了，而且用的也不多，大家只需要留下初步的印象，知道这些方法的用途是什么，需要用到的时候再来查阅即可。
+
+##### 其他方法
+
+###### 1.import.meta.hot.decline()
+
+这个方法调用之后，相当于表示此模块不可热更新，当模块更新时会强制进行页面刷新。感兴趣的同学可以继续拿上面的例子来尝试一下。
+
+###### 2.import.meta.hot.invalidate()
+
+这个方法就更简单了，只是用来强制刷新页面。
+
+###### 3.自定义事件
+
+你还可以通过 `import.meta.hot.on` 来监听 HMR 的自定义事件，内部有这么几个事件会自动触发:
+
+- `vite:beforeUpdate`： 当模块更新时触发
+- `vite:beforeFullReload`：当即将重新刷新页面时触发
+- `vite:beforePrune`： 当不再需要的模块即将被剔除时触发
+- `vite:error`： 当发生错误时(例如，语法错误)触发
+
+如果你想自定义事件可以通过上节中提到的 handleHotUpdate 这个插件 Hook 来进行触发:
+
+```js
+// 插件 Hook handleHotUpdate({ server }) {
+  server.ws.send({
+    type: 'custom',
+    event: 'custom-update',
+    data: {}
+})
+return [] }
+// 前端代码
+import.meta.hot.on('custom-update', (data) => {
+// 自定义更新逻辑 })
+```
+
+### 代码分割
+
+我们将一起分析 `Code Splitting` 解决了单产物打包模式下的哪些问题，然后用具体的项目示例体验一下 Vite 默认自带的 `Code Splitting` 效果。从中，你将了解到 Vite 的默认分包策略，以及底层所使用的 Rollup 拆包 API—— `munaulChunks`。
+
+在实际的项目场景中，只用 Vite 默认的策略是不够的，我们会更深入一步，学习 Rollup 底层拆包的各种高级姿势，实现 `自定义拆包`，同时我也会带大家通过实际案例复现 Rollup 自定义拆包经常遇到的坑—— `循环引用` 问题，一起分析问题出现的原因。
+
+需要注意的是，文中会多次提到 `bundle` 、`chunk`、`vendor` 这些构建领域的专业概念，这里给大家提前解释一下:
+
+- `bundle` 指的是整体的打包产物，包含 JS 和各种静态资源。
+- `chunk` 指的是打包后的 JS 文件，是 `bundle` 的子集。
+- `vendor` 是指第三方包的打包产物，是一种特殊的 chunk
+
+#### Code Splitting 解决的问题
+
+在传统的单 chunk 打包模式下，当项目代码越来越庞大，最后会导致浏览器下载一个巨大的文件，从页面加载性能的角度来说，主要会导致两个问题:
+
+- 无法做到**按需加载**，即时是当前页面不需要的代码也会进行加载
+- 线上 `缓存复用率` 极低，改动一行代码即可导致整个 bundle 产物缓存失效
+
+首先说第一个问题，一般而言，一个前端页面中的 JS 代码可以分为两个部分: `Initital Chunk` 和 `Async Chunk`，前者指页面首屏所需要的 JS 代码，而后者当前页面并不一定需要，一个典型的例子就是 `路由组件`，与当前路由无关的组件并不用加载。而项目被打包成单 bundle 之后，无论是 `Initial Chunk` 还是 `Async Chunk`，都会打包进同一个产物，也就是说，浏览器加载产物代码的时候，会将两者一起加载，导致许多冗余的加载过程，从而影响页面性能。而通过 `Code Splitting` 我们可以将按需加载的代码拆分出单独的 chunk，这样应用在首屏加载时只需要加载 `Initial Chunk` 即可，避免了冗余的加载过程，使页面性能得到提升。
+
+其次，线上的 `缓存命中率` 是一个重要的性能衡量标准。对于线上站点而言，服务端一般在响应资源时加上一些 HTTP 响应头，最常见的响应头之一就是 `cache-control`，它可以指定浏览器的 `强缓存`，比如设置为下面这样:
+
+```js
+cache-control: max-age=31536000
+```
+
+表示资源过期时间为一年，在过期之前，访问 `相同的资源 url`，浏览器直接利用本地的缓存，并不用给服务端发请求，这就大大降低了页面加载的网络开销。不过，在单 chunk 打包模式下面，一旦有一行代码变动，整个 chunk 的 url 地址都会变化，比如下图所示的场景:
+
+![iShot_2023-11-08_22.23.10.png](https://s2.loli.net/2023/11/08/P7hJktbo6CY5RWO.png)
+
+由于构建工具一般会根据产物的内容生成哈希值，一旦内容变化就会导致整个 chunk 产物的强缓存失效，所以单 chunk 打包模式下的缓存命中率极低，基本为零。
+
+而进行 `Code Splitting ` 之后，代码的改动只会影响部分的 chunk 哈希改动，如下图所示:
+
+![iShot_2023-11-08_22.24.17.png](https://s2.loli.net/2023/11/08/LmAitXEUeDNJVgM.png)
+
+入口文件引用了 `A `、 `B` 、 `C` 、 `D` 四个组件，当我们修改 A 的代码后，变动的 Chunk 就只有 `A` 以及 `依赖 A 的 Chunk` 中，A 对应的 chunk 会变动，这很好理解，后者也会变动是因为相应的引入语句会变化，如这里的入口文件会发生如下内容变动:
+
+```js
+import CompA from './A.d3e2f17a.js'
+// 更新 import 语句
+import CompA from './A.a5d2f82b.js'
+```
+
+也就是说，在改动 `A` 的代码后， `B` 、 `C` 、 `D` 的 chunk 产物 url 并没有发生变化，从而可以让浏览器复用本地的强缓存，大大提升线上应用的加载性能。
+
+#### Vite 默认拆包策略
+
+在生产环境下 Vite 完全利用 Rollup 进行构建，因此拆包也是基于 Rollup 来完成的，但 Rollup 本身是一个专注 JS 库打包的工具，对应用构建的能力还尚为欠缺，Vite 正好是补足了 Rollup 应用构建的能力，在拆包能力这一块的扩展就是很好的体现。
+
+在项目中执行 `npm run build` ，接着终端会出现如下的构建信息:
+
+![iShot_2023-11-08_22.28.27.png](https://s2.loli.net/2023/11/08/UIbyV8sHFAlhorE.png)
+
+这里我来解释一下产物的结构:
+
+```txt
+.
+├── assets
+│   ├── Dynamic.3df51f7a.js // Async Chunk
+│   ├── Dynamic.f2cbf023.css // Async Chunk (CSS)
+│   ├── favicon.17e50649.svg // 静态资源
+│   ├── index.1e236845.css // Initial Chunk (CSS)
+│   ├── index.6773c114.js // Initial Chunk
+│   └── vendor.ab4b9e1f.js // 第三方包产物 Chunk
+└── index.html // 入口 HTML
+```
+
+对于 Vite 的拆包能力，从产物结构中就可见一斑。
+
+一方面 Vite 实现了自动 **CSS 代码分割**的能力，即实现一个 chunk 对应一个 css 文件，比如上面产物中 `index.js` 对应一份 `index.css` ，而按需加载的 chunk `Danamic.js` 也对应单独的一份 `Danamic.css` 文件，与 JS 文件的代码分割同理，这样做也能提升 CSS 文件的缓存复用率。
+
+而另一方面， Vite 基于 Rollup 的 `manualChunks` API 实现了 `应用拆包` 的策略:
+
+- 对于 `Initital Chunk` 而言，业务代码和第三方包代码分别打包为单独的 chunk，在上述的例子中分别对应 `index.js` 和 `vendor.js` 。需要说明的是，这是 Vite 2.9 版本之前的做法，而在 Vite 2.9 及以后的版本，默认打包策略更加简单粗暴，将所有的 js 代码全部打包到 `index.js ` 中。
+- 对于 `Async Chunk` 而言，动态 import 的代码会被拆分成单独的 chunk，如上述的 `Dynacmic` 组件。
+
+小结一下，Vite 默认拆包的优势在于实现了 CSS 代码分割与业务代码、第三方库代码、动态 import 模块代码三者的分离，但缺点也比较直观，第三方库的打包产物容易变得比较臃肿，上述例子中的 `vendor.js ` 的大小已经达到 500 KB 以上，显然是有进一步拆包的优化空间的，这个时候我们就需要用到 Rollup 中的拆包 API —— `manualChunks` 了。
+
+#### 自定义拆包策略
+
+针对更细粒度的拆包，Vite 的底层打包引擎 Rollup 提供了 manualChunks ，让我们能自定义拆包策略，它属于 Vite 配置的一部分，示例如下:
+
+```js
+// vite.config.ts
+export default {
+  build: {
+    rollupOptions: {
+      output: {
+        // manualChunks 配置
+        manualChunks: {}
+      }
+    }
+  }
+}
+```
+
+`manualChunks` 主要有两种配置的形式，可以配置为一个对象或者一个函数。我们先来看看对象的配置，也是最简单的配置方式，你可以在上述的示例项目中添加如下的 `manualChunks` 配置代码:
+
+```js
+// vite.config.ts
+{
+build: {
+    rollupOptions: {
+      output: {
+// manualChunks 配置
+manualChunks: {
+// 将 React 相关库打包成单独的 chunk 中
+'react-vendor': ['react', 'react-dom'],
+// 将 Lodash 库的代码单独打包
+'lodash': ['lodash-es'],
+// 将组件库的代码打包
+    'library': ['antd', '@arco-design/web-react'],
+    },
+},
+}
+},
+}
+```
+
+在对象格式的配置中， `key` 代表 chunk 的名称， `value` 为一个字符串数组，每一项为第三方包的包名。在进行了如上的配置之后，我们可以执行 `npm run build` 尝试一下打包:
+
+![iShot_2023-11-08_22.35.51.png](https://s2.loli.net/2023/11/08/REcDrnXvudk73Yq.png)
+
+你可以看到原来的 vendor 大文件被拆分成了我们手动指定的几个小 chunk，每个 chunk 大概 200 KB 左右，是一个比较理想的 chunk 体积。这样，当第三方包更新的时候，也只会更新其中一个 chunk 的 url，而不会全量更新，从而提高了第三方包产物的缓存命中率。
+
+除了对象的配置方式之外，我们还可以通过函数进行更加灵活的配置，而 Vite 中的默认拆包策略也是通过函数的方式来进行配置的，我们可以在 Vite 的实现中瞧一瞧:
+
+```js
+// Vite 部分源码
+function createMoveToVendorChunkFn(config: ResolvedConfig): GetManualChunk {
+const cache = new Map<string, boolean>() // 返回值为 manualChunks 的配置
+return (id, { getModuleInfo }) => {
+// Vite 默认的配置逻辑其实很简单
+// 主要是为了把 Initial Chunk 中的第三方包代码单独打包成`vendor.[hash].js`
+if (
+id.includes('node_modules') &&
+!isCSSRequest(id) &&
+// 判断是否为 Initial Chunk
+staticImportedByEntry(id, getModuleInfo, cache)
+){
+return 'vendor'
+}
+}
+}
+```
+
+Rollup 会对每一个模块调用 manualChunks 函数，在 manualChunks 的函数入参中你可以拿到 `模块 id` 及 `模块详情信息` ，经过一定的处理后返回 `chunk 文件的名称` ，这样当前 id 代表的模块便会打包到你所指定的 chunk 文件中。
+
+我们现在来试着把刚才的拆包逻辑用函数来实现一遍:
+
+```js
+manualChunks(id) {
+if (id.includes('antd') || id.includes('@arco-design/web-react')) {
+return 'library'; }
+if (id.includes('lodash')) { return 'lodash';
+}
+if (id.includes('react')) {
+return 'react'; }
+}
+```
+
+打包后结果如下:
+
+![iShot_2023-11-08_22.38.54.png](https://s2.loli.net/2023/11/08/RKxPupeArHyFmZz.png)
+
+看上去好像各个第三方包的 chunk (如 `lodash` 、 `react` 等等)都能拆分出来，但实际上你可以运行 `npx vite preview` 预览产物，会发现产物根本没有办法运行起来，页面出现白屏，同时控制台出现如下的报错:
+
+![iShot_2023-11-08_22.39.47.png](https://s2.loli.net/2023/11/08/yTbFL3S7omYnkE4.png)
+
+这也就是函数配置的坑点所在了，虽然灵活而方便，但稍不注意就陷入此类的产物错误问
+题当中。那上面的这个报错究竟是什么原因导致的呢?
+
+从报错信息追溯到产物中，可以发现 react-vendor.js 与 index.js 发生了循环引用:
+
+```js
+// react-vendor.e2c4883f.js
+import { q as objectAssign } from './index.37a7b2eb.js'
+// index.37a7b2eb.js
+import { R as React } from './react-vendor.e2c4883f.js'
+```
+
+这是很典型的 ES 模块循环引用的场景，我们可以用一个最基本的例子来复原这个场景:
+
+```js
+// a.js
+import { funcB } from './b.js'
+funcB()
+export var funcA = () => {
+  console.log('a')
+}
+// b.js
+import { funcA } from './a.js'
+funcA()
+export var funcB = () => {
+  console.log('b')
+}
+```
+
+接着我们可以执行一下 a.js 文件:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script
+      type="module"
+      src="/a.js"
+    ></script>
+  </body>
+</html>
+```
+
+在浏览器中打开会出现类似的报错:
+
+![iShot_2023-11-08_22.45.02.png](https://s2.loli.net/2023/11/08/5VZUs83zedaRvcQ.png)
+
+代码的执行原理如下:
+
+- JS 引擎执行 `a.js` 时，发现引入了 `b.js` ，于是去执行 `b.js`
+- 引擎执行 `b.js `，发现里面引入了 `a.js` (出现循环引用)，认为 `a.js` 已经加载完成，继续往下执行
+- 执行到 `funcA()` 语句时发现 funcA 并没有定义，于是报错
+
+![iShot_2023-11-08_22.47.24.png](https://s2.loli.net/2023/11/08/A56wxgWKP7vNnCY.png)
+
+而对于如上打包产物的执行过程也是同理:
+
+![iShot_2023-11-08_22.47.55.png](https://s2.loli.net/2023/11/08/tqxjaO2ybgYrEkh.png)
+
+可能你会有疑问: `react-vendor` 为什么需要引用 `index.js` 的代码呢?其实也很好理解，我们之前在 `munaulChunks` 中仅仅将路径包含 `react` 的模块打包到 `react-vendor` 中，殊不知，像 `object-assign` 这种 react 本身的依赖并没有打包进 `react-vendor` 中，而是打包到另外的 chunk 当中，从而导致如下的循环依赖关系:
+
+那我们能不能避免这种问题呢?当然是可以的，之前的 `manualChunks` 逻辑过于简单粗暴，仅仅通过路径 id 来决定打包到哪个 chunk 中，而漏掉了间接依赖的情况。如果针对像 `object-assign` 这种间接依赖，我们也能识别出它属于 react 的依赖，将其自动打包到 `react-vendor` 中，这样就可以避免循环引用的问题。
+
+我们来梳理一下解决的思路:
+
+- 确定 react 相关包的入口路径
+- 在 manualChunks 中拿到模块的详细信息，向上追溯它的引用者，如果命中 react 的路径，则将模块放到 `react-vendor` 中。
+
+接下来让我们进行实际代码的实现:
+
+```js
+// 确定 react 相关包的入口路径 const chunkGroups = {
+  'react-vendor': [
+    require.resolve('react'),
+    require.resolve('react-dom')
+], }
+// Vite 中的 manualChunks 配置
+function manualChunks(id, { getModuleInfo }) {
+for (const group of Object.keys(chunkGroups)) {
+const deps = chunkGroups[group];
+if (
+id.includes('node_modules') &&
+// 递归向上查找引用者，检查是否命中 chunkGroups 声明的包
+isDepInclude(id, deps, [], getModuleInfo)
+){
+return group;
+} }
+}
+```
+
+实际上核心逻辑包含在 `isDepInclude` 函数，用来递归向上查找引用者模块:
+
+```js
+// 缓存对象
+const cache = new Map();
+function isDepInclude (id: string, depPaths: string[], importChain: string[], getModuleInfo):
+const key = `${id}-${depPaths.join('|')}`;
+// 出现循环依赖，不考虑
+if (importChain.includes(id)) {
+    cache.set(key, false);
+	return false;
+}
+// 验证缓存
+if (cache.has(key)) {
+return cache.get(key);
+}
+// 命中依赖列表
+if (depPaths.includes(id)) {
+// 引用链中的文件都记录到缓存中
+importChain.forEach(item => cache.set(`${item}-${depPaths.join('|')}`, true));
+return true;
+}
+const moduleInfo = getModuleInfo(id);
+if (!moduleInfo || !moduleInfo.importers) {
+    cache.set(key, false);
+	return false;
+}
+// 核心逻辑，递归查找上层引用者
+const isInclude = moduleInfo.importers.some(
+importer => isDepInclude(importer, depPaths, importChain.concat(id), getModuleInfo)
+);
+// 设置缓存
+cache.set(key, isInclude);
+return isInclude;
+};
+```
+
+对于这个函数的实现，有两个地方需要大家注意:
+
+- 我们可以通过 manualChunks 提供的入参 `getModuleInfo` 来获取模块的详情 `moduleInfo`，然后通过 `moduleInfo.importers` 拿到模块的引用者，针对每个引用者又可以递归地执行这一过程，从而获取引用链的信息。
+- 尽量使用缓存。由于第三方包模块数量一般比较多，对每个模块都向上查找一遍引用链会导致开销非常大，并且会产生很多重复的逻辑，使用缓存会极大加速这一过程。
+
+完成上述 `manualChunks` 的完整逻辑后，现在我们来执行来进行打包,发现可以 `react-vendor` 可以正常拆分出来，查看他的内容：
+
+![iShot_2023-11-08_22.56.33.png](https://s2.loli.net/2023/11/08/AD2numQacO9yBMF.png)
+
+从中你可以看出 `react` 的一些间接依赖已经成功打包到了 `react-vendor` 当中，执行 `npx view preview` 预览产物页面也能正常渲染了:
+
+尽管上述的解决方案已经能帮我们正常进行产物拆包，但从实现上来看，还是显得略微繁
+琐，那么有没有开箱即用的拆包方案，能让我们直接用到项目中呢?
+
+答案是肯定的，接下来我就给大家介绍 Vite 自定义拆包的终极解决方案—— `vite-plugin-chunk-split`
+
+首先安装一下这个插件:
+
+```shell
+pnpm i vite-plugin-chunk-split -D
+```
+
+然后你可以在项目中引入并使用:
+
+```js
+// vite.config.ts
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+export default {
+chunkSplitPlugin({
+// 指定拆包策略
+customSplitting: {
+// 1. 支持填包名。`react` 和 `react-dom` 会被打包到一个名为`render-vendor`的 chunk 里面
+'react-vendor': ['react', 'react-dom'],
+// 2. 支持填正则表达式。src 中 components 和 utils 下的所有文件被会被打包为`component-util`
+'components-util': [/src\/components/, /src\/utils/]
+}
+})
+}
+```
+
+相比于手动操作依赖关系，使用插件只需几行配置就能完成，非常方便。当然，这个插件还可以支持多种打包策略，包括 unbundle 模式打包，你可以去[使用文档](https://github.com/sanyuan0704/vite-plugin-chunk-split/blob/master/README-CN.md) 探索更多使用方式。
 
 ## 源码阅读
 
