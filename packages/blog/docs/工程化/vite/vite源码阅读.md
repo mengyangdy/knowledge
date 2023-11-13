@@ -1,5 +1,9 @@
 ---
-title:
+title: vite源码阅读
+tags:
+  - vite
+date: 2023-11-13
+cover: https://my-vitepress-blog.sh1a.qingstor.com/202311131421439.jpg
 ---
 
 # vite 源码阅读

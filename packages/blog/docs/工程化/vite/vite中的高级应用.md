@@ -3,7 +3,7 @@ title: vite中的高级应用
 tags:
   - vite
 date: 2023-11-09
-cover:
+cover: https://my-vitepress-blog.sh1a.qingstor.com/202311131423374.jpg
 ---
 
 ## vite 实战

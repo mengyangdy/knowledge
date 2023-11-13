@@ -1,11 +1,11 @@
 ---
-title: vite中使用的底层引擎
+title: vite中使用的底层引擎esbuild和rollup
 tags:
   - vite
   - rollup
   - esbuild
 date: 2023-11-09
-cover:
+cover: https://my-vitepress-blog.sh1a.qingstor.com/202311131423438.jpg
 ---
 
 ## rollup 和 esbuild 使用

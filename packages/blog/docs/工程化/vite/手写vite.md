@@ -3,7 +3,7 @@ title: 手写vite
 tags:
   - vite
 date: 2023-11-11
-cover:
+cover: https://my-vitepress-blog.sh1a.qingstor.com/202311131418701.jpg
 ---
 
 # 手写 vite
@@ -14,8 +14,7 @@ cover:
 
 然后我们正式开始实现依赖预构建的功能，通过 Esbuild 实现依赖扫描和依赖构建的功能。
 
-接着开始搭建 Vite 的插件机制，也就是开  
-发 PluginContainer 和 PluginContext 两个主要的对象。
+接着开始搭建 Vite 的插件机制，也就是开发 PluginContainer 和 PluginContext 两个主要的对象。
 
 搭建完插件机制之后，我们将会开发一系列的插件来实现 no-bundle 服务的编译构建能力，包括入口 HTML 处理、 TS/TSX/JS/TSX 编译、CSS 编译和静态资源处理。
 
