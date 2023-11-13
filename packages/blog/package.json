@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs",
-    "typecheck": "tsc --noEmit"
+    "preview": "vitepress preview docs"
   },
   "dependencies": {
     "@dylanjs/vitepress-theme": "workspace:*",

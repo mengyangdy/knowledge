@@ -63,6 +63,9 @@ importers:
       sass:
         specifier: ^1.65.1
         version: 1.65.1
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
       vitepress:
         specifier: 1.0.0-rc.4
         version: 1.0.0-rc.4(@types/node@20.4.10)(sass@1.65.1)
