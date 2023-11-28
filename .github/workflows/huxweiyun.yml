@@ -19,10 +19,10 @@ jobs:
           node-version: "18"  # 指定你的node版本
       - name: TranslateFile
         run: |
-        npm install -g pnpm
-        cd ./packages/blog
-        pnpm i
-        pnpm run build
+          npm install -g pnpm
+          cd ./packages/blog
+          pnpm i
+          pnpm run build
 
       - name: 连接服务器
         # uses: wangyucode/sftp-upload-action@24f8bb83383dc39bed201ee5da01475e6c38c568
