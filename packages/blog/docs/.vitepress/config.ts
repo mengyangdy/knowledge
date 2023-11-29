@@ -1,6 +1,5 @@
 import { defineConfig, getThemeConfig } from '@dylanjs/vitepress-theme/node'
 
-import themePkg from '@dylanjs/vitepress-theme/package.json'
 
 // https://vitepress.dev/reference/site-config
 
@@ -124,8 +123,8 @@ export default defineConfig({
   themeConfig: {
     lastUpdatedText: '上次更新于',
     footer: {
-      // message: '<a target="_blank" href="https://beian.miit.gov.cn/">备案信息</a>',
-      copyright: `© 2023-present Dylan | <a href="https://github.com/mengyang94982/knowledge/tree/master/packages/theme">@dylanjs/vitepress-theme@${themePkg.version} </a>`
+      message: '<a target="_blank" href="https://beian.miit.gov.cn/">豫ICP备2023033003</a>',
+      copyright: `© 2023-present Dylan`
     },
     logo: '/logo.png',
     search: {
