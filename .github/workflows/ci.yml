@@ -41,6 +41,7 @@ jobs:
       # 打包
       - name: Build
         run: |
+          cd ./packages/blog
           pnpm run build
           zip -r vitepress ./docs/.vitepress/dist
       # 产物上传到服务器
