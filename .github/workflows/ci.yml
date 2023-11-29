@@ -40,6 +40,7 @@ jobs:
           pnpm install
       # 打包
       - name: Build
+        run: |
           pnpm run build
           zip -r vitepress ./docs/.vitepress/dist
       # 产物上传到服务器
