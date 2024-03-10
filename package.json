@@ -1,31 +1,19 @@
 {
   "name": "knowledge",
-  "version": "0.0.3",
-  "private": true,
-  "description": "DylanJS's 的知识库",
+  "version": "1.0.0",
+  "description": "",
   "scripts": {
-    "blog:dev": "pnpm --filter 'blog' dev",
-    "blog:build": "pnpm --filter 'blog' build",
-    "blog:preview": "pnpm --filter 'blog' preview",
-    "stub": "pnpm -r run stub",
-    "lint": "dy prettier-write && eslint . --fix",
-    "cm": "git add . && dy git-commit",
-    "cleanup": "dy cleanup",
-    "ncu": "dy taze",
-    "typecheck": "tsc --noEmit",
-    "build": "pnpm -r run typecheck && pnpm -r run build",
-    "release": "dy release && pnpm build && pnpm publish-pkg",
-    "publish-pkg": "pnpm -r publish --access public",
-    "prepare": "dy init-simple-git-hooks"
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@dylanjs/cli": "^0.0.14",
-    "@dylanjs/eslint-config": "^0.0.7",
-    "eslint": "^8.49.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.3",
-    "simple-git-hooks": "2.9.0"
+    "naive-ui": "^2.38.1",
+    "sass": "^1.71.1",
+    "vitepress": "1.0.0-rc.45"
   },
   "pnpm": {
     "peerDependencyRules": {
@@ -35,8 +23,9 @@
       ]
     }
   },
-  "simple-git-hooks": {
-    "commit-msg": "pnpm dy git-commit-verify",
-    "pre-commit": "pnpm dy lint-staged"
+  "dependencies": {
+    "@types/node": "^20.11.25",
+    "@vueuse/core": "^10.9.0",
+    "vue": "^3.4.21"
   }
 }

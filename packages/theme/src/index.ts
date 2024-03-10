@@ -1,26 +1,19 @@
-import './styles/index.scss'
-
-import 'element-plus/dist/index.css'
-import 'element-plus/theme-chalk/dark/css-vars.css'
-
-import type {Theme} from "vitepress";
+import type {Theme} from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import App from './components/App.vue'
-import {withConfigProvider} from "./composables/config/blog";
 
-import TimeLinePage from "./components/TimeLinePage.vue";
-import UserWorksPage from "./components/UserWorksPage.vue";
+import {enhanceAppWithTabs} from 'vitepress-plugin-tabs/client'
 
-export const BlogTheme:Theme={
+import {withConfigProvider} from "./shared/blog";
+
+import BlogApp from './modules/BlogApp.vue'
+
+const BlogTheme:Theme={
   ...DefaultTheme,
-  Layout:withConfigProvider(App),
+  Layout:withConfigProvider(BlogApp),
   enhanceApp(ctx){
+    enhanceAppWithTabs(ctx.app as any)
     DefaultTheme.enhanceApp(ctx)
-    ctx.app.component('TimelinePage',TimeLinePage)
-    ctx.app.component('UserWorksPage',UserWorksPage)
   }
 }
-
-export * from './composables/config'
 
 export default BlogTheme
