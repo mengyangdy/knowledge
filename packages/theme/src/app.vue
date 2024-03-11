@@ -2,6 +2,7 @@
   <Layout>
     <template #layout-top>
       <slot name="layout-top" />
+      <BlogAlert />
     </template>
     <template #doc-before>
 
@@ -28,6 +29,9 @@
 import Theme from 'vitepress/theme'
 import {useData} from "vitepress";
 import {computed} from "vue";
+import {useBlogThemeMode} from '../shared/blog'
+
+import BlogAlert from "./BlogAlert.vue";
 
 const {frontmatter}=useData()
 const layout=computed(()=>frontmatter.value.layout)

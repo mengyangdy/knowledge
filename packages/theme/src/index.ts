@@ -15,5 +15,7 @@ const BlogTheme:Theme={
     DefaultTheme.enhanceApp(ctx)
   }
 }
+export * from './shared/index'
+// export * from './utils'
 
 export default BlogTheme
