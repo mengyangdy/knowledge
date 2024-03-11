@@ -1,10 +1,9 @@
-import BlogTheme from "@dy/vitepress-theme";
-import {h} from 'vue'
+import BlogTheme from '@dy/vitepress-theme'
+import type {EnhanceAppContext} from 'vitepress'
 
 export default {
   ...BlogTheme,
-  Layout:h(BlogTheme.Layout,undefined,{}),
-  enhanceApp(ctx:any) {
-    BlogTheme?.enhanceApp?.(ctx)
+  enhanceApp:(ctx:EnhanceAppContext)=> {
+    const {app}=ctx
   }
 }

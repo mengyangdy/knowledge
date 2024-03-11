@@ -9,10 +9,9 @@
 <script setup lang="ts">
 import {onMounted,ref} from "vue";
 import {NAlert} from 'naive-ui'
-import {useBlogConfig} from "../shared/blog";
+import {useBlogConfig} from "../../shared";
 
 const {alert:alertProps}=useBlogConfig()
-console.log("=>(BlogAlert.vue:14) alertProps", alertProps);
 const show=ref(false)
 const storageKey='theme-blog-alert'
 const closeFlag=`${storageKey}-close`
@@ -43,12 +42,12 @@ onMounted(()=>{
 
 })
 
-function handleClose(){
-  show.value=false
-  if (alertProps?.duration === -1){
-    localStorage.setItem(closeFlag,`${+new Date()}`)
-  }
-}
+// function handleClose(){
+//   show.value=false
+//   if (alertProps?.duration === -1){
+//     localStorage.setItem(closeFlag,`${+new Date()}`)
+//   }
+// }
 
 </script>
 

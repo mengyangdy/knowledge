@@ -1,12 +1,9 @@
-import process from 'node:process'
-import type {Theme} from "@dy/vitepress-theme";
-import {getThemeConfig} from "@dy/vitepress-theme";
+import {getThemeConfig} from "@dy/vitepress-theme/node";
+import {defineConfig} from "vitepress";
 
-
-export const blogTheme=getThemeConfig({
-  author:'Dylan',
-  popover:{
-    title:'公告',
+const blogTheme=getThemeConfig({
+  popover: {
+    title: '公告',
     body: [
       { type: 'text', content: '👇公众号👇---👇 微信 👇' },
       {
@@ -15,17 +12,12 @@ export const blogTheme=getThemeConfig({
       },
       {
         type: 'text',
-        content: '欢迎大家加群&私信交流'
-      },
-      {
-        type: 'text',
-        content: '文章首/文尾有群二维码',
-        style: 'padding-top:0'
+        content: '欢迎大家私信&加群交流'
       },
       {
         type: 'button',
-        content: '作者博客',
-        link: 'https://sugarat.top'
+        content: '关于作者',
+        link: '/aboutme'
       },
       {
         type: 'button',
@@ -33,9 +25,17 @@ export const blogTheme=getThemeConfig({
         props: {
           type: 'success'
         },
-        link: '/group.html',
+        link: '/group',
       }
     ],
-    duration:0
+    duration: -1
+  },
+})
+
+export default defineConfig({
+  extends: blogTheme,
+  themeConfig:{
+    lastUpdatedText: '上次更新于',
+    logo: '/logo.png',
   }
 })

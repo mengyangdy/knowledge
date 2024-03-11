@@ -1,1 +1,1 @@
-export function getList() {}
+export * from './blog'

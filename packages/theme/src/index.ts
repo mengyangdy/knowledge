@@ -1,21 +1,18 @@
 import type {Theme} from 'vitepress'
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from "vitepress/theme";
 
-import {enhanceAppWithTabs} from 'vitepress-plugin-tabs/client'
+import {withConfigProvider} from "./shared";
 
-import {withConfigProvider} from "./shared/blog";
+import App from './app.vue'
 
-import BlogApp from './modules/BlogApp.vue'
+import './styles/index.scss'
 
 const BlogTheme:Theme={
   ...DefaultTheme,
-  Layout:withConfigProvider(BlogApp),
-  enhanceApp(ctx){
-    enhanceAppWithTabs(ctx.app as any)
-    DefaultTheme.enhanceApp(ctx)
-  }
+  Layout:withConfigProvider(App)
 }
-export * from './shared/index'
-// export * from './utils'
+
+export * from './typings'
+export * from './shared'
 
 export default BlogTheme
