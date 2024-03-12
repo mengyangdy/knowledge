@@ -10,7 +10,7 @@
       <ClientOnly>
         <ArticleAnalyze />
         <!--图片预览-->
-        <ImagePreview />
+        <!--<ImagePreview />-->
       </ClientOnly>
     </template>
     <template #nav-bar-content-before>
@@ -175,8 +175,8 @@ const {Layout}=Theme
   }
   .blog-info-wrapper{
     margin-left: 16px;
-    position: sticky;
-    top: 100px;
+    //position: sticky;
+    //top: 100px;
   }
 
 }
@@ -188,8 +188,8 @@ const {Layout}=Theme
 @media screen and (max-width: 959px) {
   .blog-info-wrapper{
     margin-left: 16px;
-    position: sticky;
-    top: 40px;
+    //position: sticky;
+    //top: 40px;
   }
 }
 @media screen and (max-width: 767px) {

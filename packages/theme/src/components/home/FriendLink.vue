@@ -28,12 +28,16 @@
       }"
     >
       <ol class="friend-list swiper-wrapper">
-        <li v-for=" (item, index) in friendList" :key="index" class="swiper-slide">
+        <li v-for="(item,index) in friendList" :key="index">
           <a :href="item.url" target="_blank">
             <NAvatar :size="50" :src="item.avatar" />
             <div class="info-wrapper">
-              <span class="nickname">{{ item.nickname }}</span>
-              <p class="des">{{ item.des }}</p>
+              <span class="nickname">
+                {{item.nickname}}
+              </span>
+              <p class="des">
+                {{item.des}}
+              </p>
             </div>
           </a>
         </li>
@@ -47,9 +51,9 @@ import { NAvatar } from 'naive-ui'
 import { useDark, useIntervalFn } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import Swiper from 'swiper'
-import { useBlogConfig } from '../composables/config/blog'
-import { getImageUrl, shuffleArray } from '../utils/client'
-import type { Theme } from '../'
+import { useBlogConfig } from '../../shared'
+import { getImageUrl, shuffleArray } from '../../utils'
+import type { Theme } from '../../typings'
 
 const isDark = useDark({
   storageKey: 'vitepress-theme-appearance'

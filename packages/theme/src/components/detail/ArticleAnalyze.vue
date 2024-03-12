@@ -1,27 +1,101 @@
+<template>
+  <div v-if="showAnalyze && readingTimePosition === 'top'" class="doc-analyze" data-pagefind-ignore="all">
+    <span>
+      <NIcon :size="12">
+        <PencilAlt/>
+      </NIcon>
+      字数：{{ wordCount }} 个字
+    </span>
+    <span>
+      <NIcon :size="14">
+        <AlarmOutline/>
+      </NIcon>
+      预计：{{ readTime }} 分钟
+    </span>
+  </div>
+  <div id="hack-article-des" ref="$des" class="meta-des">
+    <!-- TODO：是否需要原创？转载等标签，理论上可以添加标签解决，可以参考 charles7c -->
+    <span v-if="author && !hiddenAuthor" class="author" title="本文作者">
+      <NIcon :size="11">
+        <UserAlt/>
+      </NIcon>
+      <a
+        v-if="currentAuthorInfo"
+        class="link"
+        :href="currentAuthorInfo.url"
+        :title="currentAuthorInfo.des"
+      >
+        {{ currentAuthorInfo.nickname }}
+      </a>
+      <template v-else>
+        {{ author }}
+      </template>
+    </span>
+    <span v-if="publishDate && !hiddenTime" class="publishDate" :title="timeTitle">
+      <NIcon :size="14">
+        <TimeOutline/>
+      </NIcon>
+      {{ publishDate }}
+    </span>
+    <span v-if="tags.length" class="tags" title="标签">
+      <NIcon :size="13">
+        <Pricetags/>
+      </NIcon>
+      <a v-for="tag in tags" :key="tag" class="link" :href="`/?tag=${tag}`">{{ tag }}
+      </a>
+    </span>
+    <template v-if="readingTimePosition === 'inline' && showAnalyze">
+      <span title="文章字数">
+        <NIcon :size="12">
+        <PencilAlt/>
+      </NIcon>
+        {{ wordCount }} 个字
+      </span>
+      <span title="预计阅读时间">
+         <NIcon :size="14">
+        <AlarmOutline/>
+      </NIcon>
+        {{ readTime }} 分钟
+      </span>
+    </template>
+    <template v-if="readingTimePosition === 'newLine' && showAnalyze">
+      <div style="width: 100%;" class="new-line-meta-des">
+        <span title="文章字数">
+          <!--<ElIcon><EditPen /></ElIcon>-->
+          {{ wordCount }} 个字
+        </span>
+        <span title="预计阅读时间">
+          <!--<ElIcon><AlarmClock /></ElIcon>-->
+          {{ readTime }} 分钟
+        </span>
+      </div>
+    </template>
+    <!-- 封面展示 -->
+    <!--<ClientOnly>-->
+    <!--  <DocCover />-->
+    <!--</ClientOnly>-->
+  </div>
+</template>
+
 <script lang="ts" setup>
+import {PencilAlt, UserAlt} from '@vicons/fa'
+import {AlarmOutline, Pricetags, TimeOutline} from '@vicons/ionicons5'
+import {NIcon} from 'naive-ui'
+// import DocCover from "../home/DocCover.vue";
 // 阅读时间计算方式参考
 // https://zhuanlan.zhihu.com/p/36375802
-import { useData, useRoute } from 'vitepress'
-import { computed, onMounted, ref, watch } from 'vue'
-import { ElIcon } from 'element-plus'
-import {
-  AlarmClock,
-  Clock,
-  CollectionTag,
-  EditPen,
-  UserFilled
-} from '@element-plus/icons-vue'
-import { useBlogConfig, useCurrentArticle, useDocMetaInsertPosition, useDocMetaInsertSelector } from '../composables/config/blog'
-import countWord, { formatShowDate } from '../utils/client'
-import type { Theme } from '../composables/config'
-import BlogDocCover from './BlogDocCover.vue'
+import {useData, useRoute} from 'vitepress'
+import {computed, onMounted, ref, watch} from 'vue'
+import {useBlogConfig, useCurrentArticle, useDocMetaInsertPosition, useDocMetaInsertSelector} from '../../shared'
+import type {Theme} from '../../typings'
+import {countWord, formatShowDate} from '../../utils'
 
-const { article, authorList } = useBlogConfig()
+const {article, authorList} = useBlogConfig()
 const readingTimePosition = article?.readingTimePosition || 'inline'
 
-const { frontmatter } = useData()
+const {frontmatter} = useData()
 const tags = computed(() => {
-  const { tag, tags, categories } = frontmatter.value
+  const {tag, tags, categories} = frontmatter.value
   return [
     ...new Set(
       []
@@ -113,16 +187,19 @@ const timeTitle = computed(() =>
 )
 const hiddenTime = computed(() => frontmatter.value.date === false)
 
-const { theme } = useData<Theme.Config>()
+const {theme} = useData<Theme.Config>()
 const globalAuthor = computed(() => theme.value.blog?.author || '')
 const author = computed(
   () =>
     (frontmatter.value.author || currentArticle.value?.meta.author)
     ?? globalAuthor.value
 )
+
+
 const currentAuthorInfo = computed(() =>
   authorList?.find(v => author.value === v.nickname)
 )
+
 const hiddenAuthor = computed(() => frontmatter.value.author === false)
 
 watch(
@@ -137,71 +214,6 @@ watch(
 )
 </script>
 
-<template>
-  <div v-if="showAnalyze && readingTimePosition === 'top'" class="doc-analyze" data-pagefind-ignore="all">
-    <span>
-      <ElIcon><EditPen /></ElIcon>
-      字数：{{ wordCount }} 个字
-    </span>
-    <span>
-      <ElIcon><AlarmClock /></ElIcon>
-      预计：{{ readTime }} 分钟
-    </span>
-  </div>
-  <div id="hack-article-des" ref="$des" class="meta-des">
-    <!-- TODO：是否需要原创？转载等标签，理论上可以添加标签解决，可以参考 charles7c -->
-    <span v-if="author && !hiddenAuthor" class="author" title="本文作者">
-      <ElIcon><UserFilled /></ElIcon>
-      <a
-        v-if="currentAuthorInfo"
-        class="link"
-        :href="currentAuthorInfo.url"
-        :title="currentAuthorInfo.des"
-      >
-        {{ currentAuthorInfo.nickname }}
-      </a>
-      <template v-else>
-        {{ author }}
-      </template>
-    </span>
-    <span v-if="publishDate && !hiddenTime" class="publishDate" :title="timeTitle">
-      <ElIcon><Clock /></ElIcon>
-      {{ publishDate }}
-    </span>
-    <span v-if="tags.length" class="tags" title="标签">
-      <ElIcon><CollectionTag /></ElIcon>
-      <a v-for="tag in tags" :key="tag" class="link" :href="`/?tag=${tag}`">{{ tag }}
-      </a>
-    </span>
-    <template v-if="readingTimePosition === 'inline' && showAnalyze">
-      <span title="文章字数">
-        <ElIcon><EditPen /></ElIcon>
-        {{ wordCount }} 个字
-      </span>
-      <span title="预计阅读时间">
-        <ElIcon><AlarmClock /></ElIcon>
-        {{ readTime }} 分钟
-      </span>
-    </template>
-    <template v-if="readingTimePosition === 'newLine' && showAnalyze">
-      <div style="width: 100%;" class="new-line-meta-des">
-        <span title="文章字数">
-          <ElIcon><EditPen /></ElIcon>
-          {{ wordCount }} 个字
-        </span>
-        <span title="预计阅读时间">
-          <ElIcon><AlarmClock /></ElIcon>
-          {{ readTime }} 分钟
-        </span>
-      </div>
-    </template>
-    <!-- 封面展示 -->
-    <ClientOnly>
-      <BlogDocCover />
-    </ClientOnly>
-  </div>
-</template>
-
 <style lang="scss" scoped>
 .doc-analyze {
   color: var(--vp-c-text-2);
@@ -209,39 +221,54 @@ watch(
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
+
   span {
     margin-right: 16px;
     display: flex;
     align-items: center;
+
     .el-icon {
+      margin-right: 4px;
+    }
+
+    .n-icon {
       margin-right: 4px;
     }
   }
 }
-.meta-des,.new-line-meta-des {
+
+.meta-des, .new-line-meta-des {
   text-align: left;
   color: var(--vp-c-text-2);
   font-size: 14px;
   margin-top: 6px;
   display: flex;
   flex-wrap: wrap;
-  >span {
+
+  > span {
     margin-right: 16px;
     display: flex;
     align-items: center;
+
     .el-icon {
+      margin-right: 4px;
+    }
+
+    .n-icon {
       margin-right: 4px;
     }
   }
 
   .link {
     color: var(--vp-c-text-2);
+
     &:hover {
       color: var(--vp-c-brand-1);
       cursor: pointer;
     }
   }
 }
+
 .tags {
   a.link:not(:last-child) {
     &::after {

@@ -4,6 +4,7 @@ import NavData from './nav'
 import HeadData from './head'
 
 const blogTheme=getThemeConfig({
+  author: 'Dylan',
   popover: {
     title: '公告',
     body: [
@@ -32,6 +33,13 @@ const blogTheme=getThemeConfig({
     ],
     duration: -1
   },
+  authorList: [
+    {
+      nickname: 'Dylan',
+      url: 'http://mengyang.online',
+      des: '前端成长之路'
+    }
+  ],
   footer: {
     copyright: `粥里有勺糖 2018 - ${new Date().getFullYear()}`,
     icpRecord: {

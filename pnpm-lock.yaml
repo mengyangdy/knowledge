@@ -48,6 +48,9 @@ importers:
       sass:
         specifier: ^1.71.1
         version: 1.71.1
+      swiper:
+        specifier: ^11.0.7
+        version: 11.0.7
       vitepress-plugin-rss:
         specifier: ^0.2.2
         version: 0.2.2
@@ -55,6 +58,9 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(vitepress@1.0.0-rc.45)(vue@3.4.21)
     devDependencies:
+      '@vicons/fa':
+        specifier: ^0.12.0
+        version: 0.12.0
       '@vicons/ionicons5':
         specifier: ^0.12.0
         version: 0.12.0
@@ -684,6 +690,10 @@ packages:
 
   /@types/web-bluetooth@0.0.20:
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
+
+  /@vicons/fa@0.12.0:
+    resolution: {integrity: sha512-g2PIeJLsTHUjt6bK63LxqC0uYQB7iu+xViJOxvp1s8b9/akpXVPVWjDTTsP980/0KYyMMe4U7F/aUo7wY+MsXA==}
+    dev: true
 
   /@vicons/ionicons5@0.12.0:
     resolution: {integrity: sha512-Iy1EUVRpX0WWxeu1VIReR1zsZLMc4fqpt223czR+Rpnrwu7pt46nbnC2ycO7ItI/uqDLJxnbcMC7FujKs9IfFA==}
@@ -1710,6 +1720,11 @@ packages:
       pirates: 4.0.6
       ts-interface-checker: 0.1.13
     dev: true
+
+  /swiper@11.0.7:
+    resolution: {integrity: sha512-cDfglW1B6uSmB6eB6pNmzDTNLmZtu5bWWa1vak0RU7fOI9qHjMzl7gVBvYSl34b0RU2N11HxxETJqQ5LeqI1cA==}
+    engines: {node: '>= 4.7.0'}
+    dev: false
 
   /tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}

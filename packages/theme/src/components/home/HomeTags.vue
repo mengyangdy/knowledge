@@ -23,14 +23,15 @@
           fill="#D3D3D3" p-id="4294"
         />
       </svg> 标签</span>
-      <ElTag v-if="activeTag.label" :type="activeTag.type as any" :effect="colorMode" closable @close="handleCloseTag">
+      <NTag v-if="activeTag.label" :type="activeTag.type as any" :effect="colorMode" closable @close="handleCloseTag">
         {{ activeTag.label }}
-      </ElTag>
+      </NTag>
     </div>
     <!-- 标签列表 -->
     <ul class="tag-list">
       <li v-for="(tag, idx) in tags" :key="tag">
         <NTag
+          style="cursor: pointer"
           :type="tagType[idx % tagType.length]" :effect="colorMode"
           @click="handleTagClick(tag, tagType[idx % tagType.length])"
         >
@@ -67,7 +68,7 @@ const isDark = useDark({
 
 const colorMode = computed(() => (isDark.value ? 'light' : 'dark'))
 
-const tagType: any = ['', 'info', 'success', 'warning', 'danger']
+const tagType: any = ['default','primary', 'info', 'success', 'warning', 'error']
 const currentPage = useCurrentPageNum()
 const router = useRouter()
 

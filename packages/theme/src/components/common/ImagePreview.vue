@@ -1,5 +1,13 @@
+<template>
+  <!--<ElImageViewer-->
+  <!--  v-if="show" :infinite="false" hide-on-click-modal teleported :url-list="previewImageInfo.list"-->
+  <!--  :initial-index="previewImageInfo.idx" @close="show = false"-->
+  <!--/>-->
+  <div>图片预览</div>
+</template>
+
 <script setup lang="ts">
-import { ElImageViewer } from 'element-plus'
+// import { ElImageViewer } from 'element-plus'
 import { onMounted, onUnmounted, reactive, ref } from 'vue'
 
 const show = ref(false)
@@ -44,9 +52,4 @@ onUnmounted(() => {
 })
 </script>
 
-<template>
-  <ElImageViewer
-    v-if="show" :infinite="false" hide-on-click-modal teleported :url-list="previewImageInfo.list"
-    :initial-index="previewImageInfo.idx" @close="show = false"
-  />
-</template>
+

@@ -1,3 +1,5 @@
+import type {ThemeableImage} from '../../typings'
+
 export function shuffleArray(arr: any[]) {
   const array = [...arr]
   for (let i = array.length - 1; i > 0; i--) {
@@ -70,4 +72,44 @@ export function formatShowDate(date: Date | string) {
   }
 
   return formatDate(new Date(date), 'yyyy-MM-dd')
+}
+
+export function getImageUrl(
+  image: ThemeableImage,
+  isDarkMode: boolean
+): string {
+  if (typeof image === 'string') {
+    // 如果 ThemeableImage 类型为 string，则直接返回字符串
+    return image
+  }
+  if ('src' in image) {
+    // 如果 ThemeableImage 类型是一个对象，并且对象有 src 属性，则返回 src 属性对应的字符串
+    return image.src
+  }
+  if ('light' in image && 'dark' in image) {
+    // 如果 ThemeableImage 类型是一个对象，并且对象同时有 light 和 dark 属性，则根据 isDarkMode 返回对应的 URL
+    return isDarkMode ? image.dark : image.light
+  } // 如果 ThemeableImage 类型不是上述情况，则返回空字符串
+  return ''
+}
+
+const pattern
+  = /[a-zA-Z0-9_\u0392-\u03C9\u00C0-\u00FF\u0600-\u06FF\u0400-\u04FF]+|[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF\u3040-\u309F\uAC00-\uD7AF]+/g
+
+// copy from https://github.com/youngjuning/vscode-juejin-wordcount/blob/main/count-word.ts
+export function countWord(data: string) {
+  const m = data.match(pattern)
+  let count = 0
+  if (!m) {
+    return 0
+  }
+  for (let i = 0; i < m.length; i += 1) {
+    if (m[i].charCodeAt(0) >= 0x4E00) {
+      count += m[i].length
+    }
+    else {
+      count += 1
+    }
+  }
+  return count
 }

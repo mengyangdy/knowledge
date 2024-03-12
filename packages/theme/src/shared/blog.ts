@@ -10,12 +10,15 @@ const currentPageNum: InjectionKey<Ref<number>> = Symbol('home-page-num')
 const homeConfigSymbol: InjectionKey<Theme.HomeConfig> = Symbol('home-config')
 const userWorks: InjectionKey<Ref<Theme.UserWorks>> = Symbol('user-works')
 
+const homeFooter: InjectionKey<Theme.Footer | Theme.Footer[] | undefined> = Symbol('home-footer')
+
 export function withConfigProvider (App:Component) {
   return defineComponent({
     name:'ConfigProvider',
     setup(_,{slots}){
       const {theme}=useData()
       const config=computed(()=>resolveConfig(theme.value))
+      provide(homeFooter, config.value.blog?.footer)
       provide(configSymbol,config)
       provide(userWorks, ref(config.value.blog?.works || {
         title: '',
@@ -96,4 +99,20 @@ export function useCurrentArticle () {
 
 export function useUserWorks () {
   return inject(userWorks)!
+}
+
+export function useDocMetaInsertPosition() {
+  const blogConfig = useConfig()
+  const { frontmatter } = useData()
+  return computed(() => frontmatter.value?.docMetaInsertPosition || blogConfig.config?.blog?.docMetaInsertPosition || 'after')
+}
+
+export function useDocMetaInsertSelector() {
+  const blogConfig = useConfig()
+  const { frontmatter } = useData()
+  return computed(() => frontmatter.value?.docMetaInsertSelector || blogConfig.config?.blog?.docMetaInsertSelector || 'h1')
+}
+
+export function useHomeFooterConfig() {
+  return inject(homeFooter)
 }
