@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import {BlogPopover} from "@sugarat/theme";
+import {BlogPopover} from "../../typings";
 import {parseStringStyle} from '@vue/shared'
 import {NButton} from 'naive-ui'
 import {computed, h, onMounted, ref} from "vue";

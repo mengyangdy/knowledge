@@ -27,12 +27,24 @@ importers:
       sass:
         specifier: ^1.71.1
         version: 1.71.1
+      vite:
+        specifier: ^5.1.6
+        version: 5.1.6(@types/node@20.11.25)(sass@1.71.1)
       vitepress:
         specifier: 1.0.0-rc.45
-        version: 1.0.0-rc.45(@types/node@20.11.25)(sass@1.71.1)(typescript@5.4.2)
+        version: 1.0.0-rc.45(@types/node@20.11.25)(sass@1.71.1)
 
   packages/theme:
     dependencies:
+      '@vueuse/core':
+        specifier: ^10.9.0
+        version: 10.9.0(vue@3.4.21)
+      fast-glob:
+        specifier: ^3.3.2
+        version: 3.3.2
+      gray-matter:
+        specifier: ^4.0.3
+        version: 4.0.3
       sass:
         specifier: ^1.71.1
         version: 1.71.1
@@ -686,6 +698,17 @@ packages:
     dependencies:
       vite: 5.1.5(@types/node@20.11.25)(sass@1.71.1)
       vue: 3.4.21(typescript@5.4.2)
+
+  /@vitejs/plugin-vue@5.0.4(vite@5.1.6)(vue@3.4.21):
+    resolution: {integrity: sha512-WS3hevEszI6CEVEx28F8RjTX97k3KsrcY6kvTg7+Whm5y3oYvcqzVeGCU3hxSAn4uY2CLCkeokkGKpoctccilQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    peerDependencies:
+      vite: ^5.0.0
+      vue: ^3.2.25
+    dependencies:
+      vite: 5.1.6(@types/node@20.11.25)(sass@1.71.1)
+      vue: 3.4.21(typescript@5.4.2)
+    dev: true
 
   /@vue/compiler-core@3.4.21:
     resolution: {integrity: sha512-MjXawxZf2SbZszLPYxaFCjxfibYrzr3eYbKxwpLR9EQN+oaziSu3qKVbwBERj1IFIB8OLUewxB5m/BFzi613og==}
@@ -1825,6 +1848,43 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
+  /vite@5.1.6(@types/node@20.11.25)(sass@1.71.1):
+    resolution: {integrity: sha512-yYIAZs9nVfRJ/AiOLCA91zzhjsHUgMjB+EigzFb6W2XTLO8JixBCKCjvhKZaye+NKYHCrkv3Oh50dH9EdLU2RA==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 20.11.25
+      esbuild: 0.19.12
+      postcss: 8.4.35
+      rollup: 4.12.1
+      sass: 1.71.1
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
   /vitepress-plugin-rss@0.2.2:
     resolution: {integrity: sha512-d/IkQffeNe3HO9gFmJS6hk/dfX085tmOcezYM4EAPraaN+zz1UdZiYTpvQsxRQTYLpQZt/OsmL7Ker4bVRQ0Cw==}
     dependencies:
@@ -1842,6 +1902,61 @@ packages:
       vitepress: 1.0.0-rc.45(@types/node@20.11.25)(sass@1.71.1)(typescript@5.4.2)
       vue: 3.4.21(typescript@5.4.2)
     dev: false
+
+  /vitepress@1.0.0-rc.45(@types/node@20.11.25)(sass@1.71.1):
+    resolution: {integrity: sha512-/OiYsu5UKpQKA2c0BAZkfyywjfauDjvXyv6Mo4Ra57m5n4Bxg1HgUGoth1CLH2vwUbR/BHvDA9zOM0RDvgeSVQ==}
+    hasBin: true
+    peerDependencies:
+      markdown-it-mathjax3: ^4.3.2
+      postcss: ^8.4.35
+    peerDependenciesMeta:
+      markdown-it-mathjax3:
+        optional: true
+      postcss:
+        optional: true
+    dependencies:
+      '@docsearch/css': 3.6.0
+      '@docsearch/js': 3.6.0
+      '@shikijs/core': 1.1.7
+      '@shikijs/transformers': 1.1.7
+      '@types/markdown-it': 13.0.7
+      '@vitejs/plugin-vue': 5.0.4(vite@5.1.6)(vue@3.4.21)
+      '@vue/devtools-api': 7.0.16(vue@3.4.21)
+      '@vueuse/core': 10.9.0(vue@3.4.21)
+      '@vueuse/integrations': 10.9.0(focus-trap@7.5.4)(vue@3.4.21)
+      focus-trap: 7.5.4
+      mark.js: 8.11.1
+      minisearch: 6.3.0
+      shiki: 1.1.7
+      vite: 5.1.6(@types/node@20.11.25)(sass@1.71.1)
+      vue: 3.4.21(typescript@5.4.2)
+    transitivePeerDependencies:
+      - '@algolia/client-search'
+      - '@types/node'
+      - '@types/react'
+      - '@vue/composition-api'
+      - async-validator
+      - axios
+      - change-case
+      - drauu
+      - fuse.js
+      - idb-keyval
+      - jwt-decode
+      - less
+      - lightningcss
+      - nprogress
+      - qrcode
+      - react
+      - react-dom
+      - sass
+      - search-insights
+      - sortablejs
+      - stylus
+      - sugarss
+      - terser
+      - typescript
+      - universal-cookie
+    dev: true
 
   /vitepress@1.0.0-rc.45(@types/node@20.11.25)(sass@1.71.1)(typescript@5.4.2):
     resolution: {integrity: sha512-/OiYsu5UKpQKA2c0BAZkfyywjfauDjvXyv6Mo4Ra57m5n4Bxg1HgUGoth1CLH2vwUbR/BHvDA9zOM0RDvgeSVQ==}

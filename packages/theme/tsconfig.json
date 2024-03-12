@@ -7,8 +7,8 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@sugarat/theme/node": ["./node"],
-      "@sugarat/theme": ["src/index.ts"]
+      "@dy/vitepress-theme/node": ["./node"],
+      "@dy/vitepress-theme": ["src/index.ts"]
     },
     "resolveJsonModule": true,
     "allowJs": true,

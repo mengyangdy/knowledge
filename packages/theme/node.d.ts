@@ -1,6 +1,5 @@
-import * as vitepress_plugin_rss from 'vitepress-plugin-rss';
+import { DefaultTheme, UserConfig } from 'vitepress';
 import { RSSOptions } from 'vitepress-plugin-rss';
-import { DefaultTheme } from 'vitepress';
 
 type RSSPluginOptions = RSSOptions;
 declare namespace BlogPopover {
@@ -383,37 +382,7 @@ declare namespace Theme {
     }
 }
 
-declare function getThemeConfig(cfg?: Partial<Theme.BlogConfig>): {
-    themeConfig: {
-        blog: {
-            blog?: false | undefined;
-            themeColor?: Theme.ThemeColor | undefined;
-            pagesData?: Theme.PageData[] | undefined;
-            srcDir?: string | undefined;
-            author?: string | undefined;
-            hotArticle?: Theme.HotArticle | undefined;
-            home?: Theme.HomeBlog | undefined;
-            search?: Theme.SearchConfig | undefined;
-            comment?: false | Theme.CommentConfig | undefined;
-            recommend?: false | Theme.RecommendArticle | undefined;
-            article?: Theme.ArticleConfig | undefined;
-            alert?: Theme.Alert | undefined;
-            popover?: Theme.Popover | undefined;
-            friend?: Theme.FriendLink[] | Theme.FriendConfig | undefined;
-            authorList?: Omit<Theme.FriendLink, "avatar">[] | undefined;
-            tabs?: boolean | undefined;
-            works?: Theme.UserWorks | undefined;
-            mermaid?: any;
-            timeZone?: number | undefined;
-            RSS?: vitepress_plugin_rss.RSSOptions | undefined;
-            footer?: Theme.Footer | Theme.Footer[] | undefined;
-            docMetaInsertSelector?: string | undefined;
-            docMetaInsertPosition?: "before" | "after" | undefined;
-            taskCheckbox?: boolean | Theme.TaskCheckbox | undefined;
-            timeline?: boolean | undefined;
-            backToTop?: boolean | Theme.BackToTop | undefined;
-        };
-    };
-};
+declare function getThemeConfig(cfg?: Partial<Theme.BlogConfig>): any;
+declare function defineConfig(config: UserConfig<Theme.Config>): any;
 
-export { getThemeConfig };
+export { defineConfig, getThemeConfig };
