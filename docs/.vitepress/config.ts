@@ -71,7 +71,7 @@ export default defineConfig({
       'link',
       {
         rel: 'icon',
-        href: '/favicon.ico',
+        href: 'https://my-vitepress-blog.sh1a.qingstor.com/202403132225889.ico',
         type: 'image/png',
         sizes: '32x32'
       }
