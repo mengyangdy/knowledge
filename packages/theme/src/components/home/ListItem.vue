@@ -168,19 +168,19 @@ const showTime = computed(() => {
 }
 
 .cover-img {
-  width: 120px;
-  height: 80px;
-  margin-left: 24px;
+  width: 150px;
+  height: 63px;
+  margin-left: 10px;
   border-radius: 2px;
   background-repeat: no-repeat;
-  background-size: 120px 80px;
+  background-size: 150px 63px;
 }
 
 @media screen and (max-width: 500px) {
   .cover-img {
     width: 100px;
     height: 60px;
-    background-size: 100px 60px;
+    background-size: 100px 42px;
   }
 }
 </style>
