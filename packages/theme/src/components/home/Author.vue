@@ -21,10 +21,6 @@ const author=computed(()=>
   ?? site.value.themeConfig?.blog?.author
 )
 
-console.log(frontmatter.value.logo)
-console.log(frontmatter.value?.blog?.logo)
-console.log(site.value.themeConfig.logo)
-
 const logo=computed(()=>
   frontmatter.value.logo
   ?? frontmatter.value?.blog?.logo

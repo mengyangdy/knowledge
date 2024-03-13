@@ -18,9 +18,9 @@
         </span>
       </span>
       <span v-else class="icon-wrapper" @click="handleScrollToComment">
-        <NIcon :size="20">
-          <CommentDots />
-        </NIcon>
+        <ElIcon :size="20">
+          <CommentIcon />
+        </ElIcon>
       </span>
     </div>
   </div>

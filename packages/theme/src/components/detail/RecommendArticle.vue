@@ -154,6 +154,9 @@ const recommendList = computed(() => {
   return topList.concat(normalList)
 })
 
+console.log("=>(RecommendArticle.vue:95) recommendList", recommendList);
+
+
 function isCurrentDoc(value: string) {
   const path = decodeURIComponent(route.path).replace(/.html$/, '')
   return [value, value.replace(/index$/, '')].includes(path)
