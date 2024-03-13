@@ -172,7 +172,6 @@ function getArticles(cfg) {
     if (!meta.title) {
       meta.title = getDefaultTitle(fileContent);
     }
-    console.log(meta, "meta");
     if (!meta.date) {
     } else {
       const timeZone = cfg?.timeZone ?? 8;

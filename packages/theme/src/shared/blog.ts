@@ -116,3 +116,7 @@ export function useDocMetaInsertSelector() {
 export function useHomeFooterConfig() {
   return inject(homeFooter)
 }
+
+export function useBackToTopConfig() {
+  return useBlogConfig().backToTop
+}

@@ -15,15 +15,12 @@ const {width}=useWindowSize()
 const inMiniScreen=computed(()=>width.value<=767)
 const {home}=useBlogConfig()
 const {frontmatter,site}=useData()
-console.log("=>(HomeHeaderAvatar.vue:17) site", site);
-console.log("=>(HomeHeaderAvatar.vue:17) frontmatter", frontmatter);
 const logo=computed(()=>
   frontmatter.value.logo
   ?? frontmatter.value?.blog?.logo
   ?? home?.logo
   ?? site.value.themeConfig.logo
 )
-console.log("=>(HomeHeaderAvatar.vue:20) logo", logo);
 
 
 const alwaysHide=computed(()=>frontmatter.value.blog?.minScreenAvatar === false)

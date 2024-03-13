@@ -5,14 +5,21 @@ import HeadData from './head'
 
 const blogTheme=getThemeConfig({
   author: 'Dylan',
+  comment: {
+    repo: 'mengyang94982/knowledge',
+    repoId: 'R_kgDOKF80Gg',
+    category: 'Announcements',
+    categoryId: 'DIC_kwDOKF80Gs4CaZPc',
+    inputPosition: 'top'
+  },
   popover: {
     title: '公告',
     body: [
-      { type: 'text', content: '👇公众号👇---👇 微信 👇' },
-      {
-        type: 'image',
-        src: 'https://img.cdn.sugarat.top/mdImg/MTYxNTAxODc2NTIxMA==615018765210'
-      },
+      { type: 'text', content: ' 公众号 ---  微信' },
+      // {
+      //   type: 'image',
+      //   src: 'https://img.cdn.sugarat.top/mdImg/MTYxNTAxODc2NTIxMA==615018765210'
+      // },
       {
         type: 'text',
         content: '欢迎大家私信&加群交流'
@@ -33,17 +40,22 @@ const blogTheme=getThemeConfig({
     ],
     duration: -1
   },
+  recommend: {
+    showSelf: true,
+    nextText: '下一页',
+    style: 'sidebar'
+  },
   authorList: [
     {
       nickname: 'Dylan',
-      url: 'http://mengyang.online',
+      url: 'https://mengyang.online',
       des: '前端成长之路'
     }
   ],
   footer: {
-    copyright: `粥里有勺糖 2018 - ${new Date().getFullYear()}`,
+    copyright: `Dylan 2023 - ${new Date().getFullYear()}`,
     icpRecord: {
-      name: '蜀ICP备19011724号',
+      name: '豫ICP备2023033003',
       link: 'https://beian.miit.gov.cn/'
     }
   },
@@ -68,6 +80,9 @@ export default defineConfig({
   },
   lastUpdated: true,
   themeConfig:{
+    search: {
+      provider: 'local'
+    },
     lastUpdatedText: '上次更新于',
     logo: '/logo.png',
     editLink: {

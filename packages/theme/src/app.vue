@@ -140,12 +140,12 @@ import {useBlogThemeMode} from "./shared";
 import Alert from "./components/prompt/Alert.vue";
 import Popover from "./components/prompt/Popover.vue";
 import ArticleAnalyze from "./components/detail/ArticleAnalyze.vue";
-import ImagePreview from "./components/common/ImagePreview.vue";
+// import ImagePreview from "./components/common/ImagePreview.vue";
 import HomeHeaderAvatar from "./components/home/HomeHeaderAvatar.vue";
 import HomeBanner from "./components/home/HomeBanner.vue";
 import List from "./components/home/List.vue";
 import HomeInfo from "./components/home/HomeInfo.vue";
-import Sidebar from "./components/home/Sidebar.vue";
+import Sidebar from "./components/detail/Sidebar.vue";
 import BackToTop from "./components/common/BackToTop.vue";
 import Comment from "./components/common/Comment.vue";
 import Footer from './components/home/Footer.vue'

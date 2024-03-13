@@ -68,7 +68,6 @@ export function getArticles(cfg?:Partial<Theme.BlogConfig>){
         // TODO：优化标题的采集
         meta.title = getDefaultTitle(fileContent)
       }
-      console.log(meta,'meta')
       if (!meta.date) {
         // meta.date = getFileBirthTime(v)
       }

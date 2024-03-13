@@ -61,11 +61,15 @@
     <template v-if="readingTimePosition === 'newLine' && showAnalyze">
       <div style="width: 100%;" class="new-line-meta-des">
         <span title="文章字数">
-          <!--<ElIcon><EditPen /></ElIcon>-->
+          <NIcon :size="12">
+        <PencilAlt/>
+      </NIcon>
           {{ wordCount }} 个字
         </span>
         <span title="预计阅读时间">
-          <!--<ElIcon><AlarmClock /></ElIcon>-->
+          <NIcon :size="14">
+        <AlarmOutline/>
+      </NIcon>
           {{ readTime }} 分钟
         </span>
       </div>

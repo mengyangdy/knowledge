@@ -9,7 +9,6 @@ import {useBlogConfig,useCurrentArticle} from "@dy/vitepress-theme";
 
 const {frontmatter}=useData()
 const cover=computed(()=>frontmatter.value.cover)
-console.log(import.meta.env)
 const currentArticle=useCurrentArticle()
 const realCover=computed<string>(()=>import.meta.env.DEV?cover.value:currentArticle.value?.meta?.cover)
 
