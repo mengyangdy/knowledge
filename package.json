@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "naive-ui": "^2.38.1",
     "sass": "^1.71.1",
     "vite": "^5.1.6",
     "vitepress": "1.0.0-rc.45"

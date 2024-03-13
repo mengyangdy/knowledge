@@ -154,7 +154,6 @@ const recommendList = computed(() => {
   return topList.concat(normalList)
 })
 
-console.log("=>(RecommendArticle.vue:95) recommendList", recommendList);
 
 
 function isCurrentDoc(value: string) {
