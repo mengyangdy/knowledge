@@ -22,10 +22,9 @@
     "build:node": "npx tsup"
   },
   "devDependencies": {
-    "@vicons/fa": "^0.12.0",
-    "@vicons/ionicons5": "^0.12.0",
+    "@element-plus/icons-vue": "^2.3.1",
     "@vue/shared": "^3.4.21",
-    "naive-ui": "^2.38.1",
+    "element-plus": "^2.6.1",
     "tsup": "^8.0.2",
     "typescript": "^5.4.2",
     "vitepress": "1.0.0-rc.45",

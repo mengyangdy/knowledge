@@ -2,17 +2,19 @@
   <div v-if="recommendList.length || empty" class="card recommend" data-pagefind-ignore="all">
     <div class="card-header">
       <span class="title" v-html="title"/>
-      <NButton v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
+      <ElButton v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
         {{ nextText }}
-      </NButton>
+      </ElButton>
     </div>
     <ol v-if="currentWikiData.length" class="recommend-container">
       <li v-for="(item,index) in currentWikiData" :key="item.route">
         <i class="num">{{ index + 1 }}</i>
         <div class="des">
-          <a class="title" :href="withBase(item.route)">
-            {{ item.meta.title }}
-          </a>
+          <ElLink type="info" class="title" :href="withBase(v.route)">
+            {{
+              item.meta.title
+            }}
+          </ElLink>
           <div class="suffix">
             <span class="tag">{{ formatShowDate(item.meta.date) }}</span>
           </div>
@@ -29,7 +31,7 @@
 import {computed, ref} from "vue";
 import {withBase} from "vitepress";
 import {formatShowDate} from "../../utils";
-import {NButton} from "naive-ui";
+import {ElButton, ElLink} from 'element-plus'
 import {useArticles, useBlogConfig} from "../../shared";
 import {fireSVG} from "../../constants/svg";
 

@@ -23,30 +23,29 @@
           fill="#D3D3D3" p-id="4294"
         />
       </svg> 标签</span>
-      <NTag v-if="activeTag.label" :type="activeTag.type as any" :effect="colorMode" closable @close="handleCloseTag">
+      <ElTag v-if="activeTag.label" :type="activeTag.type as any" :effect="colorMode" closable @close="handleCloseTag">
         {{ activeTag.label }}
-      </NTag>
+      </ElTag>
     </div>
     <!-- 标签列表 -->
     <ul class="tag-list">
       <li v-for="(tag, idx) in tags" :key="tag">
-        <NTag
-          style="cursor: pointer"
+        <ElTag
           :type="tagType[idx % tagType.length]" :effect="colorMode"
           @click="handleTagClick(tag, tagType[idx % tagType.length])"
         >
           {{ tag }}
-        </NTag>
+        </ElTag>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
-import { NTag } from 'naive-ui'
-import { useBrowserLocation, useDark, useUrlSearchParams } from '@vueuse/core'
-import { useRouter, useRoute } from 'vitepress'
+import {computed, watch} from 'vue'
+import {ElTag} from 'element-plus'
+import {useBrowserLocation, useDark, useUrlSearchParams} from '@vueuse/core'
+import {useRouter, useRoute} from 'vitepress'
 import {
   useActiveTag,
   useArticles,
@@ -68,7 +67,7 @@ const isDark = useDark({
 
 const colorMode = computed(() => (isDark.value ? 'light' : 'dark'))
 
-const tagType: any = ['default','primary', 'info', 'success', 'warning', 'error']
+const tagType: any = ['primary', 'success', 'info', 'warning', 'danger']
 const currentPage = useCurrentPageNum()
 const router = useRouter()
 
@@ -137,6 +136,11 @@ watch(
 
   &:hover {
     box-shadow: var(--box-shadow-hover);
+  }
+  :deep(.el-tag){
+    border-radius: 0;
+    font-size: 14px;
+    padding: 0 7px;
   }
 }
 

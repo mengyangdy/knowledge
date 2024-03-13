@@ -6,9 +6,9 @@
     <!-- 头部 -->
     <div class="card-header">
       <span v-if="title" class="title" v-html="title" />
-      <NButton v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
+      <ElButton v-if="showChangeBtn" size="small" type="primary" text @click="changePage">
         {{ nextText }}
-      </NButton>
+      </ElButton>
     </div>
     <!-- 文章列表 -->
     <ol v-if="currentWikiData.length" class="recommend-container">
@@ -18,13 +18,13 @@
         <!-- 简介 -->
         <div class="des">
           <!-- title -->
-          <a
-            class="title" :class="{
+          <ElLink
+            type="info" class="title" :class="{
               current: isCurrentDoc(v.route),
             }" :href="v.route"
           >
             {{ v.meta.title }}
-          </a>
+          </ElLink>
           <!-- 描述信息 -->
           <div class="suffix">
             <!-- 日期 -->
@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from 'vue'
 import {useRoute, withBase} from 'vitepress'
-import {NButton} from 'naive-ui'
+import { ElButton, ElLink } from 'element-plus'
 import {formatShowDate} from '../../utils'
 import {useArticles, useBlogConfig} from '../../shared'
 import {recommendSVG} from '../../constants/svg'

@@ -1,24 +1,18 @@
 <template>
   <div v-if="showAnalyze && readingTimePosition === 'top'" class="doc-analyze" data-pagefind-ignore="all">
     <span>
-      <NIcon :size="12">
-        <PencilAlt/>
-      </NIcon>
+      <ElIcon><EditPen/></ElIcon>
       字数：{{ wordCount }} 个字
     </span>
     <span>
-      <NIcon :size="14">
-        <AlarmOutline/>
-      </NIcon>
+      <ElIcon><AlarmClock/></ElIcon>
       预计：{{ readTime }} 分钟
     </span>
   </div>
   <div id="hack-article-des" ref="$des" class="meta-des">
     <!-- TODO：是否需要原创？转载等标签，理论上可以添加标签解决，可以参考 charles7c -->
     <span v-if="author && !hiddenAuthor" class="author" title="本文作者">
-      <NIcon :size="11">
-        <UserAlt/>
-      </NIcon>
+      <ElIcon><UserFilled/></ElIcon>
       <a
         v-if="currentAuthorInfo"
         class="link"
@@ -32,44 +26,32 @@
       </template>
     </span>
     <span v-if="publishDate && !hiddenTime" class="publishDate" :title="timeTitle">
-      <NIcon :size="14">
-        <TimeOutline/>
-      </NIcon>
+      <ElIcon><Clock/></ElIcon>
       {{ publishDate }}
     </span>
     <span v-if="tags.length" class="tags" title="标签">
-      <NIcon :size="13">
-        <Pricetags/>
-      </NIcon>
+      <ElIcon><CollectionTag/></ElIcon>
       <a v-for="tag in tags" :key="tag" class="link" :href="`/?tag=${tag}`">{{ tag }}
       </a>
     </span>
     <template v-if="readingTimePosition === 'inline' && showAnalyze">
       <span title="文章字数">
-        <NIcon :size="12">
-        <PencilAlt/>
-      </NIcon>
+        <ElIcon><EditPen/></ElIcon>
         {{ wordCount }} 个字
       </span>
       <span title="预计阅读时间">
-         <NIcon :size="14">
-        <AlarmOutline/>
-      </NIcon>
+         <ElIcon><AlarmClock/></ElIcon>
         {{ readTime }} 分钟
       </span>
     </template>
     <template v-if="readingTimePosition === 'newLine' && showAnalyze">
       <div style="width: 100%;" class="new-line-meta-des">
         <span title="文章字数">
-          <NIcon :size="12">
-        <PencilAlt/>
-      </NIcon>
+          <ElIcon><EditPen/></ElIcon>
           {{ wordCount }} 个字
         </span>
         <span title="预计阅读时间">
-          <NIcon :size="14">
-        <AlarmOutline/>
-      </NIcon>
+          <ElIcon><AlarmClock/></ElIcon>
           {{ readTime }} 分钟
         </span>
       </div>
@@ -82,9 +64,14 @@
 </template>
 
 <script lang="ts" setup>
-import {PencilAlt, UserAlt} from '@vicons/fa'
-import {AlarmOutline, Pricetags, TimeOutline} from '@vicons/ionicons5'
-import {NIcon} from 'naive-ui'
+import {
+  AlarmClock,
+  Clock,
+  CollectionTag,
+  EditPen,
+  UserFilled
+} from '@element-plus/icons-vue'
+import {ElIcon} from 'element-plus'
 // import DocCover from "../home/DocCover.vue";
 // 阅读时间计算方式参考
 // https://zhuanlan.zhihu.com/p/36375802

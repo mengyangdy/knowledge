@@ -10,9 +10,9 @@
 
     <div v-show="!commentIsVisible" class="comment-btn-wrapper">
       <span v-if="!mobileMinify && labelText" class="icon-wrapper-text" @click="handleScrollToComment">
-        <NIcon :size="20">
-          <CommentDots />
-        </NIcon>
+        <ElIcon :size="20">
+          <CommentIcon />
+        </ElIcon>
         <span class="text">
           {{ labelText }}
         </span>
@@ -30,8 +30,8 @@
 import { useElementSize, useElementVisibility, useWindowSize } from '@vueuse/core'
 import { useData, useRoute } from 'vitepress'
 import { computed, h, ref, watch } from 'vue'
-import {NIcon} from 'naive-ui'
-import {CommentDots} from '@vicons/fa'
+import { ElIcon } from 'element-plus'
+import { Comment } from '@element-plus/icons-vue'
 import Giscus from '@giscus/vue'
 import { useGiscusConfig } from '../../shared'
 import type { Theme } from '../../typings'

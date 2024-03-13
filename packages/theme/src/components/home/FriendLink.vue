@@ -30,7 +30,7 @@
       <ol class="friend-list swiper-wrapper">
         <li v-for="(item,index) in friendList" :key="index">
           <a :href="item.url" target="_blank">
-            <NAvatar :size="50" :src="item.avatar" />
+            <ElAvatar :size="50" :src="v.avatar" :alt="v.alt" />
             <div class="info-wrapper">
               <span class="nickname">
                 {{item.nickname}}
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NAvatar } from 'naive-ui'
+import { ElAvatar } from 'element-plus'
 import { useDark, useIntervalFn } from '@vueuse/core'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import Swiper from 'swiper'

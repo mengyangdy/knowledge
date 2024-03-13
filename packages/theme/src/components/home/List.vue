@@ -12,20 +12,27 @@
             :pin="item.meta.top" />
     </li>
   </ul>
+  <!-- 解决element-ui bug -->
   <ClientOnly>
-    <div class="pagination-wrapper">
-      <NPagination v-if="wikiList.length >= pageSize" v-model:page="currentPage" :item-count="filterData.length" show-quick-jumper @update:page="handleUpdatePageNum">
-        <template #goto>
-          跳转至
-        </template>
-      </NPagination>
+    <div class="el-pagination-wrapper">
+      <ElPagination
+        v-if="wikiList.length >= pageSize"
+        small
+        background
+        :default-current-page="1"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="filterData.length"
+        layout="prev, pager, next, jumper"
+        @update:current-page="handleUpdatePageNum"
+      />
     </div>
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
 import {computed,watch} from "vue";
-import {NPagination} from 'naive-ui'
+import { ElPagination } from 'element-plus'
 import {useData,useRouter} from "vitepress";
 import {useBrowserLocation} from '@vueuse/core'
 import {useActiveTag,useArticles,useBlogConfig,useCurrentPageNum} from "../../shared";
@@ -92,9 +99,19 @@ watch(location,()=>{
 </script>
 
 <style scoped lang="scss">
-.pagination-wrapper{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.el-pagination-wrapper {
+  :deep(.el-pagination li.is-active.number) {
+    background-color: var(--vp-c-brand-2);
+  }
+  :deep(.el-pagination button:hover) {
+    color: var(--vp-c-brand-2);
+  }
+
+  :deep(.el-pager li:not(.is-active):hover) {
+    color: var(--vp-c-brand-2);
+  }
+  :deep(.el-input__wrapper.is-focus) {
+    box-shadow: 0 0 0 1px var(--vp-c-brand-2) inset;
+  }
 }
 </style>

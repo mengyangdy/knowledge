@@ -2,7 +2,7 @@
   <Layout>
     <template #layout-top>
       <slot name="layout-top" />
-      <Alert />
+      <!--<Alert />-->
       <Popover/>
     </template>
     <template #doc-before>
@@ -137,7 +137,7 @@ import {useData} from "vitepress";
 import {computed} from "vue";
 import {useBlogThemeMode} from "./shared";
 
-import Alert from "./components/prompt/Alert.vue";
+// import Alert from "./components/prompt/Alert.vue";
 import Popover from "./components/prompt/Popover.vue";
 import ArticleAnalyze from "./components/detail/ArticleAnalyze.vue";
 // import ImagePreview from "./components/common/ImagePreview.vue";
