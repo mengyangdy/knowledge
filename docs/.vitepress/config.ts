@@ -1,9 +1,9 @@
-import {getThemeConfig} from "@dy/vitepress-theme/node";
-import {defineConfig} from "vitepress";
+import { getThemeConfig } from '@dy/vitepress-theme/node'
+import { defineConfig } from 'vitepress'
 import NavData from './nav'
 import HeadData from './head'
 
-const blogTheme=getThemeConfig({
+const blogTheme = getThemeConfig({
   author: 'Dylan',
   comment: {
     repo: 'mengyang94982/knowledge',
@@ -35,7 +35,7 @@ const blogTheme=getThemeConfig({
         props: {
           type: 'success'
         },
-        link: '/group',
+        link: '/group'
       }
     ],
     duration: -1
@@ -58,7 +58,7 @@ const blogTheme=getThemeConfig({
       name: '豫ICP备2023033003',
       link: 'https://beian.miit.gov.cn/'
     }
-  },
+  }
 })
 
 export default defineConfig({
@@ -67,7 +67,7 @@ export default defineConfig({
   description: 'Dylan的个人博客，记录随笔与学习笔记，大前端相关的知识，高频面试题，个人面经等',
   ignoreDeadLinks: true,
   lang: 'zh-cn',
-  head:HeadData,
+  head: HeadData,
   vite: {
     server: {
       port: 3200,
@@ -79,7 +79,7 @@ export default defineConfig({
     }
   },
   lastUpdated: true,
-  themeConfig:{
+  themeConfig: {
     search: {
       provider: 'local'
     },
@@ -94,7 +94,7 @@ export default defineConfig({
       label: '目录'
     },
     outlineTitle: '目录',
-    nav:NavData,
+    nav: NavData,
     socialLinks: [
       {
         icon: 'github',

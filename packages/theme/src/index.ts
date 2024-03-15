@@ -1,7 +1,7 @@
-import type {Theme} from 'vitepress'
-import DefaultTheme from "vitepress/theme";
+import type { Theme } from 'vitepress'
+import DefaultTheme from 'vitepress/theme'
 
-import {withConfigProvider} from "./shared";
+import { withConfigProvider } from './shared'
 
 import App from './app.vue'
 
@@ -15,9 +15,9 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 // 内置一些特殊的主题色
 import './styles/theme/inline-theme.var.css'
 
-const BlogTheme:Theme={
+const BlogTheme: Theme = {
   ...DefaultTheme,
-  Layout:withConfigProvider(App)
+  Layout: withConfigProvider(App)
 }
 
 export * from './typings'

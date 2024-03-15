@@ -2,10 +2,9 @@
 import path from 'node:path'
 // import {formatDate} from "../client";
 
-
 export function clearMatterContent(content: string) {
-  let first___: unknown
-  let second___: unknown
+  let first_line: unknown
+  let second_line: unknown
 
   const lines = content.split('\n').reduce<string[]>((pre, line) => {
     // 移除开头的空白行
@@ -13,11 +12,10 @@ export function clearMatterContent(content: string) {
       return pre
     }
     if (line.trim() === '---') {
-      if (first___ === undefined) {
-        first___ = pre.length
-      }
-      else if (second___ === undefined) {
-        second___ = pre.length
+      if (first_line === undefined) {
+        first_line = pre.length
+      } else if (second_line === undefined) {
+        second_line = pre.length
       }
     }
     pre.push(line)
@@ -26,21 +24,21 @@ export function clearMatterContent(content: string) {
   return (
     lines
       // 剔除---之间的内容
-      .slice((second___ as number) || 0)
+      .slice((second_line as number) || 0)
       .join('\n')
   )
 }
 
-
-
 export function getDefaultTitle(content: string) {
-  return clearMatterContent(content)
-    .split('\n')
-    ?.find((str) => {
-      return str.startsWith('# ')
-    })
-    ?.slice(2)
-    .replace(/^\s+|\s+$/g, '') || ''
+  return (
+    clearMatterContent(content)
+      .split('\n')
+      ?.find(str => {
+        return str.startsWith('# ')
+      })
+      ?.slice(2)
+      .replace(/^\s+|\s+$/g, '') || ''
+  )
 }
 
 // export function getFileBirthTime(url: string) {
@@ -77,7 +75,6 @@ export function getDefaultTitle(content: string) {
 //   })
 // }
 
-
 export function getTextSummary(text: string, count = 100) {
   return (
     clearMatterContent(text)
@@ -91,7 +88,7 @@ export function getTextSummary(text: string, count = 100) {
       // 除去加粗
       ?.replace(/\*\*(.*?)\*\*/g, '$1')
       ?.split('\n')
-      ?.filter(v => !!v)
+      ?.filter(v => Boolean(v))
       ?.slice(1)
       ?.join('\n')
       ?.replace(/>(.*)/, '')
@@ -108,17 +105,13 @@ export function aliasObjectToArray(obj: Record<string, string>) {
 
 export const EXTERNAL_URL_RE = /^[a-z]+:/i
 
-/**
- * Join two paths by resolving the slash collision.
- */
-export function joinPath(base: string, path: string): string {
-  return `${base}${path}`.replace(/\/+/g, '/')
+/** Join two paths by resolving the slash collision. */
+export function joinPath(base: string, paths: string): string {
+  return `${base}${paths}`.replace(/\/+/g, '/')
 }
 
-export function withBase(base: string, path: string) {
-  return EXTERNAL_URL_RE.test(path) || path.startsWith('.')
-    ? path
-    : joinPath(base, path)
+export function withBase(base: string, paths: string) {
+  return EXTERNAL_URL_RE.test(paths) || paths.startsWith('.') ? paths : joinPath(base, paths)
 }
 
 function isBase64ImageURL(url: string) {
@@ -131,6 +124,7 @@ const imageRegex = /!\[.*?\]\((.*?)\s*(".*?")?\)/
 
 /**
  * 从文档内容中提取封面
+ *
  * @param content 文档内容
  */
 export function getFirstImagURLFromMD(content: string, route: string) {
@@ -144,12 +138,9 @@ export function getFirstImagURLFromMD(content: string, route: string) {
     return url
   }
 
-  // TODO: 其它协议，待补充
-
   const paths = joinPath('/', route).split('/')
   paths.splice(paths.length - 1, 1)
   const relativePath = url.startsWith('/') ? url : path.join(paths.join('/') || '', url)
 
   return joinPath('/', relativePath)
 }
-

@@ -1,17 +1,33 @@
 {
   "name": "knowledge",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
-  },
-  "keywords": [],
   "author": "",
   "license": "ISC",
+  "keywords": [],
+  "scripts": {
+    "build": "vitepress build docs",
+    "cleanup": "dy cleanup",
+    "cm": "git add . && dy git-commit",
+    "dev": "vitepress dev docs",
+    "lint": "eslint . --fix && pnpm -r run typecheck",
+    "prepare": "dy init-simple-git-hooks",
+    "preview": "vitepress preview docs",
+    "taze": "dy taze",
+    "theme:build": "pnpm -r run tsup",
+    "typecheck": "pnpm -r run typecheck"
+  },
+  "dependencies": {
+    "@dy/vitepress-theme": "workspace:^",
+    "@types/node": "^20.11.25",
+    "@vueuse/core": "^10.9.0",
+    "simple-git-hooks": "^2.10.0",
+    "vue": "^3.4.21"
+  },
   "devDependencies": {
+    "@dylanjs/cli": "^0.0.20",
+    "@dylanjs/eslint-config": "^0.1.1",
     "naive-ui": "^2.38.1",
     "sass": "^1.71.1",
     "vite": "^5.1.6",
@@ -19,16 +35,14 @@
   },
   "pnpm": {
     "peerDependencyRules": {
-      "ignoreMissing": [
-        "@algolia/client-search",
-        "search-insights"
-      ]
+      "ignoreMissing": ["@algolia/client-search", "search-insights"]
     }
   },
-  "dependencies": {
-    "@dy/vitepress-theme": "workspace:^",
-    "@types/node": "^20.11.25",
-    "@vueuse/core": "^10.9.0",
-    "vue": "^3.4.21"
+  "simple-git-hooks": {
+    "commit-msg": "pnpm dy git-commit-verify",
+    "pre-commit": "pnpm typecheck && pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }

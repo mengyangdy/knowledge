@@ -1,11 +1,11 @@
-import type {Theme} from './typings'
-import type {UserConfig} from "vitepress";
+import type { UserConfig } from 'vitepress'
+import type { Theme } from './typings'
 
-import {getArticles,patchVPThemeConfig} from "./utils/node/theme";
-import {getVitePlugins,registerVitePlugins} from './utils/node/vitePlugins'
+import { getArticles, patchVPThemeConfig } from './utils/node/theme'
+import { getVitePlugins, registerVitePlugins } from './utils/node/vitePlugins'
 
-export function getThemeConfig (cfg?:Partial<Theme.BlogConfig>) {
-  const pagesData=getArticles(cfg)
+export function getThemeConfig(cfg?: Partial<Theme.BlogConfig>) {
+  const pagesData = getArticles(cfg)
   const extraVPConfig: any = {}
 
   // 获取要加载的vite插件

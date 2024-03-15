@@ -1,7 +1,5 @@
 import { DefaultTheme, UserConfig } from 'vitepress';
-import { RSSOptions } from 'vitepress-plugin-rss';
 
-type RSSPluginOptions = RSSOptions;
 declare namespace BlogPopover {
     interface Title {
         type: 'title';
@@ -94,6 +92,7 @@ declare namespace Theme {
         filter?: (page: Theme.PageData) => boolean;
         /**
          * 自定义排序
+         *
          * @default 'date'
          */
         sort?: 'date' | 'filename' | ((a: Theme.PageData, b: Theme.PageData) => number);
@@ -108,15 +107,14 @@ declare namespace Theme {
         pageSize?: number;
         author?: string | boolean;
         logo?: string | boolean;
-        /**
-         * @default 'card'
-         */
+        /** @default 'card' */
         avatarMode?: 'card' | 'split';
     }
     interface ArticleConfig {
         readingTime?: boolean;
         /**
          * 阅读时间分析展示位置
+         *
          * @default 'inline'
          */
         readingTimePosition?: 'inline' | 'newLine' | 'top';
@@ -135,14 +133,11 @@ declare namespace Theme {
     }
     interface Popover {
         title: string;
-        /**
-         * 细粒度的时间控制
-         * 默认展示时间，-1 只展示1次，其它数字为每次都展示，一定时间后自动消失，0为不自动消失
-         * 配置改变时，会重新触发展示
-         */
+        /** 细粒度的时间控制 默认展示时间，-1 只展示1次，其它数字为每次都展示，一定时间后自动消失，0为不自动消失 配置改变时，会重新触发展示 */
         duration: number;
         /**
          * 移动端自动最小化
+         *
          * @default false
          */
         mobileMinify?: boolean;
@@ -150,16 +145,19 @@ declare namespace Theme {
         footer?: BlogPopover.Value[];
         /**
          * 手动重新打开
+         *
          * @default true
          */
         reopen?: boolean;
         /**
          * 设置展示图标，svg
+         *
          * @recommend https://iconbuddy.app/search?q=fire
          */
         icon?: string;
         /**
          * 设置关闭图标，svg
+         *
          * @recommend https://iconbuddy.app/search?q=fire
          */
         closeIcon?: string;
@@ -168,16 +166,16 @@ declare namespace Theme {
         list: FriendLink[];
         /**
          * 是否随机展示
+         *
          * @default false
          */
         random?: boolean;
-        /**
-         * 是否限制展示数量（超出自动切换）
-         */
+        /** 是否限制展示数量（超出自动切换） */
         limit?: number;
         /**
          * 滚动速度(ms)，设置为 0 不滚动直接截取
-         * @default "动态计算"
+         *
+         * @default '动态计算'
          */
         scrollSpeed?: number;
     }
@@ -235,8 +233,8 @@ declare namespace Theme {
         blog?: false;
         /**
          * 内置一些主题色
+         *
          * @default 'vp-default'
-         * 也可以自定义颜色，详见 TODO：文档
          */
         themeColor?: ThemeColor;
         pagesData: PageData[];
@@ -244,78 +242,67 @@ declare namespace Theme {
         author?: string;
         hotArticle?: HotArticle;
         home?: HomeBlog;
-        /**
-         * 本地全文搜索定制
-         * 内置pagefind 实现，
-         * VitePress 官方提供 minisearch 实现，
-         * 社区提供 flexsearch 实现
-         */
+        /** 本地全文搜索定制 内置pagefind 实现， VitePress 官方提供 minisearch 实现， 社区提供 flexsearch 实现 */
         search?: SearchConfig;
-        /**
-         * 配置评论
-         * power by https://giscus.app/zh-CN
-         */
+        /** 配置评论 power by https://giscus.app/zh-CN */
         comment?: CommentConfig | false;
-        /**
-         * 阅读文章左侧的推荐文章（替代默认的sidebar）
-         */
+        /** 阅读文章左侧的推荐文章（替代默认的sidebar） */
         recommend?: RecommendArticle | false;
         article?: ArticleConfig;
-        /**
-         * el-alert
-         */
+        /** el-alert */
         alert?: Alert;
         popover?: Popover;
         friend?: FriendLink[] | FriendConfig;
         authorList?: Omit<FriendLink, 'avatar'>[];
         /**
          * 启用 [vitepress-plugin-tabs](https://www.npmjs.com/package/vitepress-plugin-tabs)
+         *
          * @default false
          */
         tabs?: boolean;
         works?: UserWorks;
         /**
          * https://mermaid.js.org/config/setup/modules/mermaidAPI.html#mermaidapi-configuration-defaults for options
+         *
          * @default true
          */
         mermaid?: any;
         /**
          * 设置解析 frontmatter 里 date 的时区
+         *
          * @default 8 => 'UTC+8'
          */
         timeZone?: number;
-        /**
-         * 启用RSS配置
-         */
-        RSS?: RSSOptions;
-        /**
-         * 首页页脚
-         */
+        /** 首页页脚 */
         footer?: Footer | Footer[];
         /**
          * 文章作者，标签等信息插入位置
+         *
          * @default 'h1'
          */
         docMetaInsertSelector?: string;
         /**
          * 文章作者，标签等信息插入位置
+         *
          * @default 'after'
          */
         docMetaInsertPosition?: 'before' | 'after';
         /**
-         * 配置内置的 markdown-it-task-checkbox 插件，设置 false 则关闭
-         * 详见 https://github.com/linsir/markdown-it-task-checkbox
+         * 配置内置的 markdown-it-task-checkbox 插件，设置 false 则关闭 详见 https://github.com/linsir/markdown-it-task-checkbox
+         *
          * @default true
          */
         taskCheckbox?: TaskCheckbox | boolean;
         /**
-         * 支持 markdown 时间线语法，在 vitepress 中使用 markdown 渲染时间线（时间轴）样式。
-         * 详见 https://github.com/HanochMa/vitepress-markdown-timeline
+         * 支持 markdown 时间线语法，在 vitepress 中使用 markdown 渲染时间线（时间轴）样式。 详见
+         * https://github.com/HanochMa/vitepress-markdown-timeline
+         *
          * @default true
          */
         timeline?: boolean;
         /**
          * 回到顶部
+         *
          * @default true
          */
         backToTop?: boolean | BackToTop;
@@ -323,11 +310,13 @@ declare namespace Theme {
     interface BackToTop {
         /**
          * 距离顶部多少距离出现
+         *
          * @default 450
          */
         top?: number;
         /**
          * 设置展示图标，svg
+         *
          * @recommend https://iconbuddy.app/search?q=fire
          */
         icon?: string;
@@ -340,35 +329,24 @@ declare namespace Theme {
         ulClass?: string;
         liClass?: string;
     }
-    type RSSOptions = RSSPluginOptions;
     interface Footer {
-        /**
-         * 自定义补充信息（支持配置为HTML）
-         */
+        /** 自定义补充信息（支持配置为HTML） */
         message?: string | string[];
-        /**
-         * 是否展示主题版本信息
-         */
+        /** 是否展示主题版本信息 */
         version?: boolean;
-        /**
-         * copyright
-         */
+        /** copyright */
         copyright?: string | {
             message: string;
             link?: string;
             icon?: boolean | string;
         };
-        /**
-         * ICP 备案信息
-         */
+        /** ICP 备案信息 */
         icpRecord?: {
             name: string;
             link: string;
             icon?: boolean | string;
         };
-        /**
-         * 公安备案信息
-         */
+        /** 公安备案信息 */
         securityRecord?: {
             name: string;
             link: string;
@@ -377,8 +355,6 @@ declare namespace Theme {
     }
     interface Config extends DefaultTheme.Config {
         blog?: BlogConfig;
-    }
-    interface HomeConfig {
     }
 }
 

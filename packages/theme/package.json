@@ -11,15 +11,19 @@
     ".": "./src/index.ts"
   },
   "main": "src/index.ts",
-  "files": [
-    "node.d.ts",
-    "node.js",
-    "src",
-    "types"
-  ],
+  "files": ["node.d.ts", "node.js", "src", "types"],
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build:node": "npx tsup"
+    "tsup": "npx tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@giscus/vue": "^3.0.0",
+    "@vueuse/core": "^10.9.0",
+    "fast-glob": "^3.3.2",
+    "gray-matter": "^4.0.3",
+    "sass": "^1.71.1",
+    "swiper": "^11.0.7",
+    "vitepress-plugin-tabs": "^0.5.0"
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -29,15 +33,5 @@
     "typescript": "^5.4.2",
     "vitepress": "1.0.0-rc.45",
     "vue": "^3.4.21"
-  },
-  "dependencies": {
-    "@giscus/vue": "^3.0.0",
-    "@vueuse/core": "^10.9.0",
-    "fast-glob": "^3.3.2",
-    "gray-matter": "^4.0.3",
-    "sass": "^1.71.1",
-    "swiper": "^11.0.7",
-    "vitepress-plugin-rss": "^0.2.2",
-    "vitepress-plugin-tabs": "^0.5.0"
   }
 }

@@ -44,61 +44,57 @@ var import_gray_matter = __toESM(require("gray-matter"));
 
 // src/utils/client/index.ts
 function formatDate(d, fmt = "yyyy-MM-dd hh:mm:ss") {
-  if (!(d instanceof Date)) {
-    d = new Date(d);
+  let data = d;
+  let fmts = fmt;
+  if (!(data instanceof Date)) {
+    data = new Date(data);
   }
   const o = {
-    "M+": d.getMonth() + 1,
+    "M+": data.getMonth() + 1,
     // 月份
-    "d+": d.getDate(),
+    "d+": data.getDate(),
     // 日
-    "h+": d.getHours(),
+    "h+": data.getHours(),
     // 小时
-    "m+": d.getMinutes(),
+    "m+": data.getMinutes(),
     // 分
-    "s+": d.getSeconds(),
+    "s+": data.getSeconds(),
     // 秒
-    "q+": Math.floor((d.getMonth() + 3) / 3),
+    "q+": Math.floor((data.getMonth() + 3) / 3),
     // 季度
-    "S": d.getMilliseconds()
+    S: data.getMilliseconds()
     // 毫秒
   };
-  if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(
-      RegExp.$1,
-      `${d.getFullYear()}`.substr(4 - RegExp.$1.length)
-    );
+  if (/(y+)/.test(fmts)) {
+    fmts = fmts.replace(RegExp.$1, `${data.getFullYear()}`.substr(4 - RegExp.$1.length));
   }
   for (const k in o) {
     if (new RegExp(`(${k})`).test(fmt))
-      fmt = fmt.replace(
-        RegExp.$1,
-        RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substr(`${o[k]}`.length)
-      );
+      fmts = fmts.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substr(`${o[k]}`.length));
   }
-  return fmt;
+  return fmts;
 }
 
 // src/utils/node/index.ts
 var import_node_path = __toESM(require("path"));
 function clearMatterContent(content) {
-  let first___;
-  let second___;
+  let first_line;
+  let second_line;
   const lines = content.split("\n").reduce((pre, line) => {
     if (!line.trim() && pre.length === 0) {
       return pre;
     }
     if (line.trim() === "---") {
-      if (first___ === void 0) {
-        first___ = pre.length;
-      } else if (second___ === void 0) {
-        second___ = pre.length;
+      if (first_line === void 0) {
+        first_line = pre.length;
+      } else if (second_line === void 0) {
+        second_line = pre.length;
       }
     }
     pre.push(line);
     return pre;
   }, []);
-  return lines.slice(second___ || 0).join("\n");
+  return lines.slice(second_line || 0).join("\n");
 }
 function getDefaultTitle(content) {
   return clearMatterContent(content).split("\n")?.find((str) => {
@@ -106,10 +102,10 @@ function getDefaultTitle(content) {
   })?.slice(2).replace(/^\s+|\s+$/g, "") || "";
 }
 function getTextSummary(text, count = 100) {
-  return clearMatterContent(text).match(/^# ([\s\S]+)/m)?.[1]?.replace(/#/g, "")?.replace(/!\[.*?\]\(.*?\)/g, "")?.replace(/\[(.*?)\]\(.*?\)/g, "$1")?.replace(/\*\*(.*?)\*\*/g, "$1")?.split("\n")?.filter((v) => !!v)?.slice(1)?.join("\n")?.replace(/>(.*)/, "")?.slice(0, count);
+  return clearMatterContent(text).match(/^# ([\s\S]+)/m)?.[1]?.replace(/#/g, "")?.replace(/!\[.*?\]\(.*?\)/g, "")?.replace(/\[(.*?)\]\(.*?\)/g, "$1")?.replace(/\*\*(.*?)\*\*/g, "$1")?.split("\n")?.filter((v) => Boolean(v))?.slice(1)?.join("\n")?.replace(/>(.*)/, "")?.slice(0, count);
 }
-function joinPath(base, path3) {
-  return `${base}${path3}`.replace(/\/+/g, "/");
+function joinPath(base, paths) {
+  return `${base}${paths}`.replace(/\/+/g, "/");
 }
 function isBase64ImageURL(url) {
   const regex = /^data:image\/[a-z]+;base64,/;
@@ -155,9 +151,7 @@ function getArticles(cfg) {
       );
     } else {
       route = route.replace(
-        new RegExp(
-          `^${import_node_path2.default.join(srcDir, "/").replace(new RegExp(`\\${import_node_path2.default.sep}`, "g"), "/")}`
-        ),
+        new RegExp(`^${import_node_path2.default.join(srcDir, "/").replace(new RegExp(`\\${import_node_path2.default.sep}`, "g"), "/")}`),
         ""
       );
     }
@@ -175,17 +169,13 @@ function getArticles(cfg) {
     if (!meta.date) {
     } else {
       const timeZone = cfg?.timeZone ?? 8;
-      meta.date = formatDate(
-        /* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`)
-      );
+      meta.date = formatDate(/* @__PURE__ */ new Date(`${new Date(meta.date).toUTCString()}+${timeZone}`));
     }
     meta.tags = typeof meta.tags === "string" ? [meta.tags] : meta.tags;
-    meta.tag = [meta.tag || []].flat().concat([
-      .../* @__PURE__ */ new Set([...meta.tags || []])
-    ]);
+    meta.tag = [meta.tag || []].flat().concat([.../* @__PURE__ */ new Set([...meta.tags || []])]);
     const wordCount = 100;
-    meta.description = meta.description || getTextSummary(fileContent, wordCount);
-    meta.cover = meta.cover ?? getFirstImagURLFromMD(fileContent, `/${route}`);
+    meta.description ||= getTextSummary(fileContent, wordCount);
+    meta.cover ??= getFirstImagURLFromMD(fileContent, `/${route}`);
     if (meta.publish === false) {
       meta.hidden = true;
       meta.recommend = false;
@@ -203,7 +193,7 @@ function patchVPThemeConfig(cfg, vpThemeConfig = {}) {
 }
 
 // src/utils/node/vitePlugins.ts
-function getVitePlugins(cfg) {
+function getVitePlugins(_cfg) {
   const plugins = [];
   return plugins;
 }
