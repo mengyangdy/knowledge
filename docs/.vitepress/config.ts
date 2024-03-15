@@ -1,7 +1,6 @@
 import { getThemeConfig } from '@dy/vitepress-theme/node'
 import { defineConfig } from 'vitepress'
 import NavData from './nav'
-import HeadData from './head'
 
 const blogTheme = getThemeConfig({
   author: 'Dylan',
@@ -67,14 +66,24 @@ export default defineConfig({
   description: 'Dylan的个人博客，记录随笔与学习笔记，大前端相关的知识，高频面试题，个人面经等',
   ignoreDeadLinks: true,
   lang: 'zh-cn',
-  head: HeadData,
+  head: [
+    [
+      'link',
+      {
+        rel: 'icon',
+        href: 'https://my-vitepress-blog.sh1a.qingstor.com/202403132225889.ico',
+        type: 'image/png',
+        sizes: '32x32'
+      }
+    ]
+  ],
   vite: {
     server: {
       port: 3200,
       host: '0.0.0.0'
     },
     optimizeDeps: {
-      include: ['naive-ui'],
+      include: ['element-plus'],
       exclude: ['@dy/vitepress-theme']
     }
   },

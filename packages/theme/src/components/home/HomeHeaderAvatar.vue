@@ -1,7 +1,6 @@
 <template>
   <div class="blog-home-header-avatar" v-show="inMiniScreen && !alwaysHide">
     <img :src="withBase(logo)" alt="avatar">
-    <span>logo</span>
   </div>
 </template>
 

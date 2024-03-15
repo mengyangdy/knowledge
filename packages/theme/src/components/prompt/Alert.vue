@@ -1,14 +1,14 @@
 <template>
   <div v-if="show" class="global-alert" data-pagefind-ignore="all">
-    <NAlert :title="alertProps?.title" :type="alertProps?.type" :show-icon="alertProps?.showIcon">
+    <ElAlert :title="alertProps?.title" :type="alertProps?.type" :show-icon="alertProps?.showIcon">
       <div v-if="alertProps?.html" v-html="alertProps?.html"></div>
-    </NAlert>
+    </ElAlert>
   </div>
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {NAlert} from 'naive-ui'
+import {ElAlert} from 'element-plus'
 import {useBlogConfig} from "../../shared";
 
 const {alert: alertProps} = useBlogConfig()

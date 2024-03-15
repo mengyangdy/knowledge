@@ -1,25 +1,58 @@
 <template>
-  <a class="blog-item" :href="withBase(route)">
-    <i v-if="!!pin" class="pin"/>
+  <a
+    class="blog-item"
+    :href="withBase(route)"
+  >
+    <i
+      v-if="!!pin"
+      class="pin"
+    />
     <!-- 标题 -->
-    <p v-if="isMobile" class="title">{{ title }}</p>
+    <p
+      v-if="isMobile"
+      class="title"
+    >
+      {{ title }}
+    </p>
     <div class="info-container">
       <!-- 左侧信息 -->
       <div class="info-part">
         <!-- 标题 -->
-        <p v-if="!isMobile" class="title">{{ title }}</p>
+        <p
+          v-if="!isMobile"
+          class="title"
+        >
+          {{ title }}
+        </p>
         <!-- 简短描述 -->
-        <p v-if="!descriptionHTML && !!description" class="description">
+        <p
+          v-if="!descriptionHTML && !!description"
+          class="description"
+        >
           {{ description }}
         </p>
         <template v-if="descriptionHTML">
-          <div class="description-html" v-html="descriptionHTML"/>
+          <div
+            class="description-html"
+            v-html="descriptionHTML"
+          />
         </template>
         <!-- 底部补充描述 -->
-        <div v-if="!isMobile" class="badge-list">
-          <span v-if="author" class="split">{{ author }}</span>
+        <div
+          v-if="!isMobile"
+          class="badge-list"
+        >
+          <span
+            v-if="author"
+            class="split"
+            >{{ author }}</span
+          >
           <span class="split">{{ showTime }}</span>
-          <span v-if="tag?.length" class="split">{{ tag.join(' · ') }}</span>
+          <span
+            v-if="tag?.length"
+            class="split"
+            >{{ tag.join(' · ') }}</span
+          >
         </div>
       </div>
       <!-- 右侧封面图 -->
@@ -30,20 +63,30 @@
       />
     </div>
     <!-- 底部补充描述 -->
-    <div v-if="isMobile" class="badge-list">
-      <span v-if="author" class="split">{{ author }}</span>
+    <div
+      v-if="isMobile"
+      class="badge-list"
+    >
+      <span
+        v-if="author"
+        class="split"
+        >{{ author }}</span
+      >
       <span class="split">{{ showTime }}</span>
-      <span v-if="tag?.length" class="split">{{ tag.join(' · ') }}</span>
+      <span
+        v-if="tag?.length"
+        class="split"
+        >{{ tag.join(' · ') }}</span
+      >
     </div>
   </a>
 </template>
 
 <script setup lang="ts">
-
-import {withBase} from "vitepress";
-import {computed} from "vue";
-import {useWindowSize} from "@vueuse/core";
-import {formatShowDate} from '../../utils'
+import { withBase } from 'vitepress'
+import { computed } from 'vue'
+import { useWindowSize } from '@vueuse/core'
+import { formatShowDate } from '../../utils'
 
 const props = defineProps<{
   route: string
@@ -58,13 +101,14 @@ const props = defineProps<{
   pin?: number
 }>()
 
-const {width} = useWindowSize()
+console.log(props)
+
+const { width } = useWindowSize()
 const isMobile = computed(() => width.value <= 500)
 const showTime = computed(() => {
   return formatShowDate(props.date)
 })
 </script>
-
 
 <style scoped lang="scss">
 .blog-item .pin {
@@ -87,9 +131,9 @@ const showTime = computed(() => {
   width: 120%;
   height: 30px;
   background-image: linear-gradient(
-      45deg,
-      var(--blog-theme-color),
-      var(--blog-theme-color)
+    45deg,
+    var(--blog-theme-color),
+    var(--blog-theme-color)
   );
   transform: rotate(-45deg) translateY(-20px);
   display: flex;
