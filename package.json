@@ -26,7 +26,7 @@
     "vue": "^3.4.21"
   },
   "devDependencies": {
-    "@dylanjs/cli": "^0.0.20",
+    "@dylanjs/cli": "^0.1.1",
     "@dylanjs/eslint-config": "^0.1.1",
     "naive-ui": "^2.38.1",
     "sass": "^1.71.1",
