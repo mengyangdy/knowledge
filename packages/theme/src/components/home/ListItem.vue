@@ -101,7 +101,6 @@ const props = defineProps<{
   pin?: number
 }>()
 
-console.log(props)
 
 const { width } = useWindowSize()
 const isMobile = computed(() => width.value <= 500)

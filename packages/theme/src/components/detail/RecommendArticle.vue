@@ -209,7 +209,6 @@ const currentWikiData = computed(() => {
   const endIdx = startIdx + pageSize.value
   return recommendList.value.slice(startIdx, endIdx)
 })
-console.log('🚀 ~ currentWikiData ~ currentWikiData:', currentWikiData)
 
 const showChangeBtn = computed(() => {
   return recommendList.value.length > pageSize.value
