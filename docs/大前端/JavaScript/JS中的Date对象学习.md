@@ -1,5 +1,5 @@
 ---
-title: JS中的Datae对象学习
+title: JS中的Date对象学习
 tags:
   - js
   - Date
@@ -7,7 +7,7 @@ date: 2023-09-30
 cover: https://s2.loli.net/2023/09/30/ZGypeJEsXDtSgcB.jpg
 ---
 
-# JS 中的 Datae 对象学习
+# JS 中的 Date 对象学习
 
 > Date 是 js 中的一个内置对象，用于处理日期和时间。
 

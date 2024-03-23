@@ -95,7 +95,7 @@ export default defineConfig({
     lastUpdatedText: '上次更新于',
     logo: 'https://my-vitepress-blog.sh1a.qingstor.com/202403131543188.jpg',
     editLink: {
-      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/packages/blog/docs/:path',
+      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/docs/blog/docs/:path',
       text: '去 GitHub 上编辑内容'
     },
     outline: {

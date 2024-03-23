@@ -35,7 +35,11 @@ html.dark {
   }
 
   min-height: 100vh;
-  background: radial-gradient(ellipse, rgba(var(--bg-gradient-home), 1) 0%, rgba(var(--bg-gradient-home), 0) 700%);
+  background: radial-gradient(
+    ellipse,
+    rgba(var(--bg-gradient-home), 1) 0%,
+    rgba(var(--bg-gradient-home), 0) 700%
+  );
 }
 
 // 样式重写
@@ -103,7 +107,10 @@ html.dark {
 // sidebar
 @media (min-width: 1440px) {
   aside.VPSidebar {
-    padding-left: max(32px, calc((100% - (var(--vp-layout-max-width) - 16px)) / 2)) !important;
+    padding-left: max(
+      32px,
+      calc((100% - (var(--vp-layout-max-width) - 16px)) / 2)
+    ) !important;
     padding-right: 10px !important;
   }
 }
@@ -117,6 +124,10 @@ html.dark {
 
   .vp-doc a {
     word-break: break-all;
+  }
+  [class*='language-'] pre,
+  [class*='language-'] code {
+    white-space: pre-wrap;
   }
 }
 
