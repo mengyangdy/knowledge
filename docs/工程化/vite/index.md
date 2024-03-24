@@ -792,4 +792,500 @@ export default {
 
 ![](https://my-vitepress-blog.sh1a.qingstor.com/202403240025437.png)
 
-由于有CSS代码的AST（抽象语法树）
+由于有CSS代码的AST（抽象语法树）解析能力，PostCSS可以做的事情非常多，甚至能实现CSS预处理器语法和CSS Module，社区当中也有不少的PostCSS插件，处理刚刚提到的`autoprefixer`插件，常见的插件还包括：
+
+- [postcss-pxtorem](https://github.com/cuth/postcss-pxtorem)：用来将px转化为rem单位，在适配移动端的场景下很有用。
+- [postcss-preset-env](https://github.com/csstools/postcss-preset-env)：通过它，你可以编写最新的css语法，而不用担心兼容性问题。
+- [cssnano](https://github.com/cssnano/cssnano)：主要用来压缩CSS代码，跟常规的代码压缩工具不一样，汤做得更加智能，比如提取一些公共样式进行复用、缩短一些常见的属性值等等。
+
+更多的PostCSS插件大家可以去 www.postcss.parts/ 这个网址查看。
+
+### 4.5 CSS in JS
+
+社区中有两款主流的`CSS in JS`方案：`styled-components`和`emotion`。
+
+对于CSSin JS方案，在构建侧我们需要考虑`选择器命名问题`/`DEC`(Dead Code Elimination即无用代码删除)、`代码压缩`、`生成SuorceMap`、`服务端渲染SSR`等问题，而`styled-components`和`emotion`已经提供了对应的babel插件来解决这些问题，我们在vite中要做的就是集成这些babel插件。
+
+具体来说，上述的两种主流的CSS in JS方案中集成方式如下：
+
+```js
+// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        // 加入 babel 插件
+        // 以下插件包都需要提前安装
+        // 当然，通过这个配置你也可以添加其它的 Babel 插件
+        plugins: [
+          // 适配 styled-component
+          'babel-plugin-styled-components',
+          // 适配 emotion
+          '@emotion/babel-plugin'
+        ]
+      },
+      // 注意: 对于 emotion，需要单独加上这个配置
+      // 通过 `@emotion/react` 包编译 emotion 中的特殊 jsx 语法
+      jsxImportSource: '@emotion/react'
+    })
+  ]
+})
+```
+
+### 4.6 原子化框架
+
+在目前的社区当中，CSS原子化框架主要包括Tailwind CSS和Windi CSS。Windi CSS作为前者的替换方案，实现了按需生成 CSS 类名的功能，开发环境下的 CSS 产物体积大大减少，速度上比 Tailwind CSS v2 快 20~100 倍！当然，Tailwind CSS 在 v3 版本也引入 JIT(即时编译) 的功能，解决了开发环境下 CSS 产物体积庞大的问题。接下来我们将这两个方案分别接入到 Vite 中，在实际的项目中你只需要使用其中一种就可以了。
+
+**注：Windi CSS已经不更新了，下面就不介绍他的用法了。**
+
+#### 4.6.1 TaIlwind CSS接入
+
+首先安装tailwindcss以及其必要的依赖：
+
+```shell
+pnpm install -D tailwindcss postcss autoprefixer
+```
+
+然后新建两个配置文件`tailwind.config.js`和`postcss.config.js`：
+
+```js
+// tailwind.config.js
+module.exports = {
+ content: [
+ "./index.html",
+ "./src/**/*.{vue,js,ts,jsx,tsx}",
+ ],
+ theme: {
+ extend: {},
+ },
+ plugins: [],
+}
+
+// postcss.config.js
+// 从中你可以看到，Tailwind CSS 的编译能力是通过 PostCSS 插件实现的
+// 而 Vite 本身内置了 PostCSS，因此可以通过 PostCSS 配置接入 Tailwind CSS
+// 注意: Vite 配置文件中如果有 PostCSS 配置的情况下会覆盖掉 post.config.js 的内容!
+module.exports = {
+ plugins: {
+ tailwindcss: {},
+ autoprefixer: {},
+ },
+},
+}
+```
+
+接着在项目的入口css中引入必要的样板代码：
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+现在我们就可以在项目中安心的使用Tailwind样式了：
+
+```js
+// App.tsx
+import logo from './logo.svg'
+import './App.css'
+function App() {
+  return (
+    <div>
+      <header className="App-header">
+        <img
+          src={logo}
+          className="w-20"
+          alt="logo"
+        />
+        <p className="bg-red-400">Hello Vite + React!</p>
+      </header>
+    </div>
+  )
+}
+export default App
+```
+
+## 5. vite项目的代码规范
+
+> 在真实的工程项目中，尤其是多人写作的场景下，代码规范就变得非常重要了，它可以用来统一团队代码风格，避免不同风格的代码混杂到一起难以阅读，有效提高`代码质量`,甚至可以将一些`语法错误`在开发阶段提前规避掉。但仅有规范本身不够，我们需要`自动化的工具`(即`Lint工具`)来保证规范的落地，把代码规范检查（包括`自动修复`）这件事情交给机器完成，开发着只需要专注应用逻辑本身。
+
+> 接下来我们将一起来完成Lint工具链的项目中的落地，实现自动化代码规范检查及修复的能力，学完之后，不仅能熟悉诸如`ESLint`、`Prettier`、`Stylelint`和`Commitlint`等诸多主流Lint工具的概念和使用，还能配合`husky`、`lint-staged`、`VSCode插件`和`Vite生态`在项目中集成完整的Lint工具链，搭建起完整的前端开发和代码提交工作流。
+
+### 5.1 JS/TS规范工具：ESLint
+
+> ESLint是在ECMAScript、JavaScript代码中识别和报告模式匹配的工具，它的目标是保证代码的一致性和避免错误。
+
+ESLint是国外的前端大牛`Nicholas C. Zakas`在2013年发起的一个开源项目，有一本书被誉为前端界的圣经，叫做《JavScript高级程序设计》(即红宝书)，他正是这本书的作者。
+
+`Nicholas`当初做这个开源项目，就是为了打造一款插件化的JavaScript代码静态检查工具，通过解析代码的AST来分析代码格式，检查代码的风格和质量问题。现在，ESLint已经成为一个非常成功的开源项目了，基本上属于前端项目中Lint工具的标配。
+
+ESLint的使用并不复杂，主要通过配置文件对各种代码格式的规则（rules）进行配置，以指定具体的代码规范，目前开源社区也有一些成熟的规范集可供使用，著名的包括[Airbnb JavaScript 代码规范](https://github.com/airbnb/javascript)、[Standard JavaScript 规范](https://github.com/standard/standard/blob/master/docs/README-zhcn.md)、[Google JavaScript 规范](https://google.github.io/styleguide/jsguide.html)等等，你可以在项目中直接使用这些成熟的规范，也可以自己定制一套团队独有的代码规范，这在一些大型团队当中还是很常见的。
+
+#### 5.1.1 初始化
+
+接下来我们来利用ESLint官方的cli在现有的脚手架项目中进行初始化操作，首先我们需要安装ESLint：
+
+```shell
+ pnpm i eslint -D
+```
+
+接着执行ESLint的初始化命令，并进行如下的命令行交互：
+
+```shell
+npm eslint --init
+```
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403242303631.png)
+
+接着ESLint会帮助我们自动生成.eslintrc.js配置文件。需要注意的是，在上述初始化流程中我们并没有用npm安装依赖，需要进行手动安装：
+
+```shell
+pnpm i @typescript-eslint/eslint-plugin@latest eslint-plugin-react@latest @typescript-eslint/parser@latest
+```
+
+#### 5.1.2 核心配置阶解读
+
+搭建初次接触配置文件可能会有点不太理解，接下来我来为你介绍一下几个核心的配置项，你可以对照目前生成的.eslintrc.js一起冲学习：
+
+##### 5.1.2.1 parser-解析器
+
+ESLint底层默认使用[Espree](https://github.com/eslint/espree)来进行AST解析，这个解析器目前已经基于`Acron`来实现，虽然说`Acron`目前能够解析绝大多数的ECMAScript规范的语法，但还是不支持TypeScript，因此需要引入其他的解析器完成TS的解析。
+
+社区提供了`@typescript-eslint/parser`这个解决方案，专门为了TypeScript的解析而诞生，将`TS`代码转换为`Espree`能够识别的格式（即`EStree`格式），然后在`ESLint`下通过`Espree`进行给检查，以此兼容了TypeScript语法。
+
+##### 5.1.2.2 parserOptions-解析器选项
+
+这个配置可以对上述的解析器进行能力定制，默认情况下ESLint支持ES5语法，你可以配置这个选项，具体内容如下：
+
+- ecmaVersion：这个配置和`Acron`的`ecmaVersion`是兼容的，可以配置`ES+数字`（如ES6）或者`ES+年份`(如ES2015)也可以直接配置为`latest`，启用最新的ES语法
+- sourceType：默认为`script`，如果使用ESModule则应设置为`module`
+- ecmaFeatures：为一个对象，表示像使用的额外语言特性，如开启`jsx`
+
+##### 5.1.2.3 rules-具体代码规则
+
+`rules`配置即代表在ESLint中手动调整那些代码规则，比如`禁止在if语句中使用赋值语句`这条规则可以像如下的方式配置：
+
+```ts
+// .eslintrc.js
+module.exports = { // 其它配置省略 rules: {
+// key 为规则名，value 配置内容
+    "no-cond-assign": ["error", "always"]
+  }
+}```
+
+在 rules 对象中， `key` 一般为规则名，`value` 为具体的配置内容，在上述的例子中我们设置为一个数组，数组第一项为规则的 `ID` ，第二项为 `规则的配置`
+
+这里重点说一说规则的 ID，它的语法对所有规则都适用，你可以设置以下的值:
+
+- `off` 或 `0`：表示关闭规则
+- `warn` 或 `1`：表示开启规则，不过违背规则后只抛出 warning，而不会导致程序退出
+- `error` 或 `2`：表示开启规则，不过违背规则后抛出 `error`，程序会退出
+
+具体的规则配置可能会不一样，有的是一个字符串，有的可以配置一个对象，你可以参考 [ESLint 官方文档](https://zh-hans.eslint.org/)
+
+当然，你也能直接将 `rules` 对象的 `value` 配置成 ID，如 `no-cond-assign:error`
+
+##### 5.1.2.4. plugins
+
+
+上面提到过 ESLint 的 parser 基于 `Acorn` 实现，不能直接解析 TypeScript，需要我们指定 parser 选项为 `@typescript-eslint/parser` 才能兼容 TS 的解析，同理，ESLint 本身也没有内置 TypeScript 的代码规则，这个时候 ESLint 的插件系统就排上用场了，我们需要通过添加 ESLint 插件来增加一些特定的规则，比如添加 `@typescript-eslint/eslint-plugin` 来扩展一些关于 TS 代码的规则，如下代码所示：
+
+```js
+// .eslintrc.js
+module.exports = {
+// 添加 TS 规则，可省略`eslint-plugin` 
+plugins: ['@typescript-eslint']
+}
+```
+
+值得注意的是，添加插件后只是扩展了ESLint本身的规则集，但ESLint默认并没有开启这些规则的校验。如要过开启或者调整这些规则，你需要在rules中进行配置，如：
+
+```js
+// .eslintrc.js
+module.exports = { // 开启一些 TS 规则 rules: {
+    '@typescript-eslint/ban-ts-comment': 'error',
+    '@typescript-eslint/no-explicit-any': 'warn',
+  }
+}
+```
+
+##### 5.1.2.5 extends-继承配置
+
+extends相当于`继承`另外一份ESLint配置，可以配置为一个字符串，也可以配置成一个字符串数组，主要分为如下3种情况：
+
+- 从ESLint本身继承
+- 从类似`eslint-config-xxx`的npm包继承
+- 从ESLint插件继承
+
+```js
+// .eslintrc.js
+module.exports = {
+  extends: [
+    // 第1种情况
+    'eslint:recommended'
+    // 第2种情况，一般配置的时候可以省略 `eslint-config` "standard"
+    // 第3种情况，可以省略包名中的 `eslint-plugin`
+    // 格式一般为: `plugin:${pluginName}/${configName}` "plugin:react/recommended" "plugin:@typescript-eslint/recommended",
+  ]
+}
+```
+
+有了extends的配置，对于之前所说的ESLint插件中的繁多配置，我们就不需要手动一一开启了，通过extends字段即可自动开启插件中的推荐规则：
+
+```j
+extends:["plugin:@typescript-eslint/recommended"]
+```
+
+##### 5.1.2.6 env和globals
+
+这两个配置分别表示运行环境和全局变量，在指定的运行环境中会预设一些全局变量，比如：
+
+```js
+// .eslint.js
+module.export = {
+  env: {
+    browser: 'true',
+    node: 'true'
+  }
+}
+```
+
+指定上述的`env`配置后便会启用浏览器和Node.js环境，这两个环境中的一些全局变量（如`window`、`global`）会同时启用。
+
+有些全局变量是业务代码引入的第三方库所声明，这里就需要再`globals`配置中声明全局变量了，每个全局变量的配置值有三种情况：
+
+- `writavle`或者`true`，表示变量可重写
+- `readonly`或者`false`，表示变量不可重写
+- `off`，表示禁用该全局变量
+
+拿`jquery`举例，我们可以在配置文件中声明如下：
+
+```js
+// .eslintrc.js
+module.exports = {
+  globals: {
+    // 不可重写
+    $: false,
+    jQuery: false
+  }
+}
+```
+
+### 5.2. 与Prettier结合
+
+虽然ESint本身具备自动格式化代码的功能(`eslint --fix`),但术业有专攻，ESLint的主要优势在于`代码的风格检查并给出提示`，而在代码格式化这一块Prettier做的更加专业，因此我们经常将ESLint结合Prettier一起使用。
+
+首先我们先来安装下Prettier：
+
+```shell
+pnpm i prettier -D
+```
+
+在项目根目录新建`.prettierrc.js`配置文件，填写如下的配置内容：
+
+```js
+// .prettierrc.js
+module.exports = {
+  printWidth: 80, //一行的字符数，如果超过会进行换行，默认为80
+  tabWidth: 2, // 一个 tab 代表几个空格数，默认为 2 个
+  useTabs: false, //是否使用 tab 进行缩进，默认为false，表示用空格进行缩减 singleQuote: true, // 字符串是否使用单引号，默认为 false，使用双引号
+  semi: true, // 行尾是否使用分号，默认为true
+  trailingComma: 'none', // 是否使用尾逗号
+  bracketSpacing: true // 对象大括号直接是否有空格，默认为 true，效果:{ a: 1 }
+}
+```
+
+接下来我们将`Prettier`集成到现有的`ESLint`工具中，首先安装两个工具包：
+
+```shell
+pnpm i eslint-config-prettier eslint-plugin-prettier -D
+```
+
+其中`eslint-config-prettier`用来覆盖ESLint本身的规则配置，而`eslint-plugin-prettier`则是用于让Prettier来接管`eslint --fix`即修复代码的能力。
+
+在`.eslintrc.js`配置文件中接入prettier的相关工具链，最终的配置代码如下所示，你可以直接粘贴过去：
+
+```js
+// .eslintrc.js
+module.exports = {
+  env: {
+    browser: true,
+    es2021: true
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    // 1. 接入 prettier 的规则
+    'prettier',
+    'plugin:prettier/recommended'
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module'
+  },
+  // 2. 加入 prettier 的 eslint 插件
+  plugins: ['react', '@typescript-eslint', 'prettier'],
+  rules: {
+    // 3. 注意要加上这一句，开启 prettier 自动修复的功能 "prettier/prettier": "error",
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
+    'react/react-in-jsx-scope': 'off'
+  }
+}
+```
+
+OK，现在我们回到项目中来见证一下`ESLint+Prettier`强强联合的威力，在`package.josn`中定义一个脚本：
+
+```json
+{
+  "scripts": {
+	// 省略已有 script
+    "lint:script": "eslint --ext .js,.jsx,.ts,.tsx --fix --quiet ./",
+  }
+}
+```
+
+接下来在命令行终端执行：
+
+```shell
+pnpm run lint:script
+```
+
+这样我们就完成了`ESLint的规则检查`以及`Prettier的自动修复`。不过每次执行这个命令未免会有些繁琐，我们可以在`VSCode`中安装`ESLint`和`prettier`这两个插件，并且在设置区中开启`Format On Save`：
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403242356280.png)
+
+接下来在你按`Ctrl+S`保存代码的时候，Prettier便会自动帮忙修复代码格式。
+
+### 5.3 vite中接入ESLint
+
+除了安装编辑器插件，我们也可以通过Vite插件的方式在开发阶段进行ESLint扫描，以命令行的方式展示出代码中的规范问题，并能够直接定位到原文件。
+
+首先我们安装vite中的ESLint插件：
+
+```shell
+pnpm i vite-plugin-eslint -D
+```
+
+然后在`vite.config.ts`中接入：
+
+```ts
+// vite.config.ts
+import viteEslint from 'vite-plugin-eslint';
+// 具体配置 {
+plugins: [
+// 省略其它插件
+    viteEslint(),
+  ]
+}
+```
+
+现在你可以试着重新启动项目，ESLint的错误已经能够及时显示到命令行窗口中了。
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403250000097.png)
+
+由于这个插件采用另一个进程来运行ESLint的扫描工作，因此不会影响vite项目的启动速度，这个大家不用担心。
+
+### 5.4 样式规范工具：StyleLint
+
+接下来我们进入StyleLint的不分，先来看看官方的定义：
+
+> Stylelint，一个强大的现代化样式 Lint 工具，用来帮助你避免语法错误和统一代码风格。
+
+Stylelint主要专注于样式代码的规范检查，内置了**170多个书写规则**，支持**CSS预处理器**（如Sass/Less）,提供**插件化机制**以供开发着扩展规则，已经被Google、Github的**大型团队**投入使用，与ESLint类似，在规范检查方面，StyleLint已经做的足够专业了，而在代码格式化方面，我们仍然需要结合Prettier一起来使用。
+
+首先让我们来安装StyleLint以及相应的工具套件：
+
+```shell 
+pnpm i stylelint stylelint-prettier stylelint-config-standard postcss-scss postcss-html stylelint-config-recommended-vue stylelint-config-recess-order -D
+```
+
+然后，我们在StyleLint的配置文件`.stylelintrc.js`中一一使用这些工具套件：
+
+```js
+// .stylelintrc.js
+module.exports = {
+  // 注册 stylelint 的 prettier 插件
+  plugins: ['stylelint-prettier'],
+  // 继承一系列规则集合
+  extends: [
+    // standard 规则集合
+    'stylelint-config-standard',
+    // standard 规则集合的 scss 版本
+    'stylelint-config-standard-scss',
+    // 样式属性顺序规则
+    'stylelint-config-recess-order',
+    // 接入 Prettier 规则
+    'stylelint-config-prettier',
+    'stylelint-prettier/recommended'
+  ],
+  // 配置 rules
+  rules: {
+    // 开启 Prettier 自动格式化功能
+    'prettier/prettier': true
+  }
+}
+```
+
+可以发现StyleLint的配置文件和ESLint还是非常相似的，常用的`plugins`、`extends`和`rules`属性在ESLint同样存在，并且与ESLint中这三个属性的功能也基本相同，不过需要强调的是在StyleLint中rules的配置会和ESLInt有些区别，对于每个具体的rule会有三种配置方式：
+
+- `null`：表示关闭规则
+- 一个简单值（如true，字符串，根据不同规则有所不同），表示开启规则，但并不做过多的定制。
+- 一个数组，包含两个元素，即[简单值，自定义配置],第一个元素通常为一个简单值，第二个元素用来进行更精细化的规则配置。
+
+接下来我们将StyleLint集成到项目中，回到package.json中，增加如下的scripts配置：
+
+```json
+{
+  "scripts": {
+// 整合 lint 命令
+"lint": "npm run lint:script && npm run lint:style",
+// stylelint 命令
+"lint:style": "stylelint --fix \"src/**/*.{css,scss}\""
+}
+}
+```
+
+执行 `pnpm run lint:style` 即可完成样式代码的规范检查和自动格式化。当然，你也可以在 VSCode 中安装 `Stylelint` 插件，这样能够在开发阶段即时感知到代码格式问题，提前进行修复。
+
+  当然，我们也可以直接在 Vite 中集成 Stylelint。社区中提供了 Stylelint 的 Vite 插件，实现在项目开发阶段提前暴露出样式代码的规范问题。我们来安装一下这个插件:
+
+```shell
+pnpm i @amatlash/vite-plugin-stylelint -D
+```
+
+然后在vite配置文件中添加如下的内容：
+
+```js
+// 具体配置 {
+plugins: [
+// 省略其它插件 viteStylelint({
+// 对某些文件排除检查
+      exclude: /windicss|node_modules/
+    }),
+]
+}
+```
+
+接下来，你就可以在命令行界面看到对应的StyleLint提示了：
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403250011368.png)
+
+## 6 Husky+lint-staged的提交工作流集成
+
+### 6.1 提交前的代码lint检查
+
+
+
+
+
+
+
