@@ -1283,9 +1283,987 @@ plugins: [
 
 ### 6.1 提交前的代码lint检查
 
+在上文中我们提到了安装`ESLint`、`Prettier`和`StyleLint`的VSCode插件或者vite插件，在开发阶段提前规避掉代码格式的问题，但实际上这也只是将问题提前暴露，并不能保证规范问题能完全被解决，还是可能导致线上的代码出现不符合规范的情况，那么如何来避免这类问题呢？
+
+我们可以在代码提交的时候进行卡点检查，也就是拦截`git commit`命令，进行代码格式检查，只有确保通过格式检查才允许正常提交代码，社区中已经有对应的工具--`Husky`来完成这件事情，让我们来安装一下这个工具：
+
+```shell
+pnpm i husky -D
+```
+
+值得提醒的是，有很多人推荐在pacage.json中配置husky的钩子：
+
+```json
+// package.json
+{
+  "husky": {
+    "pre-commit": "npm run lint"
+  }
+}
+```
+
+这种做法在Husky`4.x`及以下版本没问题，而在最新版本`7.x版本`中是无效的，在新版Husky版本中，我们需要做如下的事情：
+
+初始化Husky：`npx husky install`，并将`husky install`作为项目启动前脚本，如：
+
+```json
+{
+  "scripts": {
+// 会在安装 npm 依赖后自动执行
+    "postinstall": "husky install"
+  }
+}
+```
+
+添加Husky钩子，在终端执行如下命令：
+
+```shell
+npx husky add .husky/pre-commit "npm run lint"
+```
+
+接着你将会在项目根目录的`.husky`目录中看到名为`pre-commit`的文件，里面包含了`git commit`前要执行的脚本。现在，当你执行`git commit`的时候，会首先执行`npm run lint`脚本，通过Lint检查后才会正式提交代码记录。
+
+不过，刚才我们直接在Husky的钩子中执行`npm run lint`，这样产生一个额外的问题，Husky中每次执行`npm run lint`都会对仓库中的代码进行全量检查，也就是说，即使某些文件并没有改动，也会走一次Lint检查，当项目代码越来越多的时候，提交的过程会越来越慢，影响开发体验。
+
+而`lint-staged`就是用来解决上述全量扫描问题的，可以实现只对存入`暂存区`的文件进行Lint检查，大大提高了提交代码的效率，首先，我们安装一下对应的npm包：
+
+```shell
+pnpm i -D lint-staged
+```
+
+然后在package.json中添加如下的配置：
+
+```json
+{
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts}": ["npm run lint:script", "git add ."],
+    "**/*.{scss}": ["npm run lint:style", "git add ."]
+  }
+}
+```
+
+接下来我们需要在Husky中应用`lint-stage`，回到`.husky/pre-commit`脚本中，将原来的npm rn lint换成如下的脚本：
+
+```shell
+npmx --no -- lint-staged
+```
+
+如此一来，我们便实现了提交代码时的`增量lint检查`。
+
+### 6.2 提交时的commit信息规范
+
+除了代码规范检查之后，git提交信息的规范也是不容忽视的一个环节，规范的commit信息能够方便团队写作和问题定位，首先我们来安装一下需要的工具库，执行如下的命令：
+
+```shell
+pnpm i commitlint @commitlint/cli @commitlint/config-conventional -D
+```
+
+接下来新建`.commitlintrc.js`：
+
+```js
+// .commitlintrc.js
+module.exports = {
+  extends: ['@commitlint/config-conventional']
+}
+```
+
+一般我们直接使用`@commitlint/config-conventional`规范集就可以了，他所规定的commit信息一般由两个部分：`type`和`subject`组成，结构如下：
+
+```text
+// type 指提交的类型
+// subject 指提交的摘要信息
+<type>: <subject>
+```
+
+常用的`type`如下：
+
+- `feat`：添加新功能
+- `fix`：修复问题/bug
+- `style`：代码风格相关无影响运行结果的
+- `chore`：一些不影响功能的更改(依赖更新/脚手架配置修改等)
+- `perf`：性能方面的优化
+- `refactor`：代码重构
+- `revert`：撤销修改
+- `test`：添加一些测试代码等等
+- `docs`：文档/注释
+- `workflow`：工作流改进
+- `ci`：持续集成
+- `types`：类型定义文件更改
+- `wip`：开发中
+
+接下来我们将`commitlint`的功能集成到husky的钩子中，在终端执行如下命令即可：
+
+```shell
+npx husky add .husky/commit-msg "npx --no-install commitlint -e $HUSKY_GIT_PARAMS"
+```
+
+你可以发现在`.husky`目录下多出了`commit-msg`脚本文件，表示`commitlint`命令已经成功接入到了husky的钩子当中，现在我们可以尝试对代码进行提交，加入输入一个错误的commit信息，commitlint会自动抛出错误并退出：
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251003411.png)
+
+至此，我们便完成了git提交信息的卡点扫描和规范检查。
+
+## 7 vite处理静态资源
+
+> 静态资源处理是前端工程经常遇到的问题，在真实的工程中不仅仅包含了动态执行的代码，也不可避免地要引入各种静态资源，如`图片`、`JSON`、`Worker文件`、`web Assembly文件`等等。
+
+> 静态资源本身并不是标准意义上的模块，因此对它们的处理和普通的代码是需要区别对待的。一方面我们需要解决资源加载的问题，对 Vite 来说就是如何将静态资源解析并加载为一个 ES 模块的问题;另一方面在**生产环境**下我们还需要考虑静态资源的部署问题、体积问题、网络性能问题，并采取相应的方案来进行优化。
+
+### 7.1 图片加载
+
+> 图片是项目中最常用的静态资源之一，本身包括了非常多的格式，诸如 png、jpeg、 webp、avif、gif，当然，也包括经常用作图标的 svg 格式。这一部分我们主要讨论的是如何加载图片，也就是说怎么让图片在页面中**正常显示**。
+
+#### 7.1.1 使用场景
+
+在日常的项目开发过程中，我们一般会遇到三种加载图片的场景：
+
+在HTML或者JSX中，通过img标签来加载图片，如：
+
+```html
+<img src="../../assets/a.png"></img>
+```
+
+在CSS中通过background属性来加载图片，如：
+
+```css
+background: url('../../assets/b.png') no-repeat;
+```
+
+在JavaScript中，通过脚本的方式动态指定图片的src属性，如：
+
+```js
+document.getElementById('hero-img').src = '../../assets/c.png'
+```
+
+当然，大家一般还会有别名路径的需求，比如地址前缀直接换成`@assets`，这样就不用开发人员手动寻址，降低开发时的心智负担。
+
+#### 7.1.2 vite中使用
+
+接下来让我们在目前的脚手架项目来进行实际的编码，你可以在vite的配置文件中配置一下别名，方便后续的图片引入：
+
+```js
+// vite.config.ts
+import path from 'path';
+
+{
+resolve: {
+// 别名配置 alias: {
+      '@assets': path.join(__dirname, 'src/assets')
+    }
+}
+}
+```
+
+这样vite在遇到@assets路径的时候，会自动帮我们定位至根目录下的`src/assets`目录，值得注意的是，alias别名配置不仅在JavaScript的import语句中生效，在CSS代码的@import和url导入语句中也同样生效。
+
+现在`src/assets`目录的内容如下：
+
+```text
+├── icons
+│   ├── favicon.svg
+│   ├── logo-1.svg
+│   ├── logo-2.svg
+│   ├── logo-3.svg
+│   ├── logo-4.svg
+│   ├── logo-5.svg
+│   └── logo.svg
+└── imgs
+    ├── background.png
+    └── vite.png
+```
+
+接下来我们在Header组件中引入vite.png这张图片：
+
+```js
+// Header/index.tsx
+import React, { useEffect } from 'react';
+import { devDependencies } from '../../../package.json';
+import styles from './index.module.scss';
+// 1. 导入图片
+import logoSrc from '@assets/imgs/vite.png';
+// 方式一
+export function Header() {
+return (
+<div className={`p-20px text-center ${styles.header}`}>
+<!-- 省略前面的组件内容 -->
+<!-- 使用图片 -->
+<img className="m-auto mb-4" src={logoSrc} alt="" />
+</div>
+);
+}
 
 
+// 方式二
+export function Header() {
+useEffect(() => {
+const img = document.getElementById('logo') as HTMLImageElement; img.src = logoSrc;
+}, []);
+return (
+<div className={`p-20px text-center ${styles.header}`}>
+<!-- 省略前面的组件内容 -->
+<!-- 使用图片 -->
+<img id="logo" className="m-auto mb-4" alt="" />
+</div>
+); }
+```
 
+然后我们在网站上就可以看出这张图片已经显示出来了。
 
+而图片路径也被解析为了正确的格式（/表示项目根路径）：
 
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251046659.png)
 
+现在让我们进入Header组件的样式文件中添加background属性：
+
+```css
+.header {
+// 前面的样式代码省略
+  background: url('@assets/imgs/background.png') no-repeat;
+}
+```
+
+再次回到浏览器，可以看到生效的背景图片。
+
+#### 7.1.3 SVG组件方式加载
+
+刚才我们成功地在vite中实现了图片的加载，上述这些加载的方式对于SVG格式来说依然是适用的，不过，我们通常也虚妄能够将SVG当做一个组件来引入，这样我们可以很方便地修改SVG的各种属性，而且比img标签的引入方式更加优雅。
+
+SVG组件加载在不同的前端框架中的实现不太相同，社区中也已经有了对应的插件支持：
+
+- Vue2项目中可以使用[vite-plugin-vue 2-svg](https://github.com/pakholeung37/vite-plugin-vue2-svg)插件
+- Vue3项目中可以引入[vite-svg-loader](https://github.com/jpkleemans/vite-svg-loader)插件
+- React项目中可以使用[vite-plugin-svgr](https://github.com/pd4d10/vite-plugin-svgr)插件
+
+我们在React脚手架项目中安装对应的依赖：
+
+```shell
+pnpm i vite-plugin-svgr -D
+```
+
+```js
+// vite.config.ts
+import svgr from 'vite-plugin-svgr'
+
+{
+  plugins: [
+    // 其它插件省略
+    svgr()
+  ]
+}
+```
+
+随后注意要在tsconfig.json添加如下配置，否则会有类型错误：
+
+```json
+{
+  "compilerOptions": {
+  // 省略其它配置
+    "types": ["vite-plugin-svgr/client"]
+  }
+}
+```
+
+接下来让我们在项目中使用SVG组件：
+
+```js
+import { ReactComponent as ReactLogo } from '@assets/icons/logo.svg'
+export function Header() {
+  return (
+    // 其他组件内容省略
+    <ReactLogo />
+  )
+}
+```
+
+回到浏览器中，你可以看到SVG已经成功渲染了。
+
+#### 7.1.4 JSON加载
+
+vite中已经内置了对于JSON文件的解析，底层使用`@rollup/pluginutils`的`dataToEsm`方法将JSON对象转换为一个包含各种具名导出的ES模块，使用如下：
+
+```js
+import { version } from '../../../package.json'
+```
+
+不过你也可以在配置文件禁用按名导入的方式：
+
+```js
+// vite.config.ts
+{
+  json: {
+    stringify: true
+  }
+}
+```
+
+这样会将JSON的内容解析为`exort default JSON.parse('xxx)`，这样会失去`按需导出`的能力，不过在JSON数据量比较大的时候，可以优化解析性能。
+
+#### 7.1.5 Web Worker脚本
+
+vite中使用Web Worker也非常简单，我们可以在新建`Header/example.js`文件：
+
+```js
+const start = () => {
+  let count = 0
+  setInterval(() => {
+    // 给主线程传值
+    postMessage(++count)
+  }, 2000)
+}
+start()
+```
+
+然后在Header组件中引入，引入的时候注意加上`?wrker`后缀，相当于告诉vite这是一个Web Worker脚本文件：
+
+```js
+import Worker from './example.js?worker'
+// 1. 初始化 Worker 实例
+const worker = new Worker()
+// 2. 主线程监听 worker 的信息
+worker.addEventListener('message', e => {
+  console.log(e)
+})
+```
+
+打开浏览器的控制面板，你可以看到Worker传给主线程的信息已经成功打印了，说明Web Worker脚本已经成功执行，也能与主线程正常通信。
+
+#### 7.1.6 Web Assembly文件
+
+vite对于`.wasm`文件也提供了开箱即用的支持，我们那一个斐波那契的`.wasm`文件来进行一下实际操作，对应的JavaScript原文件如下：
+
+```js
+export function fib(n) {
+  var a = 0,
+    b = 1
+  if (n > 0) {
+    while (--n) {
+      let t = a + b
+      a = b
+      b = t
+    }
+    return b
+  }
+  return a
+}
+```
+
+让我们在组件中导入`fib.wasm`文件：
+
+```js
+// Header/index.tsx
+import init from './fib.wasm';
+type FibFunc = (num: number) => number;
+init({}).then((exports) => {
+const fibFunc = exports.fib as FibFunc;
+console.log('Fib result:', fibFunc(10));
+});
+```
+
+vite会对`.wasm`文件的内容进行封装，默认导出为init函数，这个函数返回一个Promise，因此我们可以在其them方法中拿到其导出的成员--`fib`方法。
+
+回到浏览器，我们可以查看到计算结果，说明`.wasm文件`已经被成功执行了。
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251105985.png)
+
+#### 7.1.7 其他静态资源
+
+除了上述的一些资源格式，vite也对下面几类格式提供了内置的支持：
+
+- 媒体类文件：包括`mp4`、`webm`、`ogg`、`mp3`、`wav`、`flac`和`aac`
+- 字体类文件：包括`woff`、`woff2`、`eot`、`ttf`和`otf`
+- 文本类：包括`webmanifest`、`pdf`和`txt`
+
+也就是说，你可以在vite中将这些类型的文件当做一个ES模块来导入使用，如果你的项目中还存在其他格式的静态资源，你可以通过`assetsInclude`配置让vite来支持加载：
+
+```js
+// vite.config.ts
+{
+  assetsInclude: ['.gltf']
+}
+```
+
+#### 7.1.8 特殊资源后缀
+
+vite中引入静态资源时，也支持在路径最后加上一些特殊的query后缀，包括：
+
+- `?url`：表示获取资源的路径，这在只想获取文件路径而不是内容的场景将会很有用
+- `?raw`：表示获取资源的字符串内容，如果你只想拿到资源的原始内容，可以使用这个后缀
+- `?inline`：表示资源强制内联，而不是打包成单独的文件
+
+#### 7.1.9 生产环境处理
+
+在前面的内容中，我们围绕着如何加载静态资源这个问题，在vite中进行具体的编码实践，相信对于vite中各种静态资源的时候，你已经比较熟悉了，但另一方面，在生产环境下，我们又面临着一些新的问题。
+
+- 部署域名怎么配置？
+- 资源打包成单文件还是作为Base 64 格式内联？
+- 图片太大了怎么压缩？
+- SVG请求数量太多了怎么优化？
+
+##### 7.1.9.1 自定义部署域名
+
+一般在我们访问线上的站点时，站点里面一些静态资源的地址都包含了相应域名的前缀，如：
+
+```html
+<img src="https://sanyuan.cos.ap-beijing.myqcloud.com/logo.png" />
+```
+
+以上面这个地址例子，[https://sanyuan.cos.ap-beijing.myqcloud.com](https://sanyuan.cos.ap-beijing.myqcloud.com)是CDN地址前缀，`/logo.png`则是我们开发阶段使用的路径，name，我们是不是需要在上线前把图片先上传到CDN，然后将代码中的地址手动替换成线上地址呢？这样就太麻烦了。
+
+在vite中我们可以有更加自动化的方式来实现地址的替换，只需要在配置文件中指定`base`参数即可：
+
+```js
+// vite.config.ts
+// 是否为生产环境，在生产环境一般会注入 NODE_ENV 这个环境变量，见下面的环境变量文件配置 const isProduction = process.env.NODE_ENV === 'production';
+// 填入项目的 CDN 域名地址
+const CDN_URL = 'xxxxxx';
+// 具体配置 {
+  base: isProduction ? CDN_URL: '/'
+}
+
+// .env.development
+NODE_ENV=development
+// .env.production
+NODE_ENV=production
+```
+
+注意在项目根目录新增的两个环境变量文件 `.env.development` 和 `.env.production`，顾名思义，即分别在开发环境和生产环境注入一些环境变量，这里为了区分不同环境我们加上了 `NODE_ENV` ，你也可以根据需要添加别的环境变量。
+
+打包的时候 Vite 会自动将这些环境变量替换为相应的字符串。
+
+接着执行 `pnpm run build`，可以发现产物中的静态资源地址已经自动加上了 CDN 地址前缀:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251124287.png)
+
+当然，HTML 中的一些 JS、CSS 资源链接也一起加上了 CDN 地址前缀:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251125941.png)
+
+当然，有时候可能项目中的某些图片需要存放到另外的存储服务，一种直接的方案是将完整地址写死到 src 属性中，如:
+
+```html
+<img src="https://my-image-cdn.com/logo.png" />
+```
+
+这样做显然是不太优雅的，我们可以通过定义环境变量的方式来解决这个问题，在项目根目录新增 .env 文件:
+
+```text
+// 开发环境优先级: .env.development > .env
+// 生产环境优先级: .env.production > .env
+// .env 文件 VITE_IMG_BASE_URL=https://my-image-cdn.com
+```
+
+然后进入 src/vite-env.d.ts 增加类型声明:
+
+```ts
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+readonly VITE_APP_TITLE: string;
+// 自定义的环境变量
+readonly VITE_IMG_BASE_URL: string;
+}
+interface ImportMeta {
+readonly env: ImportMetaEnv;
+}
+```
+
+值得注意的是，如果某个环境变量要在 Vite 中通过 `import.meta.env` 访问，那么它必须以 `VITE_` 开头，如 `VITE_IMG_BASE_URL` 。接下来我们在组件中来使用这个环境变量:
+
+```html
+<img src={new URL('./logo.png', import.meta.env.VITE_IMG_BASE_URL).href} />
+```
+
+接下来在 `开发环境` 启动项目或者 `生产环境` 打包后可以看到环境变量已经被替换，地址能够正常显示了。
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251127077.png)
+
+##### 7.1.9.2 单文件or内联
+
+在 Vite 中，所有的静态资源都有两种构建方式，一种是打包成一个单文件，另一种是通过 base64 编码的格式内嵌到代码中。
+
+这两种方案到底应该如何来选择呢?
+
+对于比较小的资源，适合内联到代码中，一方面对 `代码体积` 的影响很小，另一方面可以减少不必要的网络请求， `优化网络性能` 。而对于比较大的资源，就推荐单独打包成一个文件，而不是内联了，否则可能导致上 MB 的 base64 字符串内嵌到代码中，导致代码体积瞬间庞大，页面加载性能直线下降。
+
+Vite 中内置的优化方案是下面这样的:
+
+- 如果静态资源体积 >= 4 KB，则提取成单独的文件
+- 如果静态资源体积 < 4 KB，则作为 base 64 格式的字符串内联
+
+上述的 `4 KB` 即为提取成单文件的临界值，当然，这个临界值你可以通过 `build.assetsInlineLimit` 自行配置，如下代码所示:
+
+```js
+// vite.config.ts
+{
+  build: {
+    // 8 KB
+    assetsInlineLimit: 8 * 1024
+  }
+}
+```
+
+##### 7.1.9.3 图片压缩
+
+图片资源的体积往往是项目产物体积的大头，如果能尽可能精简图片的体积，那么对项目整体打包产物体积的优化将会是非常明显的。在 JavaScript 领域有一个非常知名的图片[压缩库 imagemin](https://www.npmjs.com/package/imagemin)，作为一个底层的压缩工具，前端的项目中经常基于它来进行图片压缩，比如 Webpack 中大名鼎鼎的 `image-webpack-loader` 。社区当中也已经有了开箱即用的 Vite 插件—— `vite-plugin-imagemin` ，首先让我们来安装它:
+
+```shell
+pnpm i vite-plugin-imagemin -D
+```
+
+随后在 Vite 配置文件中引入:
+
+```js
+//vite.config.ts
+import viteImagemin from 'vite-plugin-imagemin';
+
+{
+plugins: [
+// 忽略前面的插件 viteImagemin({
+// 无损压缩配置，无损压缩下图片质量不会变差
+optipng: {
+        optimizationLevel: 7
+    },
+// 有损压缩配置，有损压缩下图片质量可能会变差
+pngquant: {
+        quality: [0.8, 0.9],
+      },
+// svg 优化 svgo: {
+plugins: [ {
+            name: 'removeViewBox'
+          },
+          {
+            name: 'removeEmptyAttrs',
+            active: false
+} ]
+} })
+]
+}
+```
+
+接下来我们可以尝试执行 `pnpm run build` 进行打包:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251131515.png)
+
+Vite 插件已经自动帮助我们调用 imagemin 进行项目图片的压缩，可以看到压缩的效果非常明显，强烈推荐大家在项目中使用。
+
+##### 7.1.9.4 雪碧图的优化
+
+在实际的项目中我们还会经常用到各种各样的 svg 图标，虽然 svg 文件一般体积不大，但 Vite 中对于 svg 文件会始终打包成单文件，大量的图标引入之后会导致网络请求增加，大量的 HTTP 请求会导致网络解析耗时变长，页面加载性能直接受到影响。这个问题怎么解决呢?
+
+> HTTP 2 的多路复用设计可以解决大量 HTTP 的请求导致的网络加载性能问题，因此雪碧图技术在 HTTP 2 并没有明显的优化效果，这个技术更适合在传统的 HTTP 1.1 场景下使用(比如本地的 Dev Server)。
+
+比如在 Header 中分别引入 5 个 svg 文件:
+
+```js
+import Logo1 from '@assets/icons/logo-1.svg'
+import Logo2 from '@assets/icons/logo-2.svg'
+import Logo3 from '@assets/icons/logo-3.svg'
+import Logo4 from '@assets/icons/logo-4.svg'
+import Logo5 from '@assets/icons/logo-5.svg'
+```
+
+这里顺便说一句，Vite 中提供了 `import.meta.glob` 的语法糖来解决这种批量导入的问题，如上述的 import 语句可以写成下面这样:
+
+```js
+const icons = import.meta.glob('../../assets/icons/logo-*.svg')
+```
+
+结果如下：
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251133432.png)
+
+可以看到对象的 value 都是动态 import，适合按需加载的场景。在这里我们只需要同步加载即可，可以使用 import.meta.globEager 来完成:
+
+```js
+const icons = import.meta.globEager('../../assets/icons/logo-*.svg')
+```
+
+`icons`的结果打印，接下来我们稍作解析，然后将 svg 应用到组件当中:
+
+```js
+// Header/index.tsx
+const iconUrls = Object.values(icons).map(mod => mod.default);
+
+// 组件返回内容添加如下 {iconUrls.map((item) => (
+  <img src={item} key={item} width="50" alt="" />
+))}
+```
+
+回到页面中，我们发现浏览器分别发出了 5 个 svg 的请求:
+
+假设页面有 100 个 svg 图标，将会多出 100 个 HTTP 请求，依此类推。我们能不能把这些 svg 合并到一起，从而大幅减少网络请求呢?
+
+答案是可以的。这种合并图标的方案也叫 `雪碧图` ，我们可以通过 `vite-plugin-svg-icons` 来实现这个方案，首先安装一下这个插件:
+
+```shell
+pnpm i vite-plugin-svg-icons -D
+```
+
+接着在 Vite 配置文件中增加如下内容:
+
+```js
+// vite.config.ts
+
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+
+{
+plugins: [
+// 省略其它插件 createSvgIconsPlugin({
+      iconDirs: [path.join(__dirname, 'src/assets/icons')]
+    })
+]
+}
+```
+
+在 `src/components` 目录下新建 `SvgIcon` 组件:
+
+```js
+// SvgIcon/index.tsx
+export interface SvgIconProps {
+name?: string;
+prefix: string;
+color: string;
+  [key: string]: string;
+}
+
+export default function SvgIcon({ name,
+  prefix = 'icon',
+  color = '#333',
+  ...props
+}: SvgIconProps) {
+const symbolId = `#${prefix}-${name}`;
+return (
+<svg {...props} aria-hidden="true">
+      <use href={symbolId} fill={color} />
+    </svg>
+);
+}
+```
+
+现在我们回到 Header 组件中，稍作修改:
+
+```js
+// index.tsx
+const icons = import.meta.globEager('../../assets/icons/logo-*.svg');
+const iconUrls = Object.values(icons).map((mod) => {
+// 如 ../../assets/icons/logo-1.svg -> logo-1
+const fileName = mod.default.split('/').pop();
+const [svgName] = fileName.split('.');
+return svgName;
+});
+
+// 渲染 svg 组件 {iconUrls.map((item) => (
+  <SvgIcon name={item} key={item} width="50" height="50" />
+))}
+```
+
+最后在 `src/main.tsx` 文件中添加一行代码:
+
+```js
+import 'virtual:svg-icons-register'
+```
+
+现在回到浏览器的页面中，发现雪碧图已经生成:
+
+雪碧图包含了所有图标的具体内容，而对于页面每个具体的图标，则通过 use 属性来引用雪碧图的对应内容:
+
+如此一来，我们就能将所有的 svg 内容都内联到 HTML 中，省去了大量 svg 的网络请求。
+
+## 8. vite-预构建
+
+大家都知道， Vite 是一个提倡 `no-bundle` 的构建工具，相比于传统的 Webpack，能做到开发时的模块按需编译，而不用先打包完再加载。
+
+需要注意的是，我们所说的模块代码其实分为两部分，一部分是源代码，也就是业务代码，另一部分是第三方依赖的代码，即 `node_modules` 中的代码。所谓的 `no-bundle` `只是对于源代码而言`，对于第三方依赖而言，Vite 还是选择 bundle(打包)，并且使用速度极快的打包器 Esbuild 来完成这一过程，达到秒级的依赖编译速度。
+
+### 8.1 为什么需要预构建？
+
+为什么在开发阶段我们要对第三方依赖进行预构建? 如果不进行预构建会怎么样？
+
+首先 Vite 是基于浏览器原生 ES 模块规范实现的 Dev Server，不论是应用代码，还是第三方依赖的代码，理应符合 ESM 规范才能够正常运行。
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251434229.png)
+
+但可惜，我们没有办法控制第三方的打包规范。就目前来看，还有相当多的第三方库仍然没有 ES 版本的产物，比如大名鼎鼎的 `react` :
+
+```js
+// react 入口文件
+// 只有 CommonJS 格式
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./cjs/react.production.min.js')
+} else {
+  module.exports = require('./cjs/react.development.js')
+}
+```
+
+这种 CommonJS 格式的代码在 Vite 当中无法直接运行，我们需要将它转换成 ESM 格式的产物。
+
+此外，还有一个比较重要的问题——请求瀑布流问题。比如说，知名的 loadsh-es 库本身是有 ES 版本产物的，可以在 Vite 中直接运行。但实际上，它在加载时会发出特别多的请求，导致页面加载的前几秒几都乎处于卡顿状态，拿一个简单的 demo 项目举例，请求情况如下图所示:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251435336.png)
+
+我在应用代码中调用了 `debounce` 方法，这个方法会依赖很多工具函数，如下图所示:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251436879.png)
+
+每个 `import` 都会触发一次新的文件请求，因此在这种 `依赖层级深`、`涉及模块数量多` 的情况下，会触发成百上千个网络请求，巨大的请求量加上 Chrome 对同一个域名下只能同时支持 `6` 个 HTTP 并发请求的限制，导致页面加载十分缓慢，与 Vite 主导性能优势的初衷背道而驰。不过，在进行依赖的预构建之后， `lodash-es` 这个库的代码被打包成了一个文件，这样请求的数量会骤然减少，页面加载也快了许多。下图是进行预构建之后的请求情况，你可以对照看看:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251436613.png)
+
+总之，依赖预构建主要做了两件事情：
+
+一是将其他格式（如UMD和CommonJS）的产物转换为ESM格式，使其在浏览器通过`<script type="module"><script>`的方式正常加载。
+
+二是打包第三方库的代码，将各个第三方库分散的文件合并到一起，减少HTTP请求数量，避免页面加载性能劣化。
+
+而这两件事情全部由性能优异的 Esbuild (基于 Golang 开发)完成，而不是传统的 `Webpack/Rollup`，所以也不会有明显的打包性能问题，反而是 Vite 项目启动飞快(秒级启动)的一个核心原因。
+
+> ps: Vite 1.x 使用了 Rollup 来进行依赖预构建，在 2.x 版本将 Rollup 换成了 Esbuild，编译速度提升了近 100 倍。
+
+### 8.2 如何开启预构建
+
+在 Vite 中有两种开启预构建的方式，分别是 `自动开启` 和 `手动开启`。
+
+#### 8.2.1 自动开启
+
+首先是 `自动开启` 。当我们在第一次启动项目的时候，可以在命令行窗口看见如下的信息:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251440141.png)
+
+同时，在项目启动成功后，你可以在根目录下的 node_modules 中发现 .vite 目录，这就是预构建产物文件存放的目录，内容如下:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251440267.png)
+
+在浏览器访问页面后，打开 Dev Tools 中的网络调试面板，你可以发现第三方包的引入路径已经被重写:
+
+```text
+import React from "react";
+// 路径被重写，定向到预构建产物文件中
+import __vite__cjsImport0_react from "/node_modules/.vite/react.js?v=979739df";
+const React = __vite__cjsImport0_react.__esModule
+ ? __vite__cjsImport0_react.default
+ : __vite__cjsImport0_react;
+```
+
+并且对于依赖的请求结果，Vite 的 Dev Server 会设置强缓存:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251441580.png)
+
+缓存过期时间被设置为一年，表示缓存过期前浏览器对 react 预构建产物的请求不会再经过 Vite Dev Server，直接用缓存结果。
+
+当然，除了 HTTP 缓存，Vite 还设置了本地文件系统的缓存，所有的预构建产物默认缓存在 node_modules/.vite 目录中。如果以下 3 个地方都没有改动，Vite 将一直使用缓存文件:
+
+- package.json的`dependencies`字段
+- 各种包管理器的lock文件
+- `optimizeDeps`配置内容
+
+#### 8.2.2 手动开启
+
+前面说到了如何启动预构建的问题，现在我们来谈谈怎样通过 Vite 提供的配置项来定制预构建的过程。Vite 将预构建相关的配置项都集中在 `optimizeDeps` 属性上，我们来一一拆解这些子配置项背后的含义和应用场景。
+
+##### 8.2.2.1 入口文件-entries
+
+第一个是参数是 optimizeDeps.entries，通过这个参数你可以自定义预构建的入口文件：
+
+实际上，在项目第一次启动时，Vite 会默认抓取项目中所有的 HTML 文件（如当前脚手架项目中的 `index.html`），将 HTML 文件作为应用入口，然后根据入口文件扫描出项目中用到的第三方依赖，最后对这些依赖逐个进行编译。
+
+那么，当默认扫描 HTML 文件的行为无法满足需求的时候，比如项目入口为 vue 格式文件时，你可以通过 entries 参数来配置:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    // 为一个字符串数组
+    entries: ['./src/main.vue']
+  }
+}
+```
+
+当然，entries 配置也支持 [glob 语法](https://github.com/mrmlnc/fast-glob)，非常灵活，如:
+
+```js
+// 将所有的 .vue 文件作为扫描入口
+entries: ['**/*.vue']
+```
+
+不光是 `.vue` 文件，Vite 同时还支持各种格式的入口，包括: `html` 、 `svelte` 、 `astro` 、`js`、 `jsx` 、 `ts` 和 `tsx` 。可以看到，只要可能存在 `import` 语句的地方，Vite 都可以解析，并通过内置的扫描机制搜集到项目中用到的依赖，通用性很强。
+
+##### 8.2.2.2 添加一些依赖-include
+
+除了 `entries` ， `include` 也是一个很常用的配置，它决定了可以强制预构建的依赖项，使用方式很简单：
+
+```js
+// vite.config.ts
+optimizeDeps: {
+  // 配置为一个字符串数组，将 `lodash-es` 和 `vue`两个包强制进行预构建
+  include: ['lodash-es', 'vue']
+}
+```
+
+它在使用上并不难，真正难的地方在于，如何找到合适它的使用场景。前文中我们提到，Vite 会根据应用入口( `entries` )自动搜集依赖，然后进行预构建，这是不是说明 Vite 可以百分百准确地搜集到所有的依赖呢？事实上并不是，某些情况下 Vite 默认的扫描行为并不完全可靠，这就需要联合配置 `include` 来达到完美的预构建效果了。接下来，我们好好梳理一下到底有哪些需要配置 `include` 的场景。
+
+###### 8.2.2.2.1 场景一：动态import
+
+在某些动态 import 的场景下，由于 Vite 天然按需加载的特性，经常会导致某些依赖只能在运行时被识别出来。
+
+```js
+// src/locales/zh_CN.js
+import objectAssign from 'object-assign'
+console.log(objectAssign)
+// main.tsx
+const importModule = m => import(`./locales/${m}.ts`)
+importModule('zh_CN')
+```
+
+在这个例子中，动态 import 的路径只有运行时才能确定，无法在预构建阶段被扫描出来。因此，我们在访问项目时控制台会出现下面的日志信息:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251446095.png)
+
+这段 log 的意思是: Vite 运行时发现了新的依赖，随之重新进行依赖预构建，并刷新页面。这个过程也叫二次预构建。在一些比较复杂的项目中，这个过程会执行很多次，如下面的日志信息所示：
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251447044.png)
+
+然而，二次预构建的成本也比较大。我们不仅需要把预构建的流程重新运行一遍，还得重新刷新页面，并且需要重新请求所有的模块。尤其是在大型项目中，这个过程会严重拖慢应用的加载速度！因此，我们要尽力避免运行时的 `二次预构建`。具体怎么做呢？你可以通过 include 参数提前声明需要按需加载的依赖:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    include: [
+      // 按需加载的依赖都可以声明到这个数组里
+      'object-assign'
+    ]
+  }
+}
+```
+
+###### 8.2.2.2.2 场景二：某些哦包被手动exclude
+
+`exclude` 是 `optimizeDeps` 中的另一个配置项，与 `include` 相对，用于将某些依赖从预构建的过程中排除。不过这个配置并不常用，也不推荐大家使用。如果真遇到了要在预构建中排除某个包的情况，需要注意 `它所依赖的包` 是否具有 ESM 格式，如下面这个例子:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    exclude: ['@loadable/component']
+  }
+}
+```
+
+可以看到浏览器控制台会出现如下的报错:
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251449809.png)
+
+这是为什么呢? 我们刚刚手动 exclude 的包 @loadable/component 本身具有 ESM 格式的产物，但它的某个依赖 hoist-non-react-statics 的产物并没有提供 ESM 格式，导致运行时加载失败。
+
+这个时候 include 配置就派上用场了，我们可以强制对 hoist-non-react-statics 这个间接依赖进行预构建:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    include: [
+      // 间接依赖的声明语法，通过`>`分开, 如`a > b`表示 a 中依赖的 b
+      '@loadable/component > hoist-non-react-statics'
+    ]
+  }
+}
+```
+
+在 include 参数中，我们将所有不具备 ESM 格式产物包都声明一遍，这样再次启动项目就没有问题了。
+
+##### 8.2.2.3 自定义ESBuild行为
+
+Vite 提供了 `esbuildOptions` 参数来让我们自定义 Esbuild 本身的配置，常用的场景是加入一些 Esbuild 插件:
+
+```js
+// vite.config.ts
+{
+  optimizeDeps: {
+    esbuildOptions: {
+      plugins: [
+        // 加入 Esbuild 插件
+      ]
+    }
+  }
+}
+```
+
+这个配置主要是处理一些特殊情况，如某个第三方包本身的代码出现问题了。接下来，我们就来讨论一下。
+
+###### 8.2.2.3.1 特殊情况：第三方包出现问题怎么办？
+
+由于我们无法保证第三方包的代码质量，在某些情况下我们会遇到莫名的第三方库报错。我举一个常见的案例—— `react-virtualized` 库。这个库被许多组件库用到，但它的 ESM 格式产物有明显的问题，在 Vite 进行预构建的时候会直接抛出这个错误：
+
+![](https://my-vitepress-blog.sh1a.qingstor.com/202403251453416.png)
+
+原因是这个库的 ES 产物莫名其妙多出了一行无用的代码:
+
+```js
+// WindowScroller.js 并没有导出这个模块
+import { bpfrpt_proptype_WindowScroller } from '../WindowScroller.js'
+```
+
+其实我们并不需要这行代码，但它却导致 Esbuild 预构建的时候直接报错退出了。那这一类的问题如何解决呢？
+
+第一种方法：改第三方库代码
+
+首先，我们能想到的思路是直接修改第三方库的代码，不过这会带来团队协作的问题，你的改动需要同步到团队所有成员，比较麻烦。
+
+好在，我们可以使用 patch-package 这个库来解决这类问题。一方面，它能记录第三方库代码的改动，另一方面也能将改动同步到团队每个成员。
+
+`patch-package` 官方只支持 npm 和 yarn，而不支持 pnpm，不过社区中已经提供了支持 `pnpm` 的版本，这里我们来安装一下相应的包:
+
+```shell
+pnpm i @milahu/patch-package -D
+```
+
+> 注意: 要改动的包在 package.json 中必须声明确定的版本，不能有 ~ 或者 ^ 的前缀。
+
+接着，我们进入第三方库的代码中进行修改，先删掉无用的 import 语句，再在命令行输入:
+
+```shell
+npx patch-package react-virtualized
+```
+
+现在根目录会多出 `patches` 目录记录第三方包内容的更改，随后我们在 `package.json` 的 `scripts` 中增加如下内容：
+
+```js
+{
+ "scripts": {
+ // 省略其它 script
+ "postinstall": "patch-package"
+ }
+}
+```
+
+这样一来，每次安装依赖的时候都会通过 postinstall 脚本自动应用 patches 的修改，解决了团队协作的问题。
+
+第二种方法：加入ESBuild插件
+
+```js
+// vite.config.ts
+const esbuildPatchPlugin = {
+  name: 'react-virtualized-patch',
+  setup(build) {
+    build.onLoad(
+      {
+        filter: /react-virtualized\/dist\/es\/WindowScroller\/utils\/onScroll.js$/
+      },
+      async args => {
+        const text = await fs.promises.readFile(args.path, 'utf8')
+        return {
+          contents: text.replace('import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";', '')
+        }
+      }
+    )
+  }
+}
+// 插件加入 Vite 预构建配置
+{
+  optimizeDeps: {
+    esbuildOptions: {
+      plugins: [esbuildPatchPlugin]
+    }
+  }
+}
+```
