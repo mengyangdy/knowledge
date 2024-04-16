@@ -2,5 +2,6 @@
   "readableLineLength": false,
   "strictLineBreaks": false,
   "showLineNumber": true,
-  "rightToLeft": false
+  "rightToLeft": false,
+  "promptDelete": false
 }

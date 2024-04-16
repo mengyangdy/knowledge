@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "大前端/node/index.md",
+                "file": "大前端/node/node版本管理工具fnm的使用.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "大前端/node/index.md",
+                "file": "大前端/node/node版本管理工具fnm的使用.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "大前端/node/index.md",
+                "file": "大前端/node/node版本管理工具fnm的使用.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "大前端/node/index.md"
+                "file": "大前端/node/node版本管理工具fnm的使用.md"
               }
             }
           },
@@ -156,11 +156,12 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "8f6ad4362f2315cd",
+  "active": "f80fcbd82b876628",
   "lastOpenFiles": [
+    "PixPin_2024-04-05_23-12-08.png",
+    "大前端/node/index.md",
     "大前端/node/node版本管理工具fnm的使用.md",
     "大前端/node/包管理工具学习.md",
-    "大前端/node/index.md",
     "计算机基础/http/index.md"
   ]
 }

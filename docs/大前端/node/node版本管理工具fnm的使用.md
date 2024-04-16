@@ -26,6 +26,8 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 choco -v
 ```
 
+![](https://my-vitepress-blog.sh1a.qingstor.com/202404162105311.png)
+
 如果打印出版本号的话就证明成功了。
 
 提示：choco安装软件，都需要使用管理员模式打开终端安装。
@@ -41,6 +43,8 @@ choco install fnm
 ```shell
 fnm -h
 ```
+
+![PixPin_2024-04-05_23-12-08.png](https://my-vitepress-blog.sh1a.qingstor.com/202404162108936.png)
 
 ## 二 fnm配置
 
@@ -134,5 +138,8 @@ fnm ls-remote
 ```shell
 fnm env
 ```
+
+![PixPin_2024-04-05_23-35-48.png](https://my-vitepress-blog.sh1a.qingstor.com/202404162109929.png)
+
 
 此处变量FNM_DIR指示的位置就是FNM的安装位置，把fnm文件夹删除了就可以了。
