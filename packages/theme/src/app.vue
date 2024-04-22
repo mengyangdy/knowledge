@@ -10,7 +10,7 @@
       <ClientOnly>
         <ArticleAnalyze />
         <!--图片预览-->
-        <!--<ImagePreview />-->
+        <ImagePreview />
       </ClientOnly>
     </template>
     <template #nav-bar-content-before>
@@ -140,7 +140,7 @@ import {useBlogThemeMode} from "./shared";
 // import Alert from "./components/prompt/Alert.vue";
 import Popover from "./components/prompt/Popover.vue";
 import ArticleAnalyze from "./components/detail/ArticleAnalyze.vue";
-// import ImagePreview from "./components/common/ImagePreview.vue";
+import ImagePreview from "./components/common/ImagePreview.vue";
 import HomeHeaderAvatar from "./components/home/HomeHeaderAvatar.vue";
 import HomeBanner from "./components/home/HomeBanner.vue";
 import List from "./components/home/List.vue";
@@ -175,8 +175,6 @@ const {Layout}=Theme
   }
   .blog-info-wrapper{
     margin-left: 16px;
-    //position: sticky;
-    //top: 100px;
   }
 
 }

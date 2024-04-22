@@ -145,7 +145,7 @@ console.log('a')
 
 指定代码运行的宿主环境，这些环境并不是互斥的，所以我们可以一次性定义多个环境，如启动浏览器环境、ES 6 环境、NodeJS 环境等等。
 
-````javascript
+```javascript
 module.exports = {
     "env": {
         "browser": true,

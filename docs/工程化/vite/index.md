@@ -1035,7 +1035,7 @@ module.exports = {
 
 有了extends的配置，对于之前所说的ESLint插件中的繁多配置，我们就不需要手动一一开启了，通过extends字段即可自动开启插件中的推荐规则：
 
-```j
+```js
 extends:["plugin:@typescript-eslint/recommended"]
 ```
 
