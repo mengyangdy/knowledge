@@ -4,33 +4,22 @@
     "type": "split",
     "children": [
       {
-        "id": "0e9c7fa4fd1361f8",
+        "id": "10ad22d81fc443a4",
         "type": "tabs",
         "children": [
           {
-            "id": "f80fcbd82b876628",
+            "id": "b8ce3f18277d5c20",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试题/html/h5的新特性有哪些?.md",
+                "file": "面试题/前端优化/index.md",
                 "mode": "source",
                 "source": false
               }
             }
-          },
-          {
-            "id": "6d26eb0e3a4d66f6",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.5.12"
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -96,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "面试题/html/h5的新特性有哪些?.md",
+                "file": "面试题/前端优化/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "面试题/html/h5的新特性有哪些?.md",
+                "file": "面试题/前端优化/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -136,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "面试题/html/h5的新特性有哪些?.md"
+                "file": "面试题/前端优化/index.md"
               }
             }
           },
@@ -167,8 +156,23 @@
       "obsidian-excalidraw-plugin:新建绘图文件": false
     }
   },
-  "active": "6d26eb0e3a4d66f6",
+  "active": "b8ce3f18277d5c20",
   "lastOpenFiles": [
+    "面试题/css/元素之间有看不见的空白间隙是什么原因造成的.md",
+    "面试题/前端优化/index.md",
+    "面试题/前端优化",
+    "面试题/css/为什么用translate来改变位置而不是定位.md",
+    "面试题/css/伪元素和伪类的区别.md",
+    "面试题/Vue",
+    "面试题/css/transition和animation的区别.md",
+    "面试题/css/line-height和height的区别.md",
+    "面试题/html/html第一行的作用.md",
+    "面试题/html/DOM事件的理解.md",
+    "面试题/css/index.md",
+    "面试题/html/常见的图片格式及使用场景.md",
+    "面试题/html/img标签的alt和title属性有什么区别.md",
+    "面试题/html/localStorage和sessionStorage和cookie的区别.md",
+    "面试题/html/h5的新特性有哪些.md",
     "面试题/html/index.md",
     "面试题/html/h5的新特性有哪些?.md",
     "面试题/html/在项目中是如何适配的?.md",

@@ -5,6 +5,7 @@ tags:
   - 面试题
 date: 2024-04-22
 ---
+
 # 对语义化标签是如何理解的？
 
 ## 一 语义化标签的概念
@@ -165,7 +166,7 @@ button 控件 与 `<input type="button" role=“button”>` 相比，提供了�
 ## 五 参考
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
