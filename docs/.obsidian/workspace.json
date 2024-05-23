@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试题/前端优化/index.md",
+                "file": "面试题/Vue/谈谈对Vue组件化的理解.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 261
+    "width": 261,
+    "collapsed": true
   },
   "right": {
     "id": "7b72532c23ff7ca0",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "面试题/前端优化/index.md",
+                "file": "面试题/Vue/谈谈对Vue组件化的理解.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "面试题/前端优化/index.md",
+                "file": "面试题/Vue/谈谈对Vue组件化的理解.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "面试题/前端优化/index.md"
+                "file": "面试题/Vue/谈谈对Vue组件化的理解.md"
               }
             }
           },
@@ -158,8 +159,13 @@
   },
   "active": "b8ce3f18277d5c20",
   "lastOpenFiles": [
-    "面试题/css/元素之间有看不见的空白间隙是什么原因造成的.md",
+    "面试题/Vue/Vue为什么需要虚拟DOM.md",
+    "面试题/Vue/谈谈对Vue组件化的理解.md",
+    "面试题/Vue/谈谈你对SPA的理解.md",
+    "面试题/Vue/谈谈你对Vue的理解.md",
+    "面试题/Vue/index.md",
     "面试题/前端优化/index.md",
+    "面试题/css/元素之间有看不见的空白间隙是什么原因造成的.md",
     "面试题/前端优化",
     "面试题/css/为什么用translate来改变位置而不是定位.md",
     "面试题/css/伪元素和伪类的区别.md",
@@ -187,8 +193,6 @@
     "面试题/css",
     "面试题",
     "PixPin_2024-04-05_23-12-08.png",
-    "大前端/node/index.md",
-    "大前端/node/包管理工具学习.md",
-    "计算机基础/http/index.md"
+    "大前端/node/index.md"
   ]
 }
