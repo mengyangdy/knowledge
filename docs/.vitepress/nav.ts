@@ -88,6 +88,42 @@ export default [
       {
         text: 'html',
         link: '/面试题/html/'
+      },
+      {
+        text: 'css',
+        link: '/面试题/css/'
+      },
+      {
+        text: 'JavaScript',
+        link: '/面试题/JavaScript/'
+      },
+      {
+        text: 'Vue',
+        link: '/面试题/Vue/'
+      },
+      {
+        text: '浏览器',
+        link: '/面试题/浏览器/'
+      },
+      {
+        text: '性能优化',
+        link: '/面试题/性能优化/'
+      },
+      {
+        text: 'TypeScript',
+        link: '/面试题/TypeScript/'
+      },
+      {
+        text: '构建打包工具',
+        link: '/面试题/构建打包工具/'
+      },
+      {
+        text: '手写代码',
+        link: '/面试题/手写代码/'
+      },
+      {
+        text: '计算机网络',
+        link: '/面试题/计算机网络/'
       }
     ]
   }

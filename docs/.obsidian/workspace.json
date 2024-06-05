@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "10ad22d81fc443a4",
+        "id": "daa2b10a8576ef8d",
         "type": "tabs",
         "children": [
           {
-            "id": "b8ce3f18277d5c20",
+            "id": "3262f4fda12dd120",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试题/Vue/谈谈对Vue组件化的理解.md",
+                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md",
                 "mode": "source",
                 "source": false
               }
@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "path:\"面试题/场景题/\" 国际化",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -69,8 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 261,
-    "collapsed": true
+    "width": 429.5
   },
   "right": {
     "id": "7b72532c23ff7ca0",
@@ -86,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "面试题/Vue/谈谈对Vue组件化的理解.md",
+                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "面试题/Vue/谈谈对Vue组件化的理解.md",
+                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "面试题/Vue/谈谈对Vue组件化的理解.md"
+                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md"
               }
             }
           },
@@ -137,13 +136,25 @@
               "type": "advanced-tables-toolbar",
               "state": {}
             }
+          },
+          {
+            "id": "d6813ad3f0ca6a7e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              }
+            }
           }
         ],
         "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 285
+    "width": 344.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -157,42 +168,44 @@
       "obsidian-excalidraw-plugin:新建绘图文件": false
     }
   },
-  "active": "b8ce3f18277d5c20",
+  "active": "3262f4fda12dd120",
   "lastOpenFiles": [
-    "面试题/Vue/Vue为什么需要虚拟DOM.md",
-    "面试题/Vue/谈谈对Vue组件化的理解.md",
-    "面试题/Vue/谈谈你对SPA的理解.md",
-    "面试题/Vue/谈谈你对Vue的理解.md",
-    "面试题/Vue/index.md",
-    "面试题/前端优化/index.md",
-    "面试题/css/元素之间有看不见的空白间隙是什么原因造成的.md",
-    "面试题/前端优化",
-    "面试题/css/为什么用translate来改变位置而不是定位.md",
-    "面试题/css/伪元素和伪类的区别.md",
-    "面试题/Vue",
-    "面试题/css/transition和animation的区别.md",
-    "面试题/css/line-height和height的区别.md",
-    "面试题/html/html第一行的作用.md",
-    "面试题/html/DOM事件的理解.md",
-    "面试题/css/index.md",
-    "面试题/html/常见的图片格式及使用场景.md",
-    "面试题/html/img标签的alt和title属性有什么区别.md",
-    "面试题/html/localStorage和sessionStorage和cookie的区别.md",
-    "面试题/html/h5的新特性有哪些.md",
-    "面试题/html/index.md",
-    "面试题/html/h5的新特性有哪些?.md",
-    "面试题/html/在项目中是如何适配的?.md",
-    "面试题/html/对响应式布局是怎么理解的?.md",
-    "面试题/html/对渐进增强和优雅降级的理解？.md",
-    "大前端/node/node版本管理工具fnm的使用.md",
-    "面试题/html",
-    "面试题/HTML/index.md",
-    "面试题/HTML",
-    "面试题/JavaScript",
-    "面试题/js",
-    "面试题/css",
-    "面试题",
-    "PixPin_2024-04-05_23-12-08.png",
-    "大前端/node/index.md"
+    "面试题/Node/Node中的全局对象有那些举例说明它们的作用.md",
+    "面试题/Node/解释Node的事件循环机制,它是如何处理异步操作的.md",
+    "面试题/Node/解释Node中的非阻塞IO模型.md",
+    "面试题/Node/Node中的全局对象有那些?举例说明它们的作用.md",
+    "面试题/性能优化/什么是代码分割(Code Splitting)开发中如何利用代码分割进行性能优化.md",
+    "面试题/Vue/Vue中使用Object.defineProperty进行数据劫持有那些潜在缺点或限制Vue3为什么选择了Proxy.md",
+    "面试题/JavaScript/Map和WeakMap有什么不同WeakMap的特点是什么什么情况下使用WeakMap而不是Map.md",
+    "面试题/浏览器/什么是强缓存和协商缓存它们之间有何区别.md",
+    "面试题/构建打包工具/Webpack的热更新是如何工作的它的原理是什么.md",
+    "面试题/计算机网络/在浏览器中输入URL到页面加载完成的过程中,涉及到那些HTTP的技术或流程请详细描述.md",
+    "面试题/浏览器/HTTP头中的那些字段与缓存策略有关它们各自如何工作.md",
+    "面试题/计算机网络/什么是DNS预解析(DNS Prefetching)在前端优化中如何应用它.md",
+    "面试题/计算机网络/DNS解析过程是什么请从输入网址到浏览器开车加载页面的过程进行描述.md",
+    "面试题/性能优化/常见的图片优化操作有那些如何提高性能.md",
+    "面试题/构建打包工具/Webpack的基本工作原理是什么请描述其打包过程.md",
+    "面试题/Git/什么是Git的钩子(hook)可以用来做什么.md",
+    "面试题/Git/Git的内部工作原理是什么解释Git是如何跟踪文件变化的.md",
+    "面试题/浏览器/什么是垃圾回收机制它是如何管理内存的.md",
+    "面试题/浏览器/什么是SQL注入攻击尽管主要是后端的问题,前端开发者如何帮助防御.md",
+    "面试题/浏览器/什么是跨站脚本攻击(XSS)如何防止XSS攻击.md",
+    "面试题/浏览器/浏览器内核是什么常见的浏览器内核有哪些.md",
+    "面试题/浏览器/浏览器缓存如何影响HTTP请求不同的缓存策略会如何改变请求响应.md",
+    "面试题/浏览器/浏览器的事件循环机制是什么怎么处理异步操作的.md",
+    "面试题/JavaScript/Map和WeakMap有什么不同?WeakMap的特点是什么什么情况下使用WeakMap而不是Map.md",
+    "面试题/JavaScript/JavaScript中的Proxy对象是什么以及他是如何工作的用于那些场景.md",
+    "面试题/JavaScript/原型链的终点是什么如何在代码中打印一个对象的原型链直至终点.md",
+    "面试题/场景题",
+    "面试题/Node",
+    "面试题/计算机网络",
+    "面试题/手写代码",
+    "面试题/构建打包工具",
+    "面试题/Git",
+    "面试题/TypeScript",
+    "面试题/浏览器/描述浏览器解析并展示",
+    "面试题/浏览器/描述浏览器",
+    "面试题/浏览器",
+    "PixPin_2024-04-05_23-12-08.png"
   ]
 }
