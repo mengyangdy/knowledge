@@ -101,7 +101,6 @@ const props = defineProps<{
   pin?: number
 }>()
 
-
 const { width } = useWindowSize()
 const isMobile = computed(() => width.value <= 500)
 const showTime = computed(() => {
@@ -211,19 +210,20 @@ const showTime = computed(() => {
 }
 
 .cover-img {
-  width: 150px;
-  height: 63px;
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
   margin-left: 10px;
   border-radius: 2px;
   background-repeat: no-repeat;
-  background-size: 150px 63px;
+  background-size: 120px 80px;
 }
 
 @media screen and (max-width: 500px) {
   .cover-img {
     width: 100px;
-    height: 60px;
-    background-size: 100px 42px;
+    height: 66px;
+    background-size: 100px 66px;
   }
 }
 </style>

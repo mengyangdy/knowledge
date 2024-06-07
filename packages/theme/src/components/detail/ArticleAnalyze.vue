@@ -56,10 +56,6 @@
         </span>
       </div>
     </template>
-    <!-- 封面展示 -->
-    <!--<ClientOnly>-->
-    <!--  <DocCover />-->
-    <!--</ClientOnly>-->
   </div>
 </template>
 

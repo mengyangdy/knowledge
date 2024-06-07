@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, withBase } from 'vitepress'
-import { ElButton, ElLink } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { formatShowDate } from '../../utils'
 import { useArticles, useBlogConfig } from '../../shared'
 import { recommendSVG } from '../../constants/svg'
@@ -89,7 +89,7 @@ const title = computed(
     recommend.value?.title ??
     `<span class="svg-icon">${recommendSVG}</span>` + '相关文章'
 )
-const pageSize = computed(() => recommend.value?.pageSize || 9)
+const pageSize = computed(() => recommend.value?.pageSize || 10)
 const nextText = computed(() => recommend.value?.nextText || '换一组')
 const emptyText = computed(() => recommend.value?.empty ?? '暂无相关文章')
 

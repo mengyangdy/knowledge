@@ -9,7 +9,6 @@
       <slot name="doc-before" />
       <ClientOnly>
         <ArticleAnalyze />
-        <!--图片预览-->
         <ImagePreview />
       </ClientOnly>
     </template>
@@ -51,7 +50,7 @@
     </template>
     <!-- 透传默认主题的其它插槽 -->
     <!-- navbar -->
-    <template #nav-bar-title-before>
+    <!-- <template #nav-bar-title-before>
       <slot name="nav-bar-title-before" />
     </template>
     <template #nav-bar-title-after>
@@ -65,15 +64,15 @@
     </template>
     <template #nav-screen-content-after>
       <slot name="nav-screen-content-after" />
-    </template>
+    </template> -->
 
     <!-- sidebar -->
-    <template #sidebar-nav-before>
+    <!-- <template #sidebar-nav-before>
       <slot name="sidebar-nav-before" />
-    </template>
+    </template> -->
 
     <!-- content -->
-    <template #page-top>
+    <!-- <template #page-top>
       <slot name="page-top" />
     </template>
     <template #page-bottom>
@@ -127,7 +126,7 @@
     </template>
     <template #aside-ads-after>
       <slot name="aside-ads-after" />
-    </template>
+    </template> -->
   </Layout>
 </template>
 

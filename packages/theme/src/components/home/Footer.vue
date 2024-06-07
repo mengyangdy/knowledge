@@ -1,14 +1,30 @@
 <template>
-  <footer v-if="renderData.length" class="blog-footer">
-    <template v-for="({data,messageData}) in renderData">
-      <p v-for="message in messageData" v-html="message"/>
+  <footer
+    v-if="renderData.length"
+    class="blog-footer"
+  >
+    <template v-for="{ data } in renderData">
       <p class="footer-item-list">
-        <span v-for="item in data" class="footer-item">
+        <span
+          v-for="item in data"
+          class="footer-item"
+        >
           <i v-if="item.icon === 'security'">
-            <img src="../../styles/gongan.png" alt="公网安备">
+            <img
+              src="../../styles/gongan.png"
+              alt="公网安备"
+            />
           </i>
-          <i v-else-if="item.icon" v-html="item.icon"/>
-          <a v-if="item.link" :href="item.link" target="_blank" rel="noopener noreferrer">
+          <i
+            v-else-if="item.icon"
+            v-html="item.icon"
+          />
+          <a
+            v-if="item.link"
+            :href="item.link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {{ item.name }}
           </a>
           <span v-else>{{ item.name }}</span>
@@ -20,9 +36,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import {useHomeFooterConfig} from "../../shared";
-import packageJSON from '../../../package.json'
-import { copyrightSVG, icpSVG, themeSVG } from '../../constants/svg'
+import { useHomeFooterConfig } from '../../shared'
+import { copyrightSVG, icpSVG } from '../../constants/svg'
 
 const footerData = useHomeFooterConfig()
 const renderData = computed(() => {
@@ -31,55 +46,43 @@ const renderData = computed(() => {
   }
   const flatData = [footerData].flat()
   return flatData.flat().map((footer, idx) => {
-    const { icpRecord, securityRecord, copyright, version, message } = footer
+    const { icpRecord, securityRecord, copyright } = footer
     const data: {
       name: string
       link?: string
       icon?: string | boolean
     }[] = []
-    // message
-    const messageData: string[] = [message || []].flat()
 
-    // version
-    const isLast = idx === flatData.length - 1
-    if ((version !== false && isLast) || version === true) {
-      data.push({
-        name: `@sugarat/theme@${packageJSON.version}`,
-        link: 'https://theme.sugarat.top/',
-        icon: themeSVG
-      })
-    }
     // copyright
     if (typeof copyright === 'string') {
       data.push({
         name: copyright,
-        icon: copyrightSVG
+        icon: copyrightSVG,
       })
     }
     if (copyright instanceof Object) {
       data.push({
         icon: copyrightSVG,
         name: copyright.message,
-        ...copyright
+        ...copyright,
       })
     }
     // 备案信息
     if (icpRecord) {
       data.push({
         icon: icpSVG,
-        ...icpRecord
+        ...icpRecord,
       })
     }
     // 网备信息
     if (securityRecord) {
       data.push({
         icon: 'security',
-        ...securityRecord
+        ...securityRecord,
       })
     }
     return {
-      data,
-      messageData
+      data
     }
   })
 })

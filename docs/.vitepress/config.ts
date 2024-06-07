@@ -51,8 +51,8 @@ export default defineConfig({
   extends: blogTheme,
   title: '前端成长之路',
   description: 'Dylan的个人博客，记录随笔与学习笔记，大前端相关的知识，高频面试题，个人面经等',
-  ignoreDeadLinks: true,
   lang: 'zh-cn',
+  metaChunk: true,
   head: [
     [
       'link',
@@ -82,13 +82,20 @@ export default defineConfig({
     lastUpdatedText: '上次更新于',
     logo: 'https://my-vitepress-blog.sh1a.qingstor.com/202403131543188.jpg',
     editLink: {
-      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/docs/blog/docs/:path',
+      pattern: 'https://github.com/mengyang94982/knowledge/tree/master/docs/:path',
       text: '去 GitHub 上编辑内容'
     },
     outline: {
       level: 'deep',
       label: '目录'
     },
+    docFooter: {
+      prev: '上一页',
+      next: '下一页'
+    },
+    // sidebar: [
+    // 上一页下一页需要侧边栏才能使用
+    // ],
     outlineTitle: '目录',
     nav: NavData,
     socialLinks: [
