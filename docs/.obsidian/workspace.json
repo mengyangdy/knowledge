@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md",
+                "file": "面试题/手写代码/手写Promise的代码实现.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 429.5
+    "width": 330.5,
+    "collapsed": true
   },
   "right": {
     "id": "7b72532c23ff7ca0",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md",
+                "file": "面试题/手写代码/手写Promise的代码实现.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md",
+                "file": "面试题/手写代码/手写Promise的代码实现.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "面试题/手写代码/手写浅拷贝函数的代码实现.md"
+                "file": "面试题/手写代码/手写Promise的代码实现.md"
               }
             }
           },
@@ -168,8 +169,11 @@
       "obsidian-excalidraw-plugin:新建绘图文件": false
     }
   },
-  "active": "3262f4fda12dd120",
+  "active": "d707499b41632363",
   "lastOpenFiles": [
+    "面试题/手写代码/手写事件总线(EventBus)的代码实现.md",
+    "面试题/手写代码/手写深拷贝代码的实现.md",
+    "面试题/手写代码/手写浅拷贝函数的代码实现.md",
     "面试题/Node/Node中的全局对象有那些举例说明它们的作用.md",
     "面试题/Node/解释Node的事件循环机制,它是如何处理异步操作的.md",
     "面试题/Node/解释Node中的非阻塞IO模型.md",
@@ -193,9 +197,6 @@
     "面试题/浏览器/浏览器内核是什么常见的浏览器内核有哪些.md",
     "面试题/浏览器/浏览器缓存如何影响HTTP请求不同的缓存策略会如何改变请求响应.md",
     "面试题/浏览器/浏览器的事件循环机制是什么怎么处理异步操作的.md",
-    "面试题/JavaScript/Map和WeakMap有什么不同?WeakMap的特点是什么什么情况下使用WeakMap而不是Map.md",
-    "面试题/JavaScript/JavaScript中的Proxy对象是什么以及他是如何工作的用于那些场景.md",
-    "面试题/JavaScript/原型链的终点是什么如何在代码中打印一个对象的原型链直至终点.md",
     "面试题/场景题",
     "面试题/Node",
     "面试题/计算机网络",
