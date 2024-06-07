@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试题/手写代码/手写Promise的代码实现.md",
+                "file": "面试题/JavaScript/跳出循环的方法有哪些.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "面试题/手写代码/手写Promise的代码实现.md",
+                "file": "面试题/JavaScript/跳出循环的方法有哪些.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "面试题/手写代码/手写Promise的代码实现.md",
+                "file": "面试题/JavaScript/跳出循环的方法有哪些.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "面试题/手写代码/手写Promise的代码实现.md"
+                "file": "面试题/JavaScript/跳出循环的方法有哪些.md"
               }
             }
           },
@@ -169,8 +169,12 @@
       "obsidian-excalidraw-plugin:新建绘图文件": false
     }
   },
-  "active": "d707499b41632363",
+  "active": "3262f4fda12dd120",
   "lastOpenFiles": [
+    "面试题/手写代码/手写Promise的代码实现.md",
+    "面试题/JavaScript/跳出循环的方法有哪些.md",
+    "面试题/css/外边距塌陷是什么.md",
+    "面试题/JavaScript/如何判断数据类型.md",
     "面试题/手写代码/手写事件总线(EventBus)的代码实现.md",
     "面试题/手写代码/手写深拷贝代码的实现.md",
     "面试题/手写代码/手写浅拷贝函数的代码实现.md",
@@ -193,10 +197,6 @@
     "面试题/Git/Git的内部工作原理是什么解释Git是如何跟踪文件变化的.md",
     "面试题/浏览器/什么是垃圾回收机制它是如何管理内存的.md",
     "面试题/浏览器/什么是SQL注入攻击尽管主要是后端的问题,前端开发者如何帮助防御.md",
-    "面试题/浏览器/什么是跨站脚本攻击(XSS)如何防止XSS攻击.md",
-    "面试题/浏览器/浏览器内核是什么常见的浏览器内核有哪些.md",
-    "面试题/浏览器/浏览器缓存如何影响HTTP请求不同的缓存策略会如何改变请求响应.md",
-    "面试题/浏览器/浏览器的事件循环机制是什么怎么处理异步操作的.md",
     "面试题/场景题",
     "面试题/Node",
     "面试题/计算机网络",
