@@ -98,20 +98,24 @@ export default [
         link: '/面试题/JavaScript/'
       },
       {
+        text: 'TypeScript',
+        link: '/面试题/TypeScript/'
+      },
+      {
+        text: 'Node',
+        link: '/面试题/Node/'
+      },
+      {
         text: 'Vue',
         link: '/面试题/Vue/'
       },
       {
+        text: 'Git',
+        link: '/面试题/Git/'
+      },
+      {
         text: '浏览器',
         link: '/面试题/浏览器/'
-      },
-      {
-        text: '性能优化',
-        link: '/面试题/性能优化/'
-      },
-      {
-        text: 'TypeScript',
-        link: '/面试题/TypeScript/'
       },
       {
         text: '构建打包工具',
@@ -124,6 +128,14 @@ export default [
       {
         text: '计算机网络',
         link: '/面试题/计算机网络/'
+      },
+      {
+        text: '性能优化',
+        link: '/面试题/性能优化/'
+      },
+      {
+        text: '场景题',
+        link: '/面试题/场景题/'
       }
     ]
   }
