@@ -72,4 +72,4 @@ BFC 全称为块级格式化上下文(Block Formatting Context),BFC 是 W 3 C CS
 
 其他用法：
 - 防止外边距重叠
-- 清楚浮动解决副元素高度坍塌
+- 清楚浮动解决父元素高度坍塌
