@@ -1,11 +1,104 @@
 ---
 title: CSS优化和增加性能的方法有那些?
 tags:
-  - css
-  - 面试题
+- css
+- 面试题
 date: 2024-04-23
 ---
 # CSS优化和增加性能的方法有那些?
+
+## 1.1 优化
+
+实现⽅式有很多种，主要有如下：
+- 内联⾸屏关键CSS
+- 异步加载CSS
+- 资源压缩
+- 合理使⽤选择器
+- 减少使⽤昂贵的属性
+- 不要使⽤@import
+
+### 1.1.1 内联首屏关键css
+
+在打开⼀个⻚⾯，⻚⾯⾸要内容出现在屏幕的时间影响着⽤⼾的体验，⽽通过内联 css 关键代码能够使浏览器在下载完 html 后就能⽴刻渲染
+
+⽽如果外部引⽤ css 代码，在解析 html 结构过程中遇到外部 css ⽂件，才会开始下载 css 代码，再渲染
+
+所以， CSS 内联使⽤使渲染时间提前
+
+注意：但是较⼤的 css 代码并不合适内联（初始拥塞窗⼝、没有缓存），⽽其余代码则采取外部引⽤⽅式
+
+### 1.1.2 异步加载css
+
+在 CSS ⽂件请求、下载、解析完成之前，CSS 会阻塞渲染，浏览器将不会渲染任何已处理的内容
+
+前⾯加载内联代码后，后⾯的外部引⽤ css 则没必要阻塞浏览器渲染。这时候就可以采取异步加载的⽅案，主要有如下
+- 使⽤javascript将link标签插到head标签最后
+
+```js
+// 创建link标签
+const myCSS = document.createElement( "link" );
+myCSS.rel = "stylesheet";
+myCSS.href = "mystyles.css";
+// 插⼊到header的最后位置
+document.head.insertBefore( myCSS, document.head.childNodes[
+document.head.childNodes.length - 1 ].nextSibling );
+```
+
+- 设置link标签media属性为noexis，浏览器会认为当前样式表不适⽤当前类型，会在不阻塞⻚⾯渲染的情况下再进⾏下载。加载完成后，将 media 的值设为 screen 或 all ，从⽽让浏览器开始解析CSS
+
+```css
+ <link rel="stylesheet" href="mystyles.css" media="noexist" onload="this.media='all'">
+```
+
+通过rel属性将link元素标记为alternate可选样式表，也能实现浏览器异步加载。同样别忘了加载完成之后，将rel设回stylesheet
+
+```css
+1 <link rel="alternate stylesheet" href="mystyles.css" onload="this.rel='stylesheet'">
+```
+
+### 1.1.3 资源压缩
+
+利⽤ webpack 、gulp/grunt 、rollup 等模块化⼯具，将 css 代码进⾏压缩，使⽂件变⼩，⼤⼤降低了浏览器的加载时间
+
+### 1.1.4 合理使用选择器
+
+css 匹配的规则是从右往左开始匹配，例如 #markdown .content h3 匹配规则如下：
+- 先找到h3标签元素
+- 然后去除祖先不是.content的元素
+- 最后去除祖先不是#markdown的元素
+
+如果嵌套的层级更多，⻚⾯中的元素更多，那么匹配所要花费的时间代价⾃然更⾼
+
+所以我们在编写选择器的时候，可以遵循以下规则：
+- 不要嵌套使⽤过多复杂选择器，最好不要三层以上
+- 使⽤id选择器就没必要再进⾏嵌套
+- 通配符和属性选择器效率最低，避免使⽤
+
+### 1.1.5 减少使用昂贵的属性
+
+在⻚⾯发⽣重绘的时候，昂贵属性如 box-shadow / border-radius / filter /透明度/ :nth-child 等，会降低浏览器的渲染性能
+
+### 1.1.6 不要使用@import
+
+css样式⽂件有两种引⼊⽅式，⼀种是 link 元素，另⼀种是 @import
+
+@import 会影响浏览器的并⾏下载，使得⻚⾯在加载时增加额外的延迟，增添了额外的往返耗时
+
+⽽且多个 @import 可能会导致下载顺序紊乱
+
+⽐如⼀个css⽂件 index.css 包含了以下内容： @import url("reset.css")
+
+那么浏览器就必须先把 index.css 下载、解析和执⾏后，才下载、解析和执⾏第⼆个⽂件reset.css
+
+### 1.1.7 其他
+
+- 减少重排操作，以及减少不必要的重绘
+- 了解哪些属性可以继承⽽来，避免对这些属性重复编写
+- cssSprite，合成所有icon图⽚，⽤宽⾼加上backgroud-position的背景图⽅式显现出我们要的icon图，减少了http请求
+- 把⼩的icon图⽚转成base64编码
+- CSS3动画或者过渡尽量使⽤transform和opacity来实现动画，不要使⽤left和top属性
+
+## 1.2 性能
 
 - 加载性能
 	- css 压缩:将写好的 css 进行压缩打包,可以减少文件体积

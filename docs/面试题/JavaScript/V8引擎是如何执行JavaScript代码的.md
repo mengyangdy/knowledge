@@ -5,6 +5,7 @@ tags:
   - 面试题
 date: 2024-05-28
 ---
+
 # 一 V8引擎是如何执行JavaScript代码的?
 
 V8引擎执行JavaScript代码的流程包含以下几个关键步骤：

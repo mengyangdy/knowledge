@@ -197,3 +197,43 @@ flex-wrap: nowrap | wrap | wrap-reverse;
 它可以设为跟 width 或 height 属性⼀样的值（⽐如350px），则项⽬将占据固定空间
 
 ### 1.3.5 flex
+
+flex属性是`flex-grow`/`flex-shrink`/`flex-basis`的简写,默认值为`0 1 auto`,也是一个比较难的复合属性
+
+```css
+.item {
+ flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+}
+```
+
+一些属性有:
+- flex:1 = flex:1 1 0%
+- flex:2 = flex:2 1 0%
+- flex:auto = flex:1 1 auto
+- flex:none = flex:0 0 auto 常用语固定尺寸不伸缩
+
+`flex:1`和`flex:auto`的区别,可以归结于`flex-basic:0`和`flex-basic:auto`的区别,当设置为0时(绝对弹性元素),此时相当于告诉`flex-grow`和`flex-shrink`在伸缩的时候不需要考虑我的尺寸
+
+当设置为`auto`的时候(相对弹性元素),此时则需要在伸缩时将元素的尺寸考虑在内
+
+注意:建议优先使用额个属性,而不是单独写三个分离的属性,因为浏览器会推算相关值
+
+### 1.3.6 align-self
+
+允许单个项⽬有与其他项⽬不⼀样的对⻬⽅式，可覆盖 align-items 属性
+
+默认值为 auto ，表⽰继承⽗元素的 align-items 属性，如果没有⽗元素，则等同于 stretch
+
+```css
+.item {
+ align-self: auto | flex-start | flex-end | center | baseline | stretch;
+}
+```
+
+## 1.4 应用场景
+
+- 等高的多列布局：Flexbox 可以轻松创建等高的多列布局，使得每一列的高度相等，无论其内容的长度如何。
+- 水平和垂直居中：Flexbox 提供了强大的对齐和居中功能，可以在容器中轻松实现水平和垂直居中元素。
+- 自适应布局：Flexbox 具有弹性特性，可以根据可用空间自动调整项目的大小和位置，从而实现自适应的布局。
+- 等间距的分布：通过使用 Flexbox 的 justify-content 和 align-items 属性，可以轻松地在容器中创建等间距的分布，使项目之间具有相等的间距。
+- 响应式布局：Flexbox 是响应式设计的有力工具，可以通过简单的 CSS 更改来构建适应不同屏幕尺寸和设备类型的布局。
