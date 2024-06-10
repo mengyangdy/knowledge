@@ -14,7 +14,6 @@ import { useBlogConfig } from '../../shared'
 import RecommendArticle from './RecommendArticle.vue'
 
 const { recommend: _recommend } = useBlogConfig()
-console.log('🚀 ~~- recommend:', _recommend)
 
 const sidebarStyle = computed(() =>
   _recommend && _recommend?.style ? _recommend.style : 'card'

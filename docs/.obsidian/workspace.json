@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "面试题/JavaScript/跳出循环的方法有哪些.md",
+                "file": "面试题/css/transition和animation的区别.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,8 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 330.5,
-    "collapsed": true
+    "width": 330.5
   },
   "right": {
     "id": "7b72532c23ff7ca0",
@@ -86,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "面试题/JavaScript/跳出循环的方法有哪些.md",
+                "file": "面试题/css/transition和animation的区别.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "面试题/JavaScript/跳出循环的方法有哪些.md",
+                "file": "面试题/css/transition和animation的区别.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "面试题/JavaScript/跳出循环的方法有哪些.md"
+                "file": "面试题/css/transition和animation的区别.md"
               }
             }
           },
@@ -171,32 +170,32 @@
   },
   "active": "3262f4fda12dd120",
   "lastOpenFiles": [
-    "面试题/手写代码/手写Promise的代码实现.md",
-    "面试题/JavaScript/跳出循环的方法有哪些.md",
+    "面试题/css/css动画有哪些.md",
+    "面试题/css/line-height和height的区别.md",
+    "面试题/css/index.md",
+    "面试题/css/css中哪些属性可以继承.md",
+    "面试题/css/css中哪些方式可以隐藏页面元素.md",
+    "面试题/css/css选择器有哪些优先级怎么计算.md",
+    "面试题/css/css如何画一个三角形.md",
+    "面试题/css/css动画有哪些?.md",
+    "面试题/css/CSS3的新特性有哪些？.md",
+    "面试题/css/BFC是什么？创建BFC有哪些方法？BFC解决了哪些问题.md",
+    "面试题/css/元素之间有看不见的空白间隙是什么原因造成的.md",
+    "面试题/css/元素水平垂直居中的方法有哪些.md",
+    "面试题/css/为什么用translate来改变位置而不是定位.md",
+    "面试题/css/伪元素和伪类的区别.md",
     "面试题/css/外边距塌陷是什么.md",
-    "面试题/JavaScript/如何判断数据类型.md",
-    "面试题/手写代码/手写事件总线(EventBus)的代码实现.md",
-    "面试题/手写代码/手写深拷贝代码的实现.md",
-    "面试题/手写代码/手写浅拷贝函数的代码实现.md",
-    "面试题/Node/Node中的全局对象有那些举例说明它们的作用.md",
-    "面试题/Node/解释Node的事件循环机制,它是如何处理异步操作的.md",
-    "面试题/Node/解释Node中的非阻塞IO模型.md",
-    "面试题/Node/Node中的全局对象有那些?举例说明它们的作用.md",
-    "面试题/性能优化/什么是代码分割(Code Splitting)开发中如何利用代码分割进行性能优化.md",
-    "面试题/Vue/Vue中使用Object.defineProperty进行数据劫持有那些潜在缺点或限制Vue3为什么选择了Proxy.md",
-    "面试题/JavaScript/Map和WeakMap有什么不同WeakMap的特点是什么什么情况下使用WeakMap而不是Map.md",
-    "面试题/浏览器/什么是强缓存和协商缓存它们之间有何区别.md",
-    "面试题/构建打包工具/Webpack的热更新是如何工作的它的原理是什么.md",
-    "面试题/计算机网络/在浏览器中输入URL到页面加载完成的过程中,涉及到那些HTTP的技术或流程请详细描述.md",
-    "面试题/浏览器/HTTP头中的那些字段与缓存策略有关它们各自如何工作.md",
-    "面试题/计算机网络/什么是DNS预解析(DNS Prefetching)在前端优化中如何应用它.md",
-    "面试题/计算机网络/DNS解析过程是什么请从输入网址到浏览器开车加载页面的过程进行描述.md",
-    "面试题/性能优化/常见的图片优化操作有那些如何提高性能.md",
-    "面试题/构建打包工具/Webpack的基本工作原理是什么请描述其打包过程.md",
-    "面试题/Git/什么是Git的钩子(hook)可以用来做什么.md",
-    "面试题/Git/Git的内部工作原理是什么解释Git是如何跟踪文件变化的.md",
-    "面试题/浏览器/什么是垃圾回收机制它是如何管理内存的.md",
-    "面试题/浏览器/什么是SQL注入攻击尽管主要是后端的问题,前端开发者如何帮助防御.md",
+    "面试题/css/谈谈对盒模型的理解.md",
+    "面试题/css/使用CSS，怎么画出一条粗细为0.5px的线.md",
+    "面试题/css/什么是响应式设计.md",
+    "面试题/css/什么是1px问题？如何在前端开发中解决它.md",
+    "面试题/css/如何使用css完成视差滚动效果.md",
+    "面试题/css/如何实现两栏布局三栏布局.md",
+    "面试题/css/如何实现单行多行文本溢出的省略样式.md",
+    "面试题/css/能解释一下物理像素、逻辑像素、像素密度的区别，并说明为什么在移动端开发中需要@2x、@3x等图片吗.md",
+    "面试题/css/介绍下grid网格布局.md",
+    "面试题/css/介绍下flex弹性布局.md",
+    "面试题/JavaScript/跳出循环的方法有哪些.md",
     "面试题/场景题",
     "面试题/Node",
     "面试题/计算机网络",
