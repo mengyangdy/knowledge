@@ -56,22 +56,31 @@ function getElement(arr: StringArray, index: number) {
 
 ## 1.4 映射类型 (Mapped Types)
 
-映射类型使用 `in` 和 `as` 关键字，可以基于现有类型创建新的类型，通过对原有类型的每个属性应用某种变换来生成新的类型结构。例如：
+通过 in 关键字做类型的映射，遍历已有接⼝的 key 或者是遍历联合类型，如下例⼦：
 
-```js
+```JS
 type Readonly<T> = {
-  readonly [P in keyof T]: T[P];
+readonly [P in keyof T]: T[P];
 };
-
-interface Todo {
-  title: string;
-  description: string;
+interface Obj {
+a: string
+b: string
 }
-
-type ReadonlyTodo = Readonly<Todo>;
+type ReadOnlyObj = Readonly<Obj>
 ```
 
-在这个例子中，`ReadonlyTodo` 类型的每个属性都被标记为只读。
+上述的结构，可以分成这些步骤：
+- keyof T：通过类型索引 keyof 的得到联合类型 'a' | 'b'
+- P in keyof T 等同于 p in 'a' | 'b'，相当于执⾏了⼀次 forEach 的逻辑，遍历 'a' | 'b'
+
+所以最终 ReadOnlyObj 的接⼝为下述：
+
+```JS
+interface ReadOnlyObj {
+readonly a: string;
+readonly b: string;
+}
+```
 
 ## 1.5 字面量类型 (Literal Types)
 
@@ -96,6 +105,51 @@ type User = {
   id: UserID;
   name: string;
 };
+```
+
+## 1.7 类型索引
+
+keyof 类似于 Object.keys ，⽤于获取⼀个接⼝中 Key 的联合类型
+
+```JS
+interface Button {
+ type: string
+ text: string
+}
+type ButtonKeys = keyof Button
+// 等效于
+type ButtonKeys = "type" | "text"
+```
+
+## 1.8 类型约束
+
+通过关键字 extend 进⾏约束，不同于在 class 后使⽤ extends 的继承作⽤，泛型内使⽤的主要作⽤是对泛型加以约束
+
+```JS
+type BaseType = string | number | boolean
+// 这⾥表⽰ copy 的参数
+// 只能是字符串、数字、布尔这⼏种基础类型
+function copy<T extends BaseType>(arg: T): T {
+return arg
+}
+```
+
+类型约束通常和类型索引⼀起使⽤，例如我们有⼀个⽅法专⻔⽤来获取对象的值，但是这个对象并不确定，我们就可以使⽤ extends 和 keyof 进⾏约束。
+
+```JS
+function getValue<T, K extends keyof T>(obj: T, key: K) {
+ return obj[key]
+}
+const obj = { a: 1 }
+const a = getValue(obj, 'a')
+```
+
+## 1.9 条件类型
+
+条件类型的语法规则和三元表达式⼀致，经常⽤于⼀些类型不确定的情况
+
+```JS
+ T extends U ? X : Y
 ```
 
 这些高级类型为TypeScript带来了强大的类型系统，使开发者能够编写更健壮、可维护和易于理解的代码。

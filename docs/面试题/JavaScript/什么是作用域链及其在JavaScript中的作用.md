@@ -5,21 +5,134 @@ tags:
   - 面试题
 date: 2024-05-26
 ---
+
 # 一什么是作用域链及其在JavaScript中的作用？
 
-作用域链（Scope Chain）是JavaScript中一个核心的概念，它是一种内部数据结构，用于解析变量和函数的访问权限。简单来说，作用域链是一个包含了多个作用域对象的列表，这些作用域对象按照它们在代码中的嵌套层次顺序排列。当JavaScript引擎需要查找一个变量时，它会沿着作用域链逐级向上搜索，直到找到该变量或到达链的末端。
+## 1.1 作用域
 
-在JavaScript中，每个执行环境（execution context）都有自己的作用域链。当一个新的执行环境被创建时，它会从其外部环境继承作用域链，并将自身环境的变量对象添加到链的前端。这意味着，引擎首先在当前环境（即作用域链的最前端）中查找变量，如果找不到，则继续在下一个外部环境（作用域链中的下一个对象）中查找，这个过程一直持续到全局作用域。如果全局作用域中也没有找到该变量，那么引擎会报`ReferenceError`错误。
+作⽤域，即变量（变量作⽤域⼜称上下⽂）和函数⽣效（能被访问）的区域或集合
 
-作用域链在JavaScript中的作用主要体现在以下几个方面：
+换句话说，作⽤域决定了代码区块中变量和其他资源的可⻅性
 
-1. **变量查找**：它帮助JavaScript引擎确定如何在不同作用域中查找变量。当代码尝试访问一个变量时，引擎会遍历作用域链，从当前作用域开始向外搜索，直到找到匹配的变量或遍历完整个链。
-    
-2. **支持闭包**：作用域链使得内部函数可以访问外部函数的变量，即便外部函数已经执行完毕。这是因为内部函数保留了对其包含作用域的引用，形成了闭包，这是JavaScript中实现数据私有化和封装的重要机制。
-    
-3. **隔离作用域**：通过作用域链，变量的访问被限制在特定的作用域内，避免了全局变量的滥用和命名冲突，提高了代码的模块性和可维护性。
-    
-4. **控制变量生命周期**：通过限制变量的访问范围，作用域链有助于管理变量的生命周期，局部变量在不再需要时可以被垃圾回收，减少内存占用。
-    
+```JS
+ function myFunction() {
+ let inVariable = "函数内部变量";
+ }
+ myFunction();//要先执⾏这个函数，否则根本不知道⾥⾯是啥
+ console.log(inVariable); // Uncaught ReferenceError: inVariable is not defined
+```
 
-综上所述，作用域链是JavaScript中实现变量和函数访问控制的关键机制，它对于理解JavaScript的执行上下文、变量解析以及函数闭包等概念至关重要。
+上述例⼦中，函数 myFunction 内部创建⼀个 inVariable 变量，当我们在全局访问这个变量的时候，系统会报错
+
+这就说明我们在全局是⽆法获取到（闭包除外）函数内部的变量
+
+我们⼀般将作⽤域分成：
+- 全局作⽤域
+- 函数作⽤域
+- 块级作⽤域
+
+### 1.1.1 全局作用域
+
+任何不在函数中或是⼤括号中声明的变量，都是在全局作⽤域下，全局作⽤域下声明的变量可以在程序的任意位置访问
+
+```JS
+ // 全局变量
+ var greeting = 'Hello World!';
+ function greet() {
+ console.log(greeting);
+ }
+ // 打印 'Hello World!'
+ greet();
+```
+
+### 1.1.2 函数作用域
+
+函数作⽤域也叫局部作⽤域，如果⼀个变量是在函数内部声明的它就在⼀个函数作⽤域下⾯。这些变量只能在函数内部访问，不能在函数以外去访问
+
+```JS
+ function greet() {
+ var greeting = 'Hello World!';
+ console.log(greeting);
+ }
+ // 打印 'Hello World!'
+ greet();
+ // 报错： Uncaught ReferenceError: greeting is not defined
+ console.log(greeting);
+```
+
+可⻅上述代码中在函数内部声明的变量或函数，在函数外部是⽆法访问的，这说明在函数内部定义的变量或者⽅法只是函数作⽤域
+
+### 1.1.3 块级作用域
+
+ES6引⼊了 let 和 const 关键字,和 var 关键字不同，在⼤括号中使⽤ let 和 const 声明的变量存在于块级作⽤域中。在⼤括号之外不能访问这些变量
+
+```JS
+ {
+ // 块级作⽤域中的变量
+ let greeting = 'Hello World!';
+ var lang = 'English';
+ console.log(greeting); // Prints 'Hello World!'
+ }
+ // 变量 'English'
+ console.log(lang);
+ // 报错：Uncaught ReferenceError: greeting is not defined
+ console.log(greeting);
+```
+
+## 1.2 词法作用域
+
+词法作⽤域，⼜叫静态作⽤域，变量被创建时就确定好了，⽽⾮执⾏阶段确定的。也就是说我们写好代码时它的作⽤域就确定了， JavaScript 遵循的就是词法作⽤域
+
+```JS
+ var a = 2;
+ function foo(){
+ console.log(a)
+ }
+ function bar(){
+ var a = 3;
+ foo();
+ }
+ bar()
+```
+
+上述代码改变成⼀张图
+
+![](https://f.pz.al/pzal/2024/06/11/44fb6183ba2cf.png)
+
+由于 JavaScript 遵循词法作⽤域，相同层级的 foo 和 bar 就没有办法访问到彼此块作⽤域中的变量，所以输出2
+
+## 1.3 作用域链
+
+当在 Javascript 中使⽤⼀个变量的时候，⾸先 Javascript 引擎会尝试在当前作⽤域下去寻找该变量，如果没找到，再到它的上层作⽤域寻找，以此类推直到找到该变量或是已经到了全局作⽤域
+
+如果在全局作⽤域⾥仍然找不到该变量，它就会在全局范围内隐式声明该变量(⾮严格模式下)或是直接报错
+
+这⾥拿《你不知道的Javascript(上)》中的⼀张图解释：
+
+把作⽤域⽐喻成⼀个建筑，这份建筑代表程序中的嵌套作⽤域链，第⼀层代表当前的执⾏作⽤域，顶层代表全局作⽤域
+
+![](https://f.pz.al/pzal/2024/06/11/9428c0224819a.png)
+
+变量的引⽤会顺着当前楼层进⾏查找，如果找不到，则会往上⼀层找，⼀旦到达顶层，查找的过程都会停⽌
+
+下⾯代码演⽰下：
+
+```JS
+ var sex = '男';
+ function person() {
+ var name = '张三';
+ function student() {
+ var age = 18;
+ console.log(name); // 张三
+ console.log(sex); // 男
+ }
+ student();
+ console.log(age); // Uncaught ReferenceError: age is not defined
+ }
+ person();
+```
+
+上述代码主要主要做了以下⼯作：
+- student 函数内部属于最内层作⽤域，找不到 name ，向上⼀层作⽤域 person 函数内部找，找到了输出“张三”
+- student 内部输出 sex 时找不到，向上⼀层作⽤域 person 函数找，还找不到继续向上⼀层找，即全局作⽤域，找到了输出“男”
+- 在 person 函数内部输出 age 时找不到，向上⼀层作⽤域找，即全局作⽤域，还是找不到则报错
