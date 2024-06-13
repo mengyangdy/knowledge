@@ -1,10 +1,11 @@
 ---
 title: 手写节流函数(throttle)的代码实现
 tags:
-  - 手写代码
+  - 手写题
   - 面试题
 date: 2024-05-29
 ---
+
 # 一手写节流函数(throttle)的代码实现
 
 实现思路:
@@ -16,7 +17,7 @@ date: 2024-05-29
 5. 取消功能实现
 6. 获取返回值
 
-```js
+````js
     function myThrottle(
       fn,
       interval,
@@ -67,3 +68,4 @@ date: 2024-05-29
       return _throttle
     }
     ```
+````

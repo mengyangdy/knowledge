@@ -1,10 +1,11 @@
 ---
 title: 手写防抖函数(debounce)的代码实现
 tags:
-  - 手写代码
+  - 手写题
   - 面试题
 date: 2024-05-29
 ---
+
 # 一手写防抖函数(debounce)的代码实现
 
 实现思路:
@@ -16,8 +17,7 @@ date: 2024-05-29
 5. 优化四:优化返回值
 6. 优化五:增加 promise
 
-
-```js
+````js
       function myDebounce(fn, delay, immediate = false, resultCallback) {
         // 用于记录上一次事件触发的timer
         let timer = null
@@ -63,3 +63,4 @@ date: 2024-05-29
         return _debounce
       }
       ```
+````
