@@ -6,7 +6,7 @@ tags:
 date: 2024-06-09
 ---
 
-# 一 介绍下flex弹性布局
+# 介绍下flex弹性布局
 
 ## 1.1 flex布局
 
@@ -113,7 +113,7 @@ flex-wrap: nowrap | wrap | wrap-reverse;
 
 ```css
 .box {
- align-content: flex-start | flex-end | center | space-between | spacearound | stretch;
+ align-content: flex-start | flex-end | center | space-between | space-around | stretch;
 }
 ```
 
@@ -216,7 +216,7 @@ flex属性是`flex-grow`/`flex-shrink`/`flex-basis`的简写,默认值为`0 1 au
 
 当设置为`auto`的时候(相对弹性元素),此时则需要在伸缩时将元素的尺寸考虑在内
 
-注意:建议优先使用额个属性,而不是单独写三个分离的属性,因为浏览器会推算相关值
+注意:建议优先使用flex属性,而不是单独写三个分离的属性,因为浏览器会推算相关值
 
 ### 1.3.6 align-self
 

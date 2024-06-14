@@ -17,7 +17,7 @@ date: 2024-04-23
 
 ## 二 事件模型
 
-![image.png](https://i.imgur.com/MMRXE3Y.png))
+![image.png](https://i.imgur.com/MMRXE3Y.png)
 
 - 之前我们提到的 addEventListener 还有第三个参数,可以为 true 和 false,默认是 false,当第三个参数为 true 时,绑定的是捕获阶段的事件,在捕获阶段,事件是由上到下依次触发的,反之当第三个参数为 false 时,绑定的是冒泡阶段的事件,在冒泡阶段,事件是由下到上触发的
 - W 3 C 规定,当事件发生后,最先通知 window,然后是 document,开始往下依次进入直到最底层被触发的那个元素(也就是目标元素,通常是 event.target 的值),这个过程就是捕获,事件会从目标元素开始,冒泡,由下至上逐层传递至 window,这个过程就是冒泡

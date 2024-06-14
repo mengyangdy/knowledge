@@ -198,7 +198,7 @@ less 与 stylus 的作⽤域跟 javascript ⼗分的相似，⾸先会查找局�
 
 可以在 Mixins 中定义变量或者默认参数
 
-在 less 中，混合的⽤法是指将定义好的 ClassA 中引⼊另⼀个已经定义的 Class ，也能使⽤够传
+在 less 中，混入的⽤法是指将定义好的 ClassA 中引⼊另⼀个已经定义的 Class ，也能够使⽤传
 递参数，参数变量为 @ 声明
 
 ```css

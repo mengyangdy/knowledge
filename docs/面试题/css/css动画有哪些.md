@@ -17,9 +17,9 @@ CSS动画（CSS Animations）是为层叠样式表建议的允许可扩展标记
 常⻅的动画效果有很多，如平移、旋转、缩放等等，复杂动画则是多个简单动画的组合
 
 css 实现动画的⽅式，有如下⼏种：
-- transition 实现渐变动画
+- transition 渐变动画
 - transform 转变动画
-- animation 实现⾃定义动画
+- animation 自定义动画
 
 ## 1.2 实现方式
 
@@ -175,5 +175,5 @@ animation:rotate 2s;
 - transition(过渡):用于设置元素的样式过度,和animation有着类似的效果,但是细节上有很大的不同
 - transform(变形):用于元素进行旋转/缩放/移动或倾斜,和设置样式的动画并没有什么关系,就相当于color一样用来设置元素的外表
 - translate(移动):只是transform的一个属性即移动
-- animation(动画):用于设置动画属性,它是一个简写的属性,包含6个属性
+- animation(动画):用于设置动画属性,它是一个简写的属性,包含8个属性
 
