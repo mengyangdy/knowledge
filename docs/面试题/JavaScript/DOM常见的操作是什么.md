@@ -6,13 +6,12 @@ tags:
 date: 2024-06-11
 ---
 
-# 一 DOM常见的操作是什么?
+# DOM常见的操作是什么?
 
-## 1.1 DOM
+## 1 DOM
 ⽂档对象模型 (DOM) 是 HTML 和 XML ⽂档的编程接⼝
 
-它提供了对⽂档的结构化的表述，并定义了⼀种⽅式可以使从程序中对该结构进⾏访问，从⽽改变⽂
-档的结构，样式和内容
+它提供了对⽂档的结构化的表述，并定义了⼀种⽅式可以使从程序中对该结构进⾏访问，从⽽改变⽂档的结构，样式和内容
 
 任何 HTML 或 XML ⽂档都可以⽤ DOM 表⽰为⼀个由节点构成的层级结构
 
@@ -37,9 +36,9 @@ DOM 像原⼦包含着亚原⼦微粒那样，也有很多类型的 DOM 节点�
     </div>
 ```
 
-上述结构中， div 、 p 就是元素节点， content 就是⽂本节点， title 就是属性节点
+上述结构中，div、p 就是元素节点，content 就是⽂本节点，title 就是属性节点
 
-## 1.2 操作
+## 2 操作
 
 ⽇常前端开发，我们都离不开 DOM 操作
 
@@ -54,9 +53,9 @@ DOM 像原⼦包含着亚原⼦微粒那样，也有很多类型的 DOM 节点�
 - 添加节点
 - 删除节点
 
-### 1.2.1 创建节点
+### 2.1 创建节点
 
-#### 1.2.1.1 createElement
+#### 2.1.1 createElement
 
 创建新元素，接受⼀个参数，即要创建元素的标签名
 
@@ -64,7 +63,7 @@ DOM 像原⼦包含着亚原⼦微粒那样，也有很多类型的 DOM 节点�
 const divEl = document.createElement("div");
 ```
 
-#### 1.2.1.2 createTextNode
+#### 2.1.2 createTextNode
 
 创建⼀个⽂本节点
 
@@ -72,7 +71,7 @@ const divEl = document.createElement("div");
 const textEl = document.createTextNode("content");
 ```
 
-#### 1.2.1.3 createDocumentFragment
+#### 2.1.3 createDocumentFragment
 
 ⽤来创建⼀个⽂档碎⽚，它表⽰⼀种轻量级的⽂档，主要是⽤来存储临时节点，然后把⽂档碎⽚的内容⼀次性添加到 DOM 中
 
@@ -82,7 +81,7 @@ const fragment = document.createDocumentFragment();
 
 当请求把⼀个 DocumentFragment 节点插⼊⽂档树时，插⼊的不是 DocumentFragment ⾃⾝，⽽是它的所有⼦孙节点
 
-#### 1.2.1.4 createAttribute
+#### 2.1.4 createAttribute
 
 创建属性节点，可以是⾃定义属性
 
@@ -91,9 +90,9 @@ const dataAttribute = document.createAttribute('custom');
 consle.log(dataAttribute);
 ```
 
-### 1.2.2 获取节点
+### 2.2 获取节点
 
-#### 1.2.2.1 querySelector
+#### 2.2.1 querySelector
 
 传⼊任何有效的 css 选择器，即可选中单个 DOM 元素（⾸个）：
 
@@ -107,7 +106,7 @@ document.querySelector('div + p > span')
 
 如果⻚⾯上没有指定的元素时，返回 null
 
-#### 1.2.2.2 querySelectorAll
+#### 2.2.2 querySelectorAll
 
 返回⼀个包含节点⼦树内所有与之相匹配的 Element 节点列表，如果没有相匹配的，则返回⼀个空节点列表
 
@@ -135,9 +134,9 @@ document.all['']; 获取⻚⾯中的所有元素节点的对象集合型
 
 ![](https://f.pz.al/pzal/2024/06/11/cc1666479ee8a.png)
 
-### 1.2.3 更新节点
+### 2.3 更新节点
 
-#### 1.2.3.1 innerHTML
+#### 2.3.1 innerHTML
 
 不但可以修改⼀个 DOM 节点的⽂本内容，还可以直接通过 HTML ⽚段修改 DOM 节点内部的⼦树
 
@@ -151,7 +150,7 @@ document.all['']; 获取⻚⾯中的所有元素节点的对象集合型
  // <p>...</p >的内部结构已修改
 ```
 
-#### 1.2.3.2 innerText、textContent
+#### 2.3.2 innerText、textContent
 
 ⾃动对字符串进⾏ HTML 编码，保证⽆法设置任何 HTML 标签
 
@@ -166,7 +165,7 @@ document.all['']; 获取⻚⾯中的所有元素节点的对象集合型
 
 两者的区别在于读取属性时， innerText 不返回隐藏元素的⽂本，⽽ textContent 返回所有⽂本
 
-#### 1.2.3.3 style
+#### 2.3.3 style
 
 DOM 节点的 style 属性对应所有的 CSS ，可以直接获取或设置。遇到 - 需要转化为驼峰命名
 
@@ -179,15 +178,15 @@ DOM 节点的 style 属性对应所有的 CSS ，可以直接获取或设置。�
  p.style.paddingTop = '2em';
 ```
 
-### 1.2.4 添加节点
+### 2.4 添加节点
 
-#### 1.2.4.1 innerHTML
+#### 2.4.1 innerHTML
 
 如果这个DOM节点是空的，例如， <div></div> ，那么，直接使⽤ innerHTML ='<span>child</span>' 就可以修改 DOM 节点的内容，相当于添加了新的 DOM 节点
 
 如果这个DOM节点不是空的，那就不能这么做，因为 innerHTML 会直接替换掉原来的所有⼦节点
 
-#### 1.2.4.2 appendChild
+#### 2.4.2 appendChild
 
 把⼀个⼦节点添加到⽗节点的最后⼀个⼦节点
 
@@ -234,7 +233,7 @@ DOM 节点的 style 属性对应所有的 CSS ，可以直接获取或设置。�
  list.appendChild(haskell);
 ```
 
-#### 1.2.4.3 insertBefore
+#### 2.4.3 insertBefore
 
 把⼦节点插⼊到指定的位置，使⽤⽅法如下：
 
@@ -244,7 +243,7 @@ parentElement.insertBefore(newElement, referenceElement)
 
 ⼦节点会插⼊到 referenceElement 之前
 
-#### 1.2.4.4 setAttribute
+#### 2.4.4 setAttribute
 
 在指定元素中添加⼀个属性节点，如果元素中已有该属性改变属性值
 
@@ -254,7 +253,7 @@ div.setAttribute('class', 'white');//第⼀个参数属性名，第⼆个参数�
 ```
 
 
-### 1.2.5 删除节点
+### 2.5 删除节点
 
 删除⼀个节点，⾸先要获得该节点本⾝以及它的⽗节点，然后，调⽤⽗节点的 removeChild 把⾃⼰删掉
 

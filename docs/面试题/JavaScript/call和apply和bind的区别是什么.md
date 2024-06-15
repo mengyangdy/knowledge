@@ -6,10 +6,10 @@ tags:
 date: 2024-06-11
 ---
 
-# 一 call和apply和bind的区别是什么
+# call和apply和bind的区别是什么
 
-## 1.1 作⽤
-## 
+## 1 作⽤
+
 call、apply、bind 作⽤是改变函数执⾏时的上下⽂，简⽽⾔之就是改变函数运⾏时的 this 指向
 
 那么什么情况下需要改变 this 的指向呢？下⾯举个例⼦
@@ -36,11 +36,11 @@ call、apply、bind 作⽤是改变函数执⾏时的上下⽂，简⽽⾔之就
 setTimeout(obj.say.bind(obj),0); //martin，this指向obj对象
 ```
 
-## 1.2 区别
+## 2 区别
 
 下⾯再来看看 apply、call、bind 的使⽤
 
-### 1.2.1 apply
+### 2.1 apply
 apply 接受两个参数，第⼀个参数是 this 的指向，第⼆个参数是函数接受的参数，以数组的形式传⼊
 
 改变 this 指向后原函数会⽴即执⾏，且此⽅法只是临时改变 this 指向⼀次
@@ -63,7 +63,7 @@ apply 接受两个参数，第⼀个参数是 this 的指向，第⼆个参数�
  fn.apply(undefined,[1,2]); // this指向window
 ```
 
-### 1.2.2 call
+### 2.2 call
 
 call ⽅法的第⼀个参数也是 this 的指向，后⾯传⼊的是⼀个参数列表
 
@@ -87,7 +87,7 @@ call ⽅法的第⼀个参数也是 this 的指向，后⾯传⼊的是⼀个参
  fn.call(undefined,[1,2]); // this指向window
 ```
 
-### 1.2.3 bind
+### 2.3 bind
 
 bind⽅法和call很相似，第⼀参数也是 this 的指向，后⾯传⼊的也是⼀个参数列表(但是这个参数列表可以分多次传⼊)
 
@@ -105,7 +105,7 @@ bind⽅法和call很相似，第⼀参数也是 this 的指向，后⾯传⼊的
  fn(1,2) // this指向window
 ```
 
-### 1.2.4 ⼩结
+### 2.4 ⼩结
 
 从上⾯可以看到， apply 、 call 、 bind 三者的区别在于：
 - 三者都可以改变函数的 this 对象指向
@@ -113,7 +113,7 @@ bind⽅法和call很相似，第⼀参数也是 this 的指向，后⾯传⼊的
 - 三者都可以传参，但是 apply 是数组，⽽ call 是参数列表，且 apply 和 call 是⼀次性传⼊参数，⽽ bind 可以分为多次传⼊
 - bind 是返回绑定this之后的函数， apply 、 call 则是⽴即执⾏
 
-## 1.3 实现
+## 3 实现
 
 实现 bind 的步骤，我们可以分解成为三部分：
 - 修改 this 指向

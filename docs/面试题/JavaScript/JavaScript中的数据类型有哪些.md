@@ -6,9 +6,9 @@ tags:
 date: 2024-06-11
 ---
 
-# 一 JavaScript中的数据类型有哪些?
+# JavaScript中的数据类型有哪些?
 
-## 1.1 前⾔
+## 1 前⾔
 
 在 JavaScript 中，我们可以分成两种类型：
 - 基本类型
@@ -16,7 +16,7 @@ date: 2024-06-11
 
 两种类型的区别是：存储位置不同
 
-## 1.2 基本类型
+## 2 基本类型
 
 基本类型主要为以下6种：
 - Number
@@ -25,8 +25,9 @@ date: 2024-06-11
 - Undefined
 - null
 - symbol
+- bigint
 
-### 1.2.1 Number
+### 2.1 Number
 
 数值最常⻅的整数类型格式则为⼗进制，还可以设置⼋进制（零开头）、⼗六进制（0x开头）
 
@@ -52,7 +53,7 @@ console.log(0/0); // NaN
 console.log(-0/+0); // NaN
 ```
 
-### 1.2.2 Undefined
+### 2.2 Undefined
 
 Undefined 类型只有⼀个值，就是特殊值 undefined 。当使⽤ var 或 let 声明了变量但没有初始化时，就相当于给变量赋予了 undefined 值
 
@@ -69,7 +70,7 @@ console.log(message); // "undefined"
 console.log(age); // 没有声明过这个变量，报错
 ```
 
-### 1.2.3 String
+### 2.3 String
 
 字符串可以使⽤双引号（"）、单引号（'）或反引号（`）标⽰
 
@@ -86,7 +87,7 @@ let lang = "Java";
 lang = lang + "Script"; // 先销毁再创建
 ```
 
-### 1.2.4 Null
+### 2.4 Null
 
 Null 类型同样只有⼀个值，即特殊值 null
 
@@ -104,7 +105,7 @@ console.log(null == undefined); // true
 ```
 只要变量要保存对象，⽽当时⼜没有那个对象可保存，就可⽤ null 来填充该变量
 
-### 1.2.5 Boolean
+### 2.5 Boolean
 
 Boolean （布尔值）类型有两个字⾯值： true 和 false
 
@@ -118,7 +119,7 @@ Boolean （布尔值）类型有两个字⾯值： true 和 false
 |Object|null|任意对象|
 |Undefined|undefined|N/A(不存在)|
 
-### 1.2.6 Symbol
+### 2.6 Symbol
 
 Symbol （符号）是原始值，且符号实例是唯⼀、不可变的。符号的⽤途是确保对象属性使⽤唯⼀标识符，不会发⽣属性冲突的危险
 
@@ -131,14 +132,18 @@ let otherFooSymbol = Symbol('foo');
 console.log(fooSymbol == otherFooSymbol); // false
 ```
 
-## 1.3 引⽤类型
+### 2.7 BigInt
+
+BigInt（ES6引入）: 大整数类型，用来安全地存储和操作大于 2^53 - 1（Number.MAX_SAFE_INTEGER）的大整数
+
+## 3 引⽤类型
 
 复杂类型统称为 Object ，我们这⾥主要讲述下⾯三种：
 - Object
 - Array
 - Function
 
-### 1.3.1 Object
+### 3.1 Object
 
 创建 object 常⽤⽅式为对象字⾯量表⽰法，属性名可以是字符串或数值
 
@@ -150,7 +155,7 @@ name: "Nicholas",
 };
 ```
 
-### 1.3.2 Array
+### 3.2 Array
 
 JavaScript 数组是⼀组有序的数据，但跟其他语⾔不同的是，数组中每个槽位可以存储任意类型的数据。并且，数组也是动态⼤⼩的，会随着数据添加⽽⾃动增⻓
 
@@ -159,7 +164,7 @@ let colors = ["red", 2, {age: 20 }]
 colors.push(2)
 ```
 
-### 1.3.3 Function
+### 3.3 Function
 
 函数实际上是对象，每个函数都是 Function 类型的实例，⽽ Function 也有属性和⽅法，跟其他引⽤类型⼀样
 
@@ -190,11 +195,11 @@ return num1 + num2;
 };
 ```
 
-### 1.3.4 其他引⽤类型
+### 3.4 其他引⽤类型
 
 除了上述说的三种之外，还包括 Date 、 RegExp 、 Map 、 Set 等......
 
-## 1.4 存储区别
+## 4 存储区别
 
 基本数据类型和引⽤数据类型存储在内存中的位置不同：
 - 基本数据类型存储在栈中
@@ -204,7 +209,7 @@ return num1 + num2;
 
 下⾯来举个例⼦
 
-### 1.4.1 基本类型
+### 4.1 基本类型
 
 ```JS
 let a = 10;
@@ -219,7 +224,7 @@ a 的值为⼀个基本类型，是存储在栈中，将 a 的值赋给 b ，虽
 
 ![](https://f.pz.al/pzal/2024/06/11/f8a6449fe01c2.png)
 
-### 1.4.2 引⽤类型
+### 4.2 引⽤类型
 
 ```JS
 var obj1 = {}
@@ -236,7 +241,7 @@ obj1 是⼀个引⽤类型，在赋值操作过程汇总，实际是将堆内存
 
 ![](https://f.pz.al/pzal/2024/06/11/5258ad4cfef78.png)
 
-## 1.5 ⼩结
+## 5 ⼩结
 - 声明变量时不同的内存地址分配：
 	- 简单类型的值存放在栈中，在栈中存放的是对应的值
 	- 引⽤类型对应的值存储在堆中，在栈中存放的是指向堆内存的地址
