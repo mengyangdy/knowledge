@@ -6,9 +6,9 @@ tags:
 date: 2024-06-11
 ---
 
-# 一 说说你对BOM的理解
+# 说说你对BOM的理解
 
-## 1.1 是什么
+## 1 是什么
 
 BOM (Browser Object Model)，浏览器对象模型，提供了独⽴于内容与浏览器窗⼝进⾏交互的对象其作⽤就是跟浏览器做⼀些交互效果,⽐如如何进⾏⻚⾯的后退，前进，刷新，浏览器的窗⼝发⽣变化，滚动条的滚动，以及获取客⼾的⼀些信息如：浏览器品牌版本，屏幕分辨率
 
@@ -16,7 +16,7 @@ BOM (Browser Object Model)，浏览器对象模型，提供了独⽴于内容与
 
 ![](https://f.pz.al/pzal/2024/06/11/b22994e43801e.png)
 
-## 1.2 window
+## 2 window
 
 Bom 的核⼼对象是 window ，它表⽰浏览器的⼀个实例
 
@@ -61,7 +61,7 @@ window.close() 仅⽤于通过 window.open() 打开的窗⼝
 
 新创建的 window 对象有⼀个 opener 属性，该属性指向打开他的原始窗⼝对象
 
-## 1.3 location
+## 3 location
 
 url 地址如下：
 
@@ -88,20 +88,20 @@ location.reload() ，此⽅法可以重新刷新当前⻚⾯。这个⽅法会�
 
 如果要强制从服务器中重新加载，传递⼀个参数 true 即可
 
-## 1.4 navigator
+## 4 navigator
 
 navigator 对象主要⽤来获取浏览器的属性，区分浏览器类型。属性较多，且兼容性⽐较复杂下表列出了 navigator 对象接⼝定义的属性和⽅法：
 
 ![](https://f.pz.al/pzal/2024/06/11/76c621c71c717.png)
 ![](https://f.pz.al/pzal/2024/06/11/f63781dbcdcc3.png)
 
-## 1.5 screen
+## 5 screen
 
 保存的纯粹是客⼾端能⼒信息，也就是浏览器窗⼝外⾯的客⼾端显⽰器的信息，⽐如像素宽度和像素⾼度
 
 ![](https://f.pz.al/pzal/2024/06/11/05623b926c1af.png)
 
-## 1.6 history
+## 6 history
 
 history 对象主要⽤来操作浏览器 URL 的历史记录，可以通过参数向前，向后，或者向指定 URL 跳转
 
