@@ -5,38 +5,38 @@ tags:
   - 面试题
 date: 2024-05-26
 ---
-# 一浏览器加载和执行JavaScript文件的机制
+# 浏览器加载和执行JavaScript文件的机制
 
 浏览器加载和执行JavaScript文件遵循一套既定的机制，确保网页的互动性和动态功能得以实现。这个过程大致可以分为以下几个步骤：
-### 1. 解析HTML中JavaScript引用
+## 1. 解析HTML中JavaScript引用
 
 - 当浏览器解析HTML文档，遇到`<script>`标签时，它会暂停HTML的解析。
 - 如果`<script>`标签有`src`属性，浏览器会发送一个新的HTTP(S)请求去获取指定的JavaScript文件。
 - 如果`<script>`标签没有`src`属性，而是直接包含JavaScript代码（内联脚本），浏览器会直接读取并执行这些代码。
 
-### 2. 下载JavaScript文件
+## 2. 下载JavaScript文件
 
 - 对于外部的JavaScript文件，浏览器会进行下载。这一步骤可能受缓存策略影响，如果文件之前已经被下载过且未修改，浏览器可能直接从缓存中加载。
 - 下载通常异步进行，但早期的浏览器（或特定情况下）可能会阻塞HTML的解析直到脚本下载并执行完毕。
 
-### 3. 执行JavaScript
+## 3. 执行JavaScript
 
 - 一旦JavaScript文件被下载（或内联脚本被读取），浏览器将其传递给JavaScript引擎（如V8引擎在Chrome中）执行。
 - **全局执行环境**：每个JavaScript文件执行时都会有一个全局执行环境，定义了变量作用域、全局对象等。
 - **执行上下文栈**：随着函数的调用和返回，不同的执行上下文会被推入和弹出一个栈，管理代码的执行顺序。
 
-### 4. JavaScript执行对DOM的影响
+## 4. JavaScript执行对DOM的影响
 
 - JavaScript可以访问和修改DOM（文档对象模型），从而动态改变网页内容、样式或布局。
 - 由于JavaScript有能力改变HTML结构和CSS样式，浏览器可能需要在JavaScript执行后重新进行布局和绘制。
 
-### 5. 异步执行与事件处理
+## 5. 异步执行与事件处理
 
 - 现代JavaScript支持异步编程模型，如使用回调函数、Promise、async/await以及Event Loop机制。
 - 异步操作（如网络请求、定时器）不会阻塞JavaScript的主线程，允许其他脚本继续执行或浏览器处理用户交互。
 - 事件监听器可以注册在DOM元素上，当特定事件发生时（如点击），关联的JavaScript函数会被添加到事件队列中等待执行。
 
-### 6. 脚本的defer和async属性
+## 6. 脚本的defer和async属性
 
 - `defer`属性：告诉浏览器该脚本可以在文档解析完成后，DOMContentLoaded事件触发之前执行，但依然保证执行顺序（按照脚本在HTML中出现的顺序）。
 - `async`属性：指示浏览器异步加载脚本，不保证执行顺序，只要脚本一加载完成就立即执行，不会阻塞DOM构造。
