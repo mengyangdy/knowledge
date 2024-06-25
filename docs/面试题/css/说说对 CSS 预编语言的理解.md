@@ -54,17 +54,19 @@ Stylus 是⼀个 Css 的预处理框架，2010 年产⽣，来⾃ Node.js 社区
 
 less和scss:
 
-```css
-.box {
- display: block;
-}
-```
-
 sass:
 
 ```css
 .box
   display: block
+```
+
+less:
+
+```css
+.box {
+ display: block;
+}
 ```
 
 stylus:
@@ -94,15 +96,6 @@ less:
 
 变量⽆疑为 Css 增加了⼀种有效的复⽤⽅式，减少了原来在 Css 中⽆法避免的重复「硬编码」
 
-less 声明的变量必须以 @ 开头，后⾯紧跟变量名和变量值，⽽且变量名和变量值需要使⽤冒号 : 分隔开
-
-```css
-@red: #c00;
-strong {
-  color: @red;
-}
-```
-
 sass 声明的变量跟 less ⼗分的相似，只是变量名前⾯使⽤ $ 开头
 
 ```css
@@ -110,6 +103,15 @@ $red: #c00;
       strong {
         color: $red;
       }
+```
+
+less 声明的变量必须以 @ 开头，后⾯紧跟变量名和变量值，⽽且变量名和变量值需要使⽤冒号 : 分隔开
+
+```css
+@red: #c00;
+strong {
+  color: @red;
+}
 ```
 
 stylus 声明的变量没有任何的限定，可以使⽤ $ 开头，结尾的分号 ; 可有可⽆，但变量与变量值之间需要使⽤ =
