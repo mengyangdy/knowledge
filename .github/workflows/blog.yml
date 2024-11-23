@@ -36,7 +36,7 @@ jobs:
       - name: Package Build
         run: |
           cd doc_build
-          tar -czf build.tar.gz . 
+          tar --warning=no-file-changed -czf build.tar.gz . 
           cd ..
       # - name: Compress Build Folder
       #   run: |
