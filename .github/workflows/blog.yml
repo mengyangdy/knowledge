@@ -32,8 +32,8 @@ jobs:
           npm install -g pnpm
           pnpm i
           pnpm run build   
-      - name: Package Build
-        run: |
+      # - name: Package Build
+      #   run: |
           cd doc_build
           tar -czf build.tar.gz . # 在doc_build目录下创建build.tar.gz，包含所有文件
           cd ..
