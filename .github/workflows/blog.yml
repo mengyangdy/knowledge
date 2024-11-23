@@ -35,8 +35,11 @@ jobs:
       - name: Compress Build Folder
         run: |
           cd ./doc_build
-          tar -czf build.tar.gz .
+          tar --warning=no-file-changed -czf build.tar.gz .
           cd ..
+      # - name: Wait for 2 seconds
+      #   run: |
+      #     sleep 2
       - name: Upload and Extract on Server
         uses: appleboy/scp-action@v0.1.3
         with:
