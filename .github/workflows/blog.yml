@@ -24,18 +24,19 @@ jobs:
         uses: actions/checkout@master
       - name: Setup Node.js
         uses: actions/setup-node@v3
-        # with:
-        #   # 选择要使用的 node 版本
-        #   node-version: '22'
+        with:
+          # 选择要使用的 node 版本
+          node-version: '22'
       - name: TranslateFile
         run: |
           npm install -g pnpm
           pnpm i
           pnpm run build   
-      # - name: Package Build
-      #   run: |
+      # 在doc_build目录下创建build.tar.gz，包含所有文件
+      - name: Package Build
+        run: |
           cd doc_build
-          tar -czf build.tar.gz . # 在doc_build目录下创建build.tar.gz，包含所有文件
+          tar -czf build.tar.gz . 
           cd ..
       # - name: Compress Build Folder
       #   run: |
