@@ -32,11 +32,16 @@ jobs:
           npm install -g pnpm
           pnpm i
           pnpm run build   
-      - name: Compress Build Folder
+      - name: Package Build
         run: |
-          cd ./doc_build
-          tar --warning=no-file-changed -czf build.tar.gz .
+          cd doc_build
+          tar -czf build.tar.gz . # 在doc_build目录下创建build.tar.gz，包含所有文件
           cd ..
+      # - name: Compress Build Folder
+      #   run: |
+      #     cd ./doc_build
+      #     tar --warning=no-file-changed -czf build.tar.gz .
+      #     cd ..
       # - name: Wait for 2 seconds
       #   run: |
       #     sleep 2
