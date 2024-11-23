@@ -24,9 +24,9 @@ jobs:
         uses: actions/checkout@master
       - name: Setup Node.js
         uses: actions/setup-node@v3
-        with:
-          # 选择要使用的 node 版本
-          node-version: '22'
+        # with:
+        #   # 选择要使用的 node 版本
+        #   node-version: '22'
       - name: TranslateFile
         run: |
           npm install -g pnpm
