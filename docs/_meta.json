@@ -1,8 +1,9 @@
 [
   {
-    "text": "Guide",
-    "link": "/guide/",
-    "activeMatch": "/guide/"
+    "text": "前端",
+    "link": "/前端/",
+    "activeMatch": "/guide/",
+    "position":"left"
   },
   {
   	"text": "面试题",

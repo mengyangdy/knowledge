@@ -96,5 +96,12 @@
 	  "label": "Git面试题",
 	  "collapsible": true,
 	  "collapsed": true
+	},
+	{
+	  "type": "dir",
+	  "name": "代码题",
+	  "label": "代码题",
+	  "collapsible": true,
+	  "collapsed": true
 	}
 ]

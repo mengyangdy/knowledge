@@ -1,5 +1,25 @@
 # defer和async属性在script标签中分别有什么作用?
 
+浏览器在解析HTML的过程中，遇到了script元素是不能继续构建DOM树的
+
+- 它会停⽌继续构建，⾸先下载JavaScript代码，并且执⾏JavaScript的脚本
+- 只有等到JavaScript脚本执⾏结束后，才会继续解析HTML，构建DOM树
+
+为什么要这样做呢？
+
+- 这是因为JavaScript的作⽤之⼀就是操作DOM，并且可以修改DOM
+- 如果我们等到DOM树构建完成并且渲染再执⾏JavaScript，会造成严重的回流和重绘，影响⻚⾯的性能
+- 所以会在遇到script元素时，优先下载和执⾏JavaScript代码，再继续构建DOM树
+
+但是这个也往往会带来新的问题，特别是现代⻚⾯开发中：
+
+- 在⽬前的开发模式中（⽐如Vue、React），脚本往往⽐HTML⻚⾯更“重”，处理时间需要更⻓
+- 所以会造成⻚⾯的解析阻塞，在脚本下载、执⾏完成之前，⽤户在界⾯上什么都看不到
+
+为了解决这个问题，script元素给我们提供了两个属性（attribute）：defer和async。
+
+> 
+>
 > 在HTML中的`<script>`标签，`defer`和`async`这两个属性用于控制脚本的加载和执行方式，以优化页面的渲染速度和脚本的执行顺序。
 
 ## 1.1 defer 属性

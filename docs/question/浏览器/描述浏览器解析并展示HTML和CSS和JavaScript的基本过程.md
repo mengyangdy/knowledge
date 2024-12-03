@@ -1,10 +1,3 @@
----
-title: 描述浏览器解析并展示HTML和CSS和JavaScript的基本过程?
-tags:
-  - 浏览器
-  - 面试题
-date: 2024-05-26
----
 # 一 描述浏览器解析并展示HTML和CSS和JavaScript的基本过程?
 
 浏览器解析并展示HTML、CSS和JavaScript的过程可以分为以下几个关键阶段：

@@ -41,6 +41,7 @@ date: 2024-06-12
 - 原型式继承
 - 寄⽣式继承
 - 寄⽣组合式继承
+- ES6的class继承
 
 ### 2.1 原型链继承
 
@@ -169,9 +170,9 @@ instance2.sayAge(); //27
 实例对象instance1上的两个属性就屏蔽了其原型对象SubType.prototype的两个同名属性。所以，组合模式的缺点就是在使用子类创建实例对象时，其原型中会存在两份相同的属性/方法
 
 ### 2.4 原型式继承
- 
+
  利用一个空对象作为中介，将某个对象直接赋值给空对象构造函数的原型。
- 
+
  ```JS
  function object(obj){
    function F(){}
@@ -179,9 +180,9 @@ instance2.sayAge(); //27
    return new F();
  }
  ```
- 
+
  object()对传入其中的对象执行了一次浅复制，将构造函数F的原型直接指向传入的对象
- 
+
  ```JS
  var person = {
    name: "Nicholas",
@@ -198,7 +199,7 @@ instance2.sayAge(); //27
  
  alert(person.friends);   //"Shelby,Court,Van,Rob,Barbie"
  ```
- 
+
 缺点：
 - 原型链继承多个实例的引用类型属性指向相同，存在篡改的可能。
 - 无法传递参数
@@ -393,3 +394,6 @@ class Rectangle {}
 
 - ES5的继承实质上是先创建子类的实例对象，然后再将父类的方法添加到this上（Parent.call(this))
 - ES6的继承有所不同，实质上是先创建父类的实例对象this，然后再用子类的构造函数修改this。因为子类没有自己的this对象，所以必须先调用父类的super()方法，否则新建实例报错
+
+
+
