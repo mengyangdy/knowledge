@@ -1,0 +1,63 @@
+<mxfile host="65bd71144e">
+    <diagram id="uLZPEOT0xDVLSvmWztDx" name="Page-1">
+        <mxGraphModel dx="800" dy="1695" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="5" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="用户组件中调用reactive&lt;br&gt;传入对象类型数据" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry y="180" width="150" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="" style="edgeStyle=none;html=1;fontColor=#000000;" edge="1" parent="1" source="4">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="670" y="200" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="reactive函数进行处理&lt;br&gt;1. 不是对象不进行代理&lt;br&gt;2.如果已经被reactive代&lt;br&gt;理过了也不再代理&lt;br&gt;3. 如果weakmap中存在&lt;br&gt;就从缓存中取值返回&lt;br&gt;4. 使用new Proxy代理对象" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="225" y="145" width="160" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="使用new WeakMap进行对象缓存" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="205" y="70" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;font-style: italic; background-color: rgb(255, 255, 255);&quot;&gt;相同对象被多次代理时 进行缓存永远返回第一次代理的对象&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="110" y="100" width="370" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;font-style: italic; background-color: rgb(255, 255, 255);&quot;&gt;一个对象被代理后再次被代理，返回的也是同一个对象&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="125" y="125" width="340" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;new Proxy(&lt;span style=&quot;font-style: italic;&quot;&gt;target&lt;/span&gt;, mutableHandlers)&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="385" y="170" width="290" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="edgeStyle=none;html=1;fontColor=#000000;" edge="1" parent="1" source="12" target="13">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="" style="edgeStyle=none;html=1;fontColor=#000000;" edge="1" parent="1" source="12" target="15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;mutableHandler函数进行处理&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="675" y="185" width="210" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="" style="edgeStyle=none;html=1;fontColor=#000000;" edge="1" parent="1" source="13" target="17">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;get方法&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1000" y="70" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="" style="edgeStyle=none;html=1;fontColor=#000000;" edge="1" parent="1" source="15" target="19">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;set方法&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1030" y="215" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;1. 如果key是__v_isReactive就证明是个内部的值返回true不取值&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;2.调用track方法进行依赖收集&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;3. 使用reflect获取到这个值&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;4. 判断这个值是不是ref 如果是的话就返回值.value&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;5. 判断这个值是不是对象，如果是对象的话继续使用reactive代理&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;6. 返回这个值&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="-40" width="430" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;1. 先获取下用户修改之前的值&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;2.使用reflect将新值赋值给对象&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;3. 如果新旧值不一样就使用trigger进行更新&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Monaco, Menlo, &amp;quot;Courier New&amp;quot;, monospace, Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; line-height: 20px;&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;4. 返回新值&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1180" y="185" width="300" height="90" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

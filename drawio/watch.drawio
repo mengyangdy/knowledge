@@ -1,0 +1,39 @@
+<mxfile host="65bd71144e">
+    <diagram id="w-ln_1a0ge8EgFUPC9UN" name="Page-1">
+        <mxGraphModel dx="1457" dy="526" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="6" style="edgeStyle=none;html=1;entryX=0.001;entryY=0.39;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="2" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="watch实现" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="20" y="195" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" style="edgeStyle=none;html=1;" edge="1" parent="1" source="3" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="watchEffect实现" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="-5" y="245" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="" style="edgeStyle=none;html=1;" edge="1" parent="1" source="4">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="295" y="230" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="doWatch实现" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="125" y="215" width="90" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="传入source，cb,options" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="45" y="165" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="传入Effect，null，options" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="265" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="1. 判断传入的是个函数还是对象，对象的话就取出来每一个值转化为函数作为Effect&lt;br&gt;2. 创建一个job函数，判断传过来的有没有cb函调函数，有的话，立即执行Effect得到新值&lt;br&gt;3. 这个值赋值给oldValue等待下次使用&lt;br&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="281" y="200" width="490" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

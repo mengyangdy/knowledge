@@ -1,11 +1,34 @@
----
-title: 什么是1px问题？如何在前端开发中解决它?
-tags:
-  - css
-  - 面试题
-date: 2024-05-25
----
+
+
 # 一 什么是1px问题？如何在前端开发中解决它?
 
-1px问题主要出现在高分辨率的屏幕上，特别是在移动设备上，许多现代设备特别是智能手机和平板电脑，它们的屏幕像素密度（PPI，每英寸像素数）相较于传统显示器有了显著提升，引入了所谓的Retina屏幕和其他高DPI屏幕技术。在这些高DPI屏幕上，设备的物理像素与CSS逻辑像素并不总是 1:1对应，而是存在一个设备像素比（device pixel ratio, dpr），可能是2、3甚至更高。当设计师要求实现1像素的边框或者线条时，就会出现 2 像素或者 3 像素的线条。
+在移动端的设计稿中，往往UI给的设计稿宽度为750px，图中设计的边框宽度为1px，在我们375px的设备下，我们应该将宽度写为0.5px
 
+但是如果直接设置0.5的话，一些设备（特别是旧的移动设备和浏览器）并且不支持0.5px，这个就是我们常说的1px问题以及如何画出0.5px边框的问题
+
+那么这种问题应该如何去处理呢？目前常见的方案有两种：
+
+- 方案一：viewport + rem + div
+- 方案二：伪类+ transform
+
+![](http://cdn.mengyang.online/202412091706574.png)
+
+```css
+.border{
+  position:relative;
+  padding:10px;
+  margin:20px;
+  display:inline-block;
+}
+.border::before{
+  content:'';
+  position:absoolute;
+  left:0;
+  top:0;
+  width:200%;
+  height:200%;
+  border:1px soli red;
+  transform-origin:0 0;
+  transform:scale(0.5);
+}
+```

@@ -103,5 +103,12 @@
 	  "label": "代码题",
 	  "collapsible": true,
 	  "collapsed": true
+	},
+	{
+	  "type": "dir",
+	  "name": "项目难点亮点",
+	  "label": "项目难点亮点",
+	  "collapsible": true,
+	  "collapsed": true
 	}
 ]
