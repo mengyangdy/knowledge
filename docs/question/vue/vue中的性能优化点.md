@@ -6,7 +6,7 @@
    1. reactive
    2. ref
    3. shallowReactive
-   4. readonly
+   4. readonly 只读属性
 3. 使用computed计算属性，缓存结果，减少函数执行次数
 4. 避免过度渲染
    1. 列表中加入key
@@ -18,3 +18,5 @@
    1. 利用webpack等工具将代码分割成更小的包
 7. kepp-alive
 8. 减少事件监听，使用事件代理
+9. 使用函数式组件
+   1. 函数式组件没有data，只接受props作为展示使用
