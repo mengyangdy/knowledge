@@ -36,6 +36,13 @@
 	},
 	{
 	  "type": "dir",
+	  "name": "react",
+	  "label": "React面试题",
+	  "collapsible": true,
+	  "collapsed": true
+	},
+	{
+	  "type": "dir",
 	  "name": "小程序",
 	  "label": "小程序面试题",
 	  "collapsible": true,
@@ -57,15 +64,8 @@
 	},
 	{
 	  "type": "dir",
-	  "name": "构建打包工具",
-	  "label": "构建打包工具面试题",
-	  "collapsible": true,
-	  "collapsed": true
-	},
-	{
-	  "type": "dir",
-	  "name": "计算机网络",
-	  "label": "计算机网络面试题",
+	  "name": "工程化",
+	  "label": "工程化面试题",
 	  "collapsible": true,
 	  "collapsed": true
 	},
@@ -78,22 +78,8 @@
 	},
 	{
 	  "type": "dir",
-	  "name": "手写题",
-	  "label": "手写题",
-	  "collapsible": true,
-	  "collapsed": true
-	},
-	{
-	  "type": "dir",
 	  "name": "性能优化",
 	  "label": "性能优化面试题",
-	  "collapsible": true,
-	  "collapsed": true
-	},
-	{
-	  "type": "dir",
-	  "name": "git",
-	  "label": "Git面试题",
 	  "collapsible": true,
 	  "collapsed": true
 	},
