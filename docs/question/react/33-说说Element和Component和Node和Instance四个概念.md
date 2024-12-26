@@ -1,0 +1,6 @@
+# 33.说说对React中Element和Component和Node和Instance四个概念的理解
+
+1. Element：它是React应用中的最基本的构建块，他是一个普通的JS对象，用来描述UI的一部分，Element可以是原生的DOM元素，也可以是自定义的组件，它的作用是用来向React描述开发着想在页面上render什么内容，Element是不可变的，一旦创建了就不能被修改
+2. Component：它是React的一个概念，它是由Element构成的，可以试函数组件或者类组件，Component可以接收输入的数据，并返回一个描述UI的Element，Component可以被服用，可以在应用中多次使用
+3. Node：指的是React应用中的一个虚拟节点，他是Element的实例，Node包含了Element的所有信息，包含类型、属性、子节点等等，Node是React内部用来描述UI的一种数据结构，他可以被渲染成真实DOM元素
+4. Instance：它指的是React应用中的一个组件实例，它是Component的实例，每一个Component在应用中都会有一个对应的Instance，它包含了Component的所有状态和方法，Instance可以被用来操作组件的状态以及用户的交互事件
