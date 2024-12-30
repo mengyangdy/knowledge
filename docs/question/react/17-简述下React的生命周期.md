@@ -66,9 +66,13 @@ render函数应该为纯函数，也就是不修改state的情况下，每次调
 
 ### 2.1 shouldComponentUpdate
 
-当props或者state发生变化后，这个生命周期会在渲染执行之前被调用
+当props或者state发生变化后，页面在渲染函数执行之前会调用这个生命周期，默认情况下，这个方法会返回true，让React执行更新。
 
-这个方法仅仅作为性能优化方式而存在的，不要企图依靠此方法来阻止渲染，因为这可能会产生bug，应该使用PureComponent组件而不是使用这个生命周期
+如果我们的组件不依赖于state或props的改变，你可以让shouldComponentUpdate返回false来避免不必要的渲染
+
+这个方法仅仅作为性能优化方式而存在的，不要企图依靠此方法来阻止渲染，因为这可能会产生bug，应该使用PureComponent组件而不是使用这个生命周期。
+
+React.PureComponent是另一个可以用来优化性能的方法。PureComponent通过props和state的浅层对比来实现shouldComponentUpdate，这可以避免在props或state没有改变的情况下进行不必要的渲染。
 
 
 
