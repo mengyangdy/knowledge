@@ -1,0 +1,43 @@
+---
+title: 开发环境设置跨域
+description: 详细解释了前端开发中代理配置的各个参数含义，包括 target、changeOrigin、ws、secure 等关键配置项的作用，以及如何通过路径匹配和重写来处理 API 请求转发。适合需要配置开发环境跨域的开发者参考
+tags: [前端开发, 跨域]
+date: 2023-12-10
+---
+
+前两天遇到一个开发环境设置跨域的问题，其中的字段名不知道是什么意思，现在记录一下。
+
+开发环境设置跨域主要是我们的构建工具在底层用node搭建了一个服务器进行转发，也就是我们的请求先通过这个node服务器，然后node服务器在帮我们发送接口。
+
+```js
+proxy: {
+  '/api': {
+    target: 'www.baidu.com',
+    changeOrigin: true,
+    ws: true,
+    secure: false
+  }
+}
+```
+
+首先 /api 的意思是匹配所有以 /api 开头的请求路径：
+
+匹配的路径：
+
+- /api/user → 转发到 http://example.com/api/user
+- /api/data → 转发到 http://example.com/api/data
+
+不匹配的路径：
+
+- /user
+- /v2/api/data（不以 /api 开头）
+
+当然我们也可以使用正则来进行匹配，写法为 ^/api 或者 ^/(api|v2/api)。
+
+以下是各个配置字段的含义：
+
+- target：目标服务器地址，所有匹配 /api 的请求都会被转发到此地址
+- changeOrigin：为 true 的话就是修改请求头中的 Host 为目标地址的域名，避免后端服务因为Host校验而拒绝请求
+- ws：如果后端使用了WebSocket就开启此选项
+- secure：禁用对HTTP证书的验证，适用于目标服务器使用自签名证书的情况
+- pathRewrite：作用是重写请求路径，如果前端请求路径是 /api/user/list，但是后端接口的实际地址是 /user/list，此时就需要通过 pathRewrite 移除前面的 /api 这个路径

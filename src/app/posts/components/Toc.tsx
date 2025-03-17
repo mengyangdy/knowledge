@@ -3,6 +3,7 @@
 import {  motion, useScroll } from "framer-motion";
 import { useEffect } from "react";
 import * as tocbot from 'tocbot';
+import '@/style/tocbot.css';
 
 const listVariants={
   hidden:{

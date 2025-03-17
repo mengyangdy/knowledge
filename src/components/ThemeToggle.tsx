@@ -9,10 +9,10 @@ import useThemeToggleAnimation from '@/hooks/useThemeToggleAnimation';
 import { Toaster } from '@/components/ui/sonner';
 
 export default function ThemeToggle() {
-	const eventRef = useRef<AnyIfEmpty>(null);
+	const eventRef = useRef<React.MouseEvent<HTMLButtonElement> | null>(null);
 	const [mounted, setMounted] = useState(false);
-	const { theme, setTheme }: AnyIfEmpty = useTheme();
-	const toggleRef = useRef<AnyIfEmpty>(null);
+	const { theme, setTheme } = useTheme();
+	const toggleRef = useRef<HTMLButtonElement>(null);
 	const { toggleDarkMode } = useThemeToggleAnimation({
 		domRef: toggleRef,
 		isDarkMode: theme === 'dark',
@@ -21,18 +21,18 @@ export default function ThemeToggle() {
 		}
 	});
 	useEffect(() => {
-		// const link = document.createElement('link');
-		// link.rel = 'stylesheet';
-		// link.href =
-		// 	theme === 'dark'
-		// 		? '/style/prism-gruvbox-light.css'
-		// 		: '/style/prism-coldark-dark.css';
-		// document.head.appendChild(link);
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href =
+			theme === 'dark'
+				? '/style/prism-gruvbox-light.css'
+				: '/style/prism-coldark-dark.css';
+		document.head.appendChild(link);
 
 		// 清理函数，在组件卸载或主题变化时移除之前的 CSS
-		// return () => {
-		// 	document.head.removeChild(link);
-		// };
+		return () => {
+			document.head.removeChild(link);
+		};
 	}, [theme]);
 	useEffect(() => {
 		setMounted(true);
@@ -67,7 +67,7 @@ export default function ThemeToggle() {
 					)}
 				</motion.div>
 			</Switch>
-			<Toaster theme={theme ?? 'light'} richColors />
+			<Toaster theme={(theme as 'light' | 'dark' | 'system') ?? 'light'} richColors />
 		</div>
 	);
 }

@@ -1,11 +1,3 @@
-/**
- * Coldark Theme for Prism.js
- * Theme variation: Dark
- * Tested with HTML, CSS, JS, JSON, PHP, YAML, Bash script
- * @author Armand Philippot <contact@armandphilippot.com>
- * @homepage https://github.com/ArmandPhilippot/coldark-prism
- * @license MIT
- */
 code[class*='language-'],
 pre[class*='language-'] {
 	color: #e3eaf2;

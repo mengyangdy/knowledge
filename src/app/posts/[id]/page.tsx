@@ -23,15 +23,11 @@ const variantStyles = {
 
 // 2. 修改 getPageData 函数
 async function getPageData(params: { id: string }) {
-  // 先获取并验证 id
-  const param = await Promise.resolve(params)
-  const id=param.id
-
   // 获取所有文章
   const posts = await Promise.resolve(allPosts);
 
   // 获取当前文章
-  const currentPost = posts.find((post) => generateSlug(post.title) === id);
+  const currentPost = posts.find((post) => generateSlug(post.title) === params.id);
   if (!currentPost) return null;
 
   // 获取排序后的文章列表
@@ -41,7 +37,7 @@ async function getPageData(params: { id: string }) {
 
   // 找到当前文章的索引
   const currentIndex = sortedPosts.findIndex(
-    (p) => generateSlug(p.title) === id
+    (p) => generateSlug(p.title) === params.id
   );
 
   // 获取前后文章
@@ -61,17 +57,17 @@ async function getPageData(params: { id: string }) {
 // 5. 修改静态参数生成函数
 export async function generateStaticParams() {
   const posts = await Promise.resolve(allPosts);
-  return posts.map((post: any) => ({
+  return posts.map((post) => ({
     id: generateSlug(post.title),
   }));
 }
 
 // 4. 修改元数据生成函数
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const data = await getPageData(params);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const data = await getPageData(resolvedParams);
   if (!data) {
-    const param = await Promise.resolve(params)
-    throw new Error(`Post not found for slug: ${param.id}`);
+    throw new Error(`Post not found for slug: ${resolvedParams.id}`);
   }
 
   const { currentPost: post } = data;
@@ -97,9 +93,17 @@ const computeTitle = (p: Post) => {
   return p.title;
 };
 
-export default async function Page({ params }: { params: { id: string } }) {
-  
-  const data = await getPageData(params);
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function Page({ params, searchParams }: PageProps) {
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+  const data = await getPageData(resolvedParams);
   if (!data) notFound();
 
   const { currentPost: post, prevPost, nextPost } = data;
@@ -126,7 +130,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </Link>
             <article
               data-postid={post._id}
-              className="rich-text-viewer prose px-4"
+              className="rich-text-viewer prose prose-zinc dark:prose-invert px-4"
             >
               <div className="mb-8 text-center">
                 {post.cover && (
@@ -181,7 +185,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               {/* 上一个 */}
               {prevPost ? (
                 <Link
-                  href={`/posts/${prevPost.slug}`}
+                  href={`/posts/${generateSlug(prevPost.title)}`}
                   className={cn(
                     "inline-flex items-center justify-center rounded-md  px-4 py-2 text-sm  font-medium text-violet-500  dark:text-violet-300 shadow-sm hover:bg-violet-200 dark:hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2"
                   )}
@@ -197,7 +201,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               {/* 下一个 */}
               {nextPost ? (
                 <Link
-                  href={`/posts/${nextPost.slug}`}
+                  href={`/posts/${generateSlug(nextPost.title)}`}
                   className={cn(
                     "inline-flex items-center justify-center rounded-md  px-4 py-2 text-sm font-medium text-violet-500 dark:text-violet-300 shadow-sm hover:bg-violet-200  dark:hover:bg-violet-500  focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2"
                   )}

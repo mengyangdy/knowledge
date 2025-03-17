@@ -7,7 +7,7 @@ export default function useThemeToggleAnimation({
 	domRef,
 	onThemeChange
 }: {
-	domRef: React.RefObject<HTMLElement>;
+	domRef: React.RefObject<HTMLButtonElement | null>;
 	isDarkMode: boolean;
 	onThemeChange: (theme: string) => void;
 }) {

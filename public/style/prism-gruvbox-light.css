@@ -1,13 +1,3 @@
-/**
- * Gruvbox light theme
- *
- * Based on Gruvbox: https://github.com/morhetz/gruvbox
- * Adapted from PrismJS gruvbox-dark theme: https://github.com/schnerring/prism-themes/blob/master/themes/prism-gruvbox-dark.css
- *
- * @author Michael Schnerring (https://schnerring.net)
- * @version 1.0
- */
-
 code[class*='language-'],
 pre[class*='language-'] {
 	color: #3c3836; /* fg1 / fg */

@@ -43,7 +43,7 @@ export const Post = defineDocumentType(() => ({
     title: { type: "string", required: true },
     description: { type: "string", required: false },
     tags: { type: "list", of: { type: "string" }, required: true },
-    author: { type: "string", required: true },
+    author: { type: "string", required: false },
     cover: { type: "string", required: false },
     date: { type: "date", required: true },
   },
@@ -70,11 +70,11 @@ export default makeSource({
   contentDirInclude: ["posts", "data/blog"],
   documentTypes: [Post],
   mdx: {
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [[remarkGfm, { singleTilde: false }]],
     rehypePlugins: [
       // 为代码添加特殊样式
       // @ts-ignore
-      [rehypePrismPlus, { defaultLanguage: "js", ignoreMissing: true }],
+      [rehypePrismPlus, { ignoreMissing: true }],
       // 为每个 header 添加 id
       rehypeSlug,
       //为 header 添加链接

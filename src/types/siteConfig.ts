@@ -24,24 +24,13 @@ export type SiteConfig = {
 	name: string;
 	author: string;
 	description: string;
-	url: string;
 	email: string;
-	siteHostList: string[];
-	keywords: string[];
 	authorsUrl?: string;
-	ogImage: string;
 	social: socialItem[];
 	navigationItems: navigationItem[];
 	moreItems: moreItem;
-	footerItems: navigationItem[];
-	metadataBase: URL | string;
 	themeColors?: string | ThemeColor[];
 	defaultNextTheme?: string;
-	icons: {
-		icon: string;
-		shortcut?: string;
-		apple?: string;
-	};
 	openGraph?: {
 		type: string;
 		locale: string;
