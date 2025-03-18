@@ -97,12 +97,10 @@ interface PageProps {
   params: Promise<{
     id: string;
   }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
   const data = await getPageData(resolvedParams);
   if (!data) notFound();
 

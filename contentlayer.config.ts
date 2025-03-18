@@ -33,7 +33,6 @@ export function generateSlug(title: string): string {
   // 移除首尾连字符
 }
 
-
 export const Post = defineDocumentType(() => ({
   name: "Post",
   filePathPattern: `**/*.mdx`,
@@ -70,11 +69,11 @@ export default makeSource({
   contentDirInclude: ["posts", "data/blog"],
   documentTypes: [Post],
   mdx: {
-    remarkPlugins: [[remarkGfm, { singleTilde: false }]],
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [
       // 为代码添加特殊样式
       // @ts-ignore
-      [rehypePrismPlus, { ignoreMissing: true }],
+      [rehypePrismPlus, { defaultLanguage: "js", ignoreMissing: true }],
       // 为每个 header 添加 id
       rehypeSlug,
       //为 header 添加链接
