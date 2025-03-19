@@ -1,10 +1,12 @@
-import { Manrope,Inter } from "next/font/google";
-// 加载谷歌字体
-export const sansFont = Manrope({
-  subsets: ["latin"],
-  weight: ['400', '500', '600', '700', '800'],
-  variable:'--font-sans',
-  display:'swap',
-});
+import { Inter, Manrope } from "next/font/google"
 
-export const inter=Inter({subsets:['latin']})
+const sansFont = Manrope({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700", "800"],
+	variable: "--font-sans",
+	display: "swap",
+})
+
+const inter = Inter({ subsets: ["latin"] })
+
+export { sansFont, inter }

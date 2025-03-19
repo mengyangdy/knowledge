@@ -1,12 +1,8 @@
-import type { NextConfig } from "next";
-import { withContentlayer } from 'next-contentlayer';
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // 静态导出
-	output: 'export',
-  reactStrictMode: true,
-	swcMinify: true,
-};
+	/* config options here */
+	transpilePackages: ["@douyinfe/semi-ui"],
+}
 
-export default withContentlayer(nextConfig);
+export default nextConfig
