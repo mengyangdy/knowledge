@@ -2,7 +2,7 @@ const BaseConfig = {
 	author: "Dylan",
 	locale: "zh-CN",
 	email: "466879168@qq.com",
-	nav: [
+	navs: [
 		{
 			text: "首页",
 			link: "/",
