@@ -12,11 +12,12 @@
 	"dependencies": {
 		"@douyinfe/semi-ui": "^2.76.1",
 		"clsx": "^2.1.1",
-		"framer-motion": "^12.5.0",
+		"framer-motion": "^11.3.2",
 		"next": "15.2.3",
 		"next-themes": "^0.4.6",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
+		"react-wrap-balancer": "^1.1.1",
 		"tailwind-merge": "^3.0.2"
 	},
 	"devDependencies": {
