@@ -7,11 +7,16 @@ import Header from "@/components/Header"
 import { ThemeProvider } from "next-themes"
 import { Suspense } from "react"
 
-export default function RootLayout({
+import { PostsProvider } from '@/components/PostsProvider';
+import { getAllPosts } from '@/lib/file';
+
+export default async  function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode
 }>) {
+
+	const posts = await getAllPosts();
 	return (
 		<html
 			lang={BaseConfig.locale}
@@ -20,6 +25,7 @@ export default function RootLayout({
 		>
 			<body className={inter.className}>
 				<ThemeProvider>
+				<PostsProvider posts={posts}>
 					<GlobalBg />
 					<div className="fixed inset-0 flex justify-center sm:px-8">
 						<div className="flex w-full max-w-7xl lg:px-8">
@@ -33,6 +39,7 @@ export default function RootLayout({
 							<Footer />
 						</Suspense>
 					</div>
+					</PostsProvider>	
 				</ThemeProvider>
 			</body>
 		</html>
