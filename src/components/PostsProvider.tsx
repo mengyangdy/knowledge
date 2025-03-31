@@ -3,7 +3,7 @@
 import { createContext, useContext } from "react"
 
 export interface Post {
-  date: ReactNode
+  date: string
   tags: any
 	title: string
 	content: string

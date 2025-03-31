@@ -40,7 +40,7 @@ function Posts() {
                   className=" block text-xs text-gray-600"
                 >
                   {/* {dayjs(post.date).format("YYYY-MM-DD")} */}
-                  {new Date(item.date).toISOString().split('T')[0]}
+                  {item.date}
                 </time>
                 {/* <Separator orientation="vertical" className="h-5" /> */}
                 {item.tags.map((tag:string) => (
