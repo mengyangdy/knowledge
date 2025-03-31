@@ -1,4 +1,4 @@
-import { type IconProps } from '@/types/type';
+import type { IconProps } from "@/types/type"
 
 export function SnailIcon(props: IconProps = {}) {
 	return (
@@ -28,6 +28,5 @@ export function SnailIcon(props: IconProps = {}) {
 				></path>
 			</g>
 		</svg>
-	);
+	)
 }
-

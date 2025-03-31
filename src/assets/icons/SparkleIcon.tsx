@@ -1,4 +1,4 @@
-import { type IconProps } from '@/types/type';
+import type { IconProps } from "@/types/type"
 
 export function SparkleIcon(props: IconProps = {}) {
 	return (
@@ -18,6 +18,5 @@ export function SparkleIcon(props: IconProps = {}) {
 				strokeLinejoin="round"
 			/>
 		</svg>
-	);
+	)
 }
-

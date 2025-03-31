@@ -1,4 +1,4 @@
-import { type IconProps } from "@/types/type";
+import type { IconProps } from "@/types/type"
 
 export function MailIcon(props: IconProps = {}) {
 	return (
@@ -18,5 +18,5 @@ export function MailIcon(props: IconProps = {}) {
 				strokeLinejoin="round"
 			/>
 		</svg>
-	);
+	)
 }

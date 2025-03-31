@@ -60,11 +60,11 @@ function AvatarImage({
 }
 
 interface AvatarComponent extends React.FC<ComponentProps> {
-	Image: React.FC<AvatarImageProps>;
+	Image: React.FC<AvatarImageProps>
 }
 
 const Avatar = Object.assign(AvatarContainer, {
 	Image: AvatarImage,
-}) as AvatarComponent;
+}) as AvatarComponent
 
-export default Avatar;
+export default Avatar
