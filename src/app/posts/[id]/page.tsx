@@ -3,10 +3,11 @@
 import Container from "@/components/Container";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { UTurnLeftIcon,TagIcon } from "@/assets";
+import { UTurnLeftIcon, TagIcon } from "@/assets";
 import { getAllPosts, Post } from "@/lib/file";
-import { Tag,MarkdownRender  } from "@douyinfe/semi-ui";
+import { Tag, MarkdownRender } from "@douyinfe/semi-ui";
 import { usePostsContext } from "@/components/PostsProvider";
+import { use } from "react";
 
 const variantStyles = {
   primary:
@@ -15,14 +16,14 @@ const variantStyles = {
     "group rounded-full bg-gradient-to-b from-zinc-50/50 to-white/90 px-3 py-2 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur transition dark:from-zinc-900/50 dark:to-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20",
 };
 interface TypeParams {
-	id: string;
+  id: string;
 }
 
-const Page = ({ params }: { params: TypeParams }) => {
-  // const post = getAllPosts().find((post) => post.slug === params.id) as Post;
-  const { posts } = usePostsContext()
-  console.log("🚀 ~ Page ~ posts:", posts)
-  const post=posts.find((post)=>post.slug===params.id)
+const Page = ({ params }: any) => {
+  const resolvedParams: any = use(params);
+  const { posts } = usePostsContext();
+  const post:any = posts.find((post) => post.slug === resolvedParams.id);
+
   return (
     <Container.Outer className="mt-10 lg:mt-16">
       <Container.Inner className="!px-0">
@@ -61,8 +62,10 @@ const Page = ({ params }: { params: TypeParams }) => {
                   </span>
                 </div>
                 <div className="flex w-full justify-center gap-2 mt-2">
-                  {post.tags.map((tag) => (
-                    <Tag size="large" key={tag}>{tag}</Tag>
+                  {post.tags.map((tag:any) => (
+                    <Tag size="large" key={tag}>
+                      {tag}
+                    </Tag>
                   ))}
                 </div>
                 {/* 描述渲染 */}
@@ -77,7 +80,7 @@ const Page = ({ params }: { params: TypeParams }) => {
               </div>
 
               <div className="js-toc-content">
-              <MarkdownRender raw={`无需转义的符号{}<> ...`} format="md" />
+                <MarkdownRender raw={post.content} format="md" />
               </div>
             </article>
           </div>
